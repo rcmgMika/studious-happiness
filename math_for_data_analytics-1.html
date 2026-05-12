@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mathematics for Data Analytics</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --accent1: #00d4ff;
+    --accent2: #7c3aed;
+    --accent3: #10b981;
+    --accent4: #f59e0b;
+    --accent5: #ef4444;
+    --accent6: #ec4899;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --border: rgba(255,255,255,0.07);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    padding: 0 0 80px;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0a0e1a 0%, #0f172a 40%, #1a0a2e 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 70px 40px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(124,58,237,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: 10%;
+    width: 350px; height: 350px;
+    background: radial-gradient(circle, rgba(0,212,255,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-inner { max-width: 900px; margin: 0 auto; position: relative; z-index: 1; }
+  .hero-tag {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent1);
+    border: 1px solid rgba(0,212,255,0.3);
+    padding: 4px 12px;
+    border-radius: 2px;
+    margin-bottom: 20px;
+  }
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.2rem, 5vw, 3.6rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 18px;
+  }
+  h1 span { color: var(--accent1); }
+  .hero-desc {
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 580px;
+    margin-bottom: 28px;
+  }
+  .hero-stats {
+    display: flex; gap: 32px; flex-wrap: wrap;
+  }
+  .stat {
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .stat-num { font-size: 1.5rem; color: var(--accent1); font-weight: 500; }
+  .stat-label { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+
+  /* NAV */
+  .toc-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 40px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .toc-pill {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.05em;
+    padding: 5px 11px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .toc-pill:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+  /* MAIN */
+  main { max-width: 960px; margin: 0 auto; padding: 60px 24px 0; }
+
+  /* SECTION */
+  .section {
+    margin-bottom: 70px;
+    animation: fadeUp 0.5s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-icon {
+    width: 46px; height: 46px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
+  .section-meta {}
+  .section-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.55rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+  .section-tagline {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* TOPIC GRID */
+  .topics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .topic-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .topic-card:hover {
+    border-color: rgba(255,255,255,0.15);
+    transform: translateY(-2px);
+  }
+  .topic-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .topic-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    padding: 2px 7px;
+    border-radius: 20px;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+  }
+  .topic-items {
+    list-style: none;
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.9;
+  }
+  .topic-items li::before {
+    content: '›';
+    margin-right: 7px;
+    opacity: 0.5;
+  }
+
+  /* RESOURCES */
+  .resources-section {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 26px;
+    margin-top: 10px;
+  }
+  .resources-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .resources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 10px;
+  }
+  .resource-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 13px 15px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .resource-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .resource-name {
+    font-size: 0.83rem;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+  .resource-type {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    color: var(--muted);
+  }
+
+  /* COLOR THEMES PER SECTION */
+  .s1 .section-icon { background: rgba(0,212,255,0.12); color: var(--accent1); }
+  .s1 .section-num { color: var(--accent1); }
+  .s1 h2 { color: var(--accent1); }
+  .s1 .topic-badge { background: rgba(0,212,255,0.1); color: var(--accent1); }
+
+  .s2 .section-icon { background: rgba(124,58,237,0.12); color: var(--accent2); }
+  .s2 .section-num { color: var(--accent2); }
+  .s2 h2 { color: var(--accent2); }
+  .s2 .topic-badge { background: rgba(124,58,237,0.12); color: var(--accent2); }
+
+  .s3 .section-icon { background: rgba(16,185,129,0.12); color: var(--accent3); }
+  .s3 .section-num { color: var(--accent3); }
+  .s3 h2 { color: var(--accent3); }
+  .s3 .topic-badge { background: rgba(16,185,129,0.12); color: var(--accent3); }
+
+  .s4 .section-icon { background: rgba(245,158,11,0.12); color: var(--accent4); }
+  .s4 .section-num { color: var(--accent4); }
+  .s4 h2 { color: var(--accent4); }
+  .s4 .topic-badge { background: rgba(245,158,11,0.12); color: var(--accent4); }
+
+  .s5 .section-icon { background: rgba(239,68,68,0.12); color: var(--accent5); }
+  .s5 .section-num { color: var(--accent5); }
+  .s5 h2 { color: var(--accent5); }
+  .s5 .topic-badge { background: rgba(239,68,68,0.12); color: var(--accent5); }
+
+  .s6 .section-icon { background: rgba(236,72,153,0.12); color: var(--accent6); }
+  .s6 .section-num { color: var(--accent6); }
+  .s6 h2 { color: var(--accent6); }
+  .s6 .topic-badge { background: rgba(236,72,153,0.12); color: var(--accent6); }
+
+  .s7 .section-icon { background: rgba(0,212,255,0.08); color: #60a5fa; }
+  .s7 .section-num { color: #60a5fa; }
+  .s7 h2 { color: #60a5fa; }
+  .s7 .topic-badge { background: rgba(96,165,250,0.1); color: #60a5fa; }
+
+  .s8 .section-icon { background: rgba(52,211,153,0.1); color: #34d399; }
+  .s8 .section-num { color: #34d399; }
+  .s8 h2 { color: #34d399; }
+  .s8 .topic-badge { background: rgba(52,211,153,0.1); color: #34d399; }
+
+  /* GLOBAL RESOURCES */
+  .global-resources {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 34px 36px;
+    margin-top: 60px;
+  }
+  .global-resources h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .global-resources .sub {
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin-bottom: 28px;
+  }
+  .res-category { margin-bottom: 26px; }
+  .res-cat-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .res-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 8px;
+  }
+  .res-chip {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 11px 14px;
+    font-size: 0.82rem;
+  }
+  .res-chip-name { font-weight: 500; color: var(--text); margin-bottom: 2px; }
+  .res-chip-url {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    color: var(--muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    padding: 40px;
+    color: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    border-top: 1px solid var(--border);
+    margin-top: 60px;
+  }
+
+  @media (max-width: 600px) {
+    .hero { padding: 48px 20px 44px; }
+    .toc-bar { padding: 10px 16px; }
+    main { padding: 40px 16px 0; }
+    .global-resources { padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">Complete Reference Guide</div>
+    <h1>Mathematics for<br><span>Data Analytics</span></h1>
+    <p class="hero-desc">Every mathematical concept you need — from foundational arithmetic to advanced machine learning mathematics — organized by topic with learning resources.</p>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">8</div><div class="stat-label">Core Domains</div></div>
+      <div class="stat"><div class="stat-num">60+</div><div class="stat-label">Topics Covered</div></div>
+      <div class="stat"><div class="stat-num">40+</div><div class="stat-label">Resources Listed</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc-bar">
+  <a href="#sec1" class="toc-pill">01 Pre-Algebra & Algebra</a>
+  <a href="#sec2" class="toc-pill">02 Statistics & Probability</a>
+  <a href="#sec3" class="toc-pill">03 Linear Algebra</a>
+  <a href="#sec4" class="toc-pill">04 Calculus</a>
+  <a href="#sec5" class="toc-pill">05 Discrete Math</a>
+  <a href="#sec6" class="toc-pill">06 Numerical Methods</a>
+  <a href="#sec7" class="toc-pill">07 Info Theory & Optimization</a>
+  <a href="#sec8" class="toc-pill">08 ML Mathematics</a>
+  <a href="#global" class="toc-pill">📦 All Resources</a>
+</div>
+
+<main>
+
+<!-- ══════════════════════════════════ SECTION 1 ══════════════════════════════════ -->
+<div class="section s1" id="sec1">
+  <div class="section-header">
+    <div class="section-icon">∑</div>
+    <div class="section-meta">
+      <div class="section-num">01 — Foundation</div>
+      <h2>Pre-Algebra & Algebra</h2>
+      <div class="section-tagline">The bedrock of all quantitative reasoning in analytics.</div>
+    </div>
+  </div>
+
+  <div class="topics-grid">
+    <div class="topic-card">
+      <div class="topic-name">Pre-Algebra <span class="topic-badge">Foundational</span></div>
+      <ul class="topic-items">
+        <li>Order of operations (PEMDAS/BODMAS)</li>
+        <li>Integer & rational number arithmetic</li>
+        <li>Fractions, decimals, percentages</li>
+        <li>Ratios and proportions</li>
+        <li>Absolute value</li>
+        <li>Factoring integers & prime factorization</li>
+        <li>GCF and LCM</li>
+        <li>Exponents and roots (including fractional exponents)</li>
+        <li>Scientific notation</li>
+      </ul>
+    </div>
+    <div class="topic-card">
+      <div class="topic-name">Algebra I <span class="topic-badge">Core</span></div>
+      <ul class="topic-items">
+        <li>Variables, expressions, and equations</li>
+        <li>Solving linear equations & inequalities</li>
+        <li>Systems of linear equations</li>
+        <li>Polynomial operations & factoring</li>
+        <li>Quadratic equations (factoring, completing the square, quadratic formula)</li>
+        <li>Functions: definition, notation, domain, range</li>
+        <li>Slope and linear functions</li>
+      </ul>
+    </div>
+    <div class="topic-card">
+      <div class="topic-name">Algebra II <span class="topic-badge">Core</span></div>
+      <ul class="topic-items">
+        <li>Exponential and logarithmic functions</li>
+        <li>Laws of logarithms (product, quotient, power)</li>
+        <li>Natural logarithm (ln) and base-e</li>
+        <li>Rational functions & expressions</li>
+        <li>Sequences and series (arithmetic & geometric)</li>
+        <li>Sigma notation (Σ)</li>
+        <li>Binomial theorem</li>
+        <li>Complex numbers (basics)</li>
+      </ul>
+    </div>
+    <div class="topic-card">
+      <div class="topic-name">Functions & Graphs <span class="topic-badge">Core</span></div>
+      <ul class="topic-items">
+        <li>Composition and inverse functions</li>
+        <li>Piecewise functions</li>
+        <li>Transformations (shift, scale, reflect)</li>
+        <li>Modeling with functions</li>
+        <li>Polynomial and power functions</li>
+        <li>Absolute value functions</li>
+        <li>Step functions</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="resources-section">
+    <div class="resources-title">📚 Resources for this section</div>
+    <div class="resources-grid">
+      <div class="resource-item"><div class="resource-icon">🌐</div><div><div class="resource-name">Khan Academy — Algebra</div><div class="resource-type">Web · Free · khanacademy.org</div></div></div>
+      <div class="resource-item"><div class="resource-icon">📱</div><div><div class="resource-name">Photomath</div><div class="resource-type">App (iOS/Android) · Free</div></div></div>
+      <div class="resource-item"><div class="resource-icon">📱</div><div><div class="resource-name">Mathway</div><div class="resource-type">App (iOS/Android) · Free/Paid</div></div></div>
+      <div class="resource-item"><div class="resource-icon">📖</div><div><div class="resource-name">OpenStax: College Algebra</div><div class="resource-type">Free PDF · openstax.org</div></div></div>
+      <div class="resource-item"><div class="resource-icon">🌐</div><div><div class="resource-name">Paul's Online Math Notes</div><div class="resource-type">Web · Free · tutorial.math.lamar.edu</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════ SECTION 2 ══════════════════════════════════ -->
+<div class="section s2" id="sec2">
+  <div class="section-header">
+    <div class="section-icon">σ</div>
+    <div class="section-meta">
+      <div class="section-num">02 — Core Analytics</div>
+      <h2>Statistics & Probability</h2>
+      <div class="section-tagline">The language of data — central to every analytics workflow.</div>
+    </div>
+  </div>
+
+  <div class="topics-grid">
+    <div class="topic-card">
+      <div class="topic-name">Descriptive Statistics <span class="topic-badge">Essential</span></div>
+      <ul class="topic-items">
+        <li>Mean, median, mode, midrange</li>
+        <li>Variance and standard deviation (population vs sample)</li>
+        <li>Range, IQR, quartiles, percentiles</li>
+        <li>Skewness and kurtosis</li>
+        <li>Covariance and correlation (Pearson, Spearman, Kendall)</li>
+        <li>Five-number summary & box plots</li>
+        <li>Z-scores and standardization</li>
+        <li>Frequency distributions and histograms</li>
+      </ul>
+    </div>
+    <div class="topic-card">
+      <div class="topic-name">Probability Theory <span class="topic-badge">Essential</span></div>
+      <ul class="topic-items">
+        <li>Sample spaces, events, outcomes</li>
+        <li>Axioms of probability</li>
+        <li>Classical, frequentist, Bayesian interpretations</li>
+        <li>Addition and multiplication rules</li>
+        <li>Conditional probability: P(A|B)</li>
+        <li>Bayes' Theorem</li>
+        <li>Independence vs. mutual exclusivity</li>
+        <li>Permutations and combinations</li>
+        <li>Law of total probability</li>
+      </ul>
+    </div>
+    <div class="topic-card">
+      <div class="topic-name">Probability Distributions <span class="topic-badge">Essential</span></div>
+      <ul class="topic-items">
+        <li>Discrete: Bernoulli, Binomial, Poisson, Geometric</li>
+        <li>Continuous: Uniform, Normal (Gaussian), Exponential</li>
+        <li>Student's t-distribution</li>
+        <li>Chi-squared (χ²) distribution</li>
+        <li>F-distribution</li>
+        <li>Beta and Gamma distributions</li>
+        <li>PDF, CDF, PMF — definitions and usage</li>
+        <li>Expected value E[X] and variance Var[X]</li>
+        <li>Moment generating functions</li>
+      </ul>
+    </div>
+    <div class="topic-card">
+      <div class="topic-name">Inferential Statistics <span class="topic-badge">Essential</span></div>
+      <ul class="topic-items">
+        <li>Sampling distributions & Central Limit Theorem</li>
+        <li>Point estimates and confidence intervals</li>
+        <li>Hypothesis testing framework (H₀ vs Hₐ)</li>
+        <li>p-values and significance levels (α)</li>
+        <li>Type I and Type II errors</li>
+        <li>z-test, t-test (one-sample, two-sample, paired)</li>
+        <li>ANOVA (one-way and two-way)</li>
+        <li>Chi-squared tests (goodness of fit, independence)</li>
+        <li>Power of a test</li>
+      </ul>
+    </div>
+    <div class="topic-card">
+      <div class="topic-name">Bayesian Statistics <span class="topic-badge">Advanced</span></div>
+      <ul class="topic-items">
+        <li>Prior, likelihood, posterior distributions</li>
+        <li>Bayesian updating</li>
+        <li>Conjugate priors</li>
+        <li>Maximum A Posteriori (MAP) estimation</li>
+        <li>Credible intervals</li>
+        <li>Markov Chain Monte Carlo (MCMC) — overview</li>
+      </ul>
+    </div>
+    <div class="topic-card">
+      <div class="topic-name">Regression Analysis <span class="topic-badge">Essential</span></div>
+      <ul class="topic-items">
+        <li>Simple linear regression (OLS)</li>
+        <li>Multiple linear regression</li>
+        <li>Assumptions: linearity, normality, homoscedasticity, independence</li>
+        <li>R², Adjusted R², RMSE, MAE</li>
+        <li>Residuals analysis</li>
+        <li>Logistic regression (log-odds, sigmoid)</li>
+        <li>Polynomial regression</li>
+        <li>Ridge (L2), Lasso (L1), Elastic Net regularization</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="resources-section">
+    <div class="resources-title">📚 Resources for this section</div>
+    <div class="resources-grid">
+      <div class="resource-item"><div class="resource-icon">🌐</div><div><div class="resource-name">Khan Academy — Statistics</div><div class="resource-type">Web · Free · khanacademy.org</div></div></div>
+      <div class="resource-item"><div class="resource-icon">📖</div><div><div class="resource-name">OpenIntro Statistics</div><div class="resource-type">Free PDF · openintro.org</div></div></div>
+      <div class="resource-item"><div class="resource-icon">📺</div><div><div class="resource-name">StatQuest (Josh Starmer)</div><div class="resource-type">YouTube · Free</div></div></div>
+      <div class="resource-item"><div class="resource-icon">📱</div><div><div class="resource-name">StatPad / GeoGebra</div><div class="resource-type">App · Free</div></div></div>
+      <div class="resource-item"><div class="resource-icon">🌐</div><div><div class="resource-name">Seeing Theory (Brown U)</div><div class="resource-type">Interactive Web · seeingtheory.brown.edu</div></div></div>
+      <div class="resource-item"><div class="resource-icon">📖</div><div><div class="resource-name">Think Stats (Downey)</div><div class="resource-type">Free PDF · greenteapress.com</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════ SECTION 3 ══════════════════════════════════ -->
+<div class="section s3" id="sec3">
+  <div class="section-header">
+    <div class="section-icon">𝐀</div>
+    <div class="section-meta">
+      <div class="section-num">03 — Core Analytics</div>
+      <h2>Linear Algebra</h2>
+      <div class="section-tagline">The mathematics of data tables, transformations, and dimensionality.</div>
+    </div>
+  </div>
+
+  <div class="topics-grid">
+    <div class="topic-card">
+      <div class="topic-name">Vectors <span class="topic-badge">Essential</span></div>
+      <ul class="topic-items">
+        <li>Vector notation and geometric interpretation</li>
+        <li>Vector addition and scalar multiplication</li>
+        <li>Dot product (inner product)</li>
+        <li>Cross product</li>
+        <li>Vector norms (L1, L2, L∞)</li>
+        <li>Unit vectors and normalization</li>
+        <li>Orthogonality and orthonormality</li>
+        <li>Projection of vectors</li>
+        <li>Linear independence</li>
+      </ul>
+    </div>
+    <div class="topic-card">
+      <div class="topic-name">Matrices <span class="topic-badge">Essential</span></div>
+      <ul class="topic-items">
+        <li>Matrix addition, subtraction, scalar multiplication</li>
+        <li>Matrix multiplication (row × column rule)</li>
+        <li>Transpose (Aᵀ)</li>
+        <li>Identity and zero matrices</li>
+        <li>Symmetric, diagonal, orthogonal matrices</li>
+        <li>Matrix inverse and conditions for invertibility</li>
+        <li>Determinants and their properties</li>
+        <li>Trace of a matrix</li>
+        <li>Rank of a matrix</li>
+      </ul>
+    </div>
+    <div class="topic-card">
+      <div class="topic-name">Systems & Decompositions <span class="topic-badge">Essential</span></div>
+      <ul class="topic-items">
+        <li>Solving Ax = b (Gaussian elimination, back-substitution)</li>
+        <li>Row echelon form, reduced row echelon form</li>
+        <li>LU decomposition</li>
+        <li>QR decomposition</li>
+        <li>Singular Value Decomposition (SVD)</li>
+        <li>Cholesky decomposition</li>
+        <li>Eigenvalues and eigenvectors</li>
+        <li>Eigendecomposition</li>
+        <li>Null space and column space</li>
+      </ul>
+    </div>
+    <div class="topic-card">
+      <div class="topic-name">Vector Spaces & Transformations <span class="topic-badge">Advanced</span></div>
+      <ul class="topic-items">
+        <li>Span, basis, and dimension</li>
+        <li>Linear transformations as matrices</li>
+        <li>Change of basis</li>
+        <li>Principal Component Analysis (PCA) — math</li>
+        <li>Positive definite matrices</li>
+        <li>Covariance matrices</li>
+        <li>Kernel methods (inner product spaces)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="resources-section">
+    <div class="resources-title">📚 Resources for this section</div>
+    <div class="resources-grid">
+      <div class="resource-item"><div class="resource-icon">📺</div><div><div class="resource-name">3Blue1Brown — Essence of LA</div><div class="resource-type">YouTube · Free</div></div></div>
+      <div class="resource-item"><div class="resource-icon">🌐</div><div><div class="resource-name">MIT OpenCourseWare 18.06</div><div class="resource-type">Web · Free · ocw.mit.edu</div></div></div>
+      <div class="resource-item"><div class="resource-icon">📖</div><div><div class="resource-name">Introduction to Linear Algebra (Strang)</div><div class="resource-type">Textbook · math.mit.edu</div></div></div>
+      <div class="resource-item"><div class="resource-icon">🌐</div><div><div class="resource-name">Immersive Linear Algebra</div><div class="resource-type">Interactive Web · immersivemath.com</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════ SECTION 4 ══════════════════════════════════ -->
+<div class="section s4" id="sec4">
+  <div class="section-header">
+    <div class="section-icon">∂</div>
+    <div class="section-meta">
+      <div class="section-num">04 — Core Analytics</div>
+      <h2>Calculus</h2>
+      <div class="section-tagline">Optimization, rates of change, and the math behind learning algorithms.</div>
+    </div>
+  </div>
+
+  <div class="topics-grid">
+    <div class="topic-card">
+      <div class="topic-name">Differential Calculus <span class="topic-badge">Core</span></div>
+      <ul class="topic-items">
+        <li>Limits and continuity</li>
+        <li>Definition of the derivative</li>
+        <li>Differentiation rules: power, product, quotient, chain</li>
+        <li>Derivatives of: polynomials, exponentials, logarithms, trig</li>
+        <li>Higher-order derivatives</li>
+        <li>Implicit differentiation</li>
+        <li>Critical points, local/global minima and maxima</li>
+        <li>Concavity, inflection points</li>
+        <li>L'Hôpital's Rule</li>
+      </ul>
+    </div>
+    <div class="topic-card">
+      <div class="topic-name">Integral Calculus <span class="topic-badge">Core</span></div>
+      <ul class="topic-items">
+        <li>Antiderivatives and indefinite integrals</li>
+        <li>Fundamental Theorem of Calculus</li>
+        <li>Definite integrals and area under curves</li>
+        <li>Integration techniques: substitution, by parts</li>
+        <li>Improper integrals</li>
+        <li>Numerical integration (trapezoidal, Simpson's rule)</li>
+        <li>Probability density functions (continuous distributions)</li>
+      </ul>
+    </div>
+    <div class="topic-card">
+      <div class="topic-name">Multivariable Calculus <span class="topic-badge">Advanced</span></div>
+      <ul class="topic-items">
+        <li>Partial derivatives (∂f/∂x, ∂f/∂y)</li>
+        <li>Gradient vector (∇f)</li>
+        <li>Directional derivatives</li>
+        <li>The Jacobian matrix</li>
+        <li>The Hessian matrix (second-order partial derivatives)</li>
+        <li>Chain rule for multivariable functions</li>
+        <li>Taylor series expansion (multivariate)</li>
+        <li>Lagrange multipliers for constrained optimization</li>
+      </ul>
+    </div>
+    <div class="topic-card">
+      <div class="topic-name">Optimization (Calculus-Based) <span class="topic-badge">Essential</span></div>
+      <ul class="topic-items">
+        <li>Gradient Descent (batch, stochastic, mini-batch)</li>
+        <li>Learning rate and convergence</li>
+        <li>Momentum, Adam, RMSprop (conceptual math)</li>
+        <li>Convex vs. non-convex functions</li>
+        <li>Saddle points and local minima</li>
+        <li>Cost / loss function minimization</li>
+        <li>Second-order optimization (Newton's method)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="resources-section">
+    <div class="resources-title">📚 Resources for this section</div>
+    <div class="resources-grid">
+      <div class="resource-item"><div class="resource-icon">📺</div><div><div class="resource-name">3Blue1Brown — Essence of Calculus</div><div class="resource-type">YouTube · Free</div></div></div>
+      <div class="resource-item"><div class="resource-icon">🌐</div><div><div class="resource-name">Khan Academy — Calculus</div><div class="resource-type">Web · Free · khanacademy.org</div></div></div>
+      <div class="resource-item"><div class="resource-icon">📖</div><div><div class="resource-name">Calculus Made Easy (Silvanus Thompson)</div><div class="resource-type">Free PDF · gutenberg.org</div></div></div>
+      <div class="resource-item"><div class="resource-icon">🌐</div><div><div class="resource-name">MIT OCW 18.01 Single Variable</div><div class="resource-type">Web · Free · ocw.mit.edu</div></div></div>
+      <div class="resource-item"><div class="resource-icon">🌐</div><div><div class="resource-name">Desmos Graphing Calculator</div><div class="resource-type">Web/App · Free · desmos.com</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════ SECTION 5 ══════════════════════════════════ -->
+<div class="section s5" id="sec5">
+  <div class="section-header">
+    <div class="section-icon">∩</div>
+    <div class="section-meta">
+      <div class="section-num">05 — Supporting</div>
+      <h2>Discrete Mathematics</h2>
+      <div class="section-tagline">Logic, sets, graphs — essential for databases, algorithms, and data structures.</div>
+    </div>
+  </div>
+
+  <div class="topics-grid">
+    <div class="topic-card">
+      <div class="topic-name">Set Theory <span class="topic-badge">Core</span></div>
+      <ul class="topic-items">
+        <li>Sets, subsets, power sets, universal set</li>
+        <li>Union (∪), intersection (∩), difference, complement</li>
+        <li>Cartesian products</li>
+        <li>Venn diagrams</li>
+        <li>Cardinality (finite and infinite sets)</li>
+        <li>Relations: reflexive, symmetric, transitive</li>
+        <li>Functions as relations</li>
+      </ul>
+    </div>
+    <div class="topic-card">
+      <div class="topic-name">Logic & Proofs <span class="topic-badge">Core</span></div>
+      <ul class="topic-items">
+        <li>Propositional logic (AND, OR, NOT, XOR)</li>
+        <li>Truth tables</li>
+        <li>Implications, biconditionals</li>
+        <li>Logical equivalence, De Morgan's Laws</li>
+        <li>Predicate logic: quantifiers (∀, ∃)</li>
+        <li>Proof techniques: direct, contrapositive, contradiction, induction</li>
+      </ul>
+    </div>
+    <div class="topic-card">
+      <div class="topic-name">Combinatorics <span class="topic-badge">Core</span></div>
+      <ul class="topic-items">
+        <li>Fundamental counting principle</li>
+        <li>Permutations (with and without repetition)</li>
+        <li>Combinations (nCr)</li>
+        <li>Pascal's triangle</li>
+        <li>Inclusion-exclusion principle</li>
+        <li>Pigeonhole principle</li>
+        <li>Generating functions (basics)</li>
+      </ul>
+    </div>
+    <div class="topic-card">
+      <div class="topic-name">Graph Theory <span class="topic-badge">Advanced</span></div>
+      <ul class="topic-items">
+        <li>Graphs, vertices, edges, directed/undirected</li>
+        <li>Adjacency matrices and lists</li>
+        <li>Paths, cycles, trees</li>
+        <li>Connectivity, degree</li>
+        <li>Bipartite graphs</li>
+        <li>Shortest path (Dijkstra)</li>
+        <li>Network flows and PageRank</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="resources-section">
+    <div class="resources-title">📚 Resources for this section</div>
+    <div class="resources-grid">
+      <div class="resource-item"><div class="resource-icon">📖</div><div><div class="resource-name">Discrete Mathematics (OpenStax)</div><div class="resource-type">Free PDF · openstax.org</div></div></div>
+      <div class="resource-item"><div class="resource-icon">🌐</div><div><div class="resource-name">Brilliant.org — Discrete Math</div><div class="resource-type">Web/App · brilliant.org</div></div></div>
+      <div class="resource-item"><div class="resource-icon">📺</div><div><div class="resource-name">TrevTutor (Discrete Math)</div><div class="resource-type">YouTube · Free</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════ SECTION 6 ══════════════════════════════════ -->
+<div class="section s6" id="sec6">
+  <div class="section-header">
+    <div class="section-icon">≈</div>
+    <div class="section-meta">
+      <div class="section-num">06 — Applied</div>
+      <h2>Numerical Methods & Analysis</h2>
+      <div class="section-tagline">Computational mathematics for real-world imprecision and large-scale data.</div>
+    </div>
+  </div>
+
+  <div class="topics-grid">
+    <div class="topic-card">
+      <div class="topic-name">Numerical Analysis <span class="topic-badge">Applied</span></div>
+      <ul class="topic-items">
+        <li>Floating point representation and rounding errors</li>
+        <li>Numerical stability and condition numbers</li>
+        <li>Root finding: bisection, Newton-Raphson</li>
+        <li>Polynomial interpolation</li>
+        <li>Spline interpolation</li>
+        <li>Numerical differentiation (finite differences)</li>
+        <li>Numerical integration (quadrature)</li>
+      </ul>
+    </div>
+    <div class="topic-card">
+      <div class="topic-name">Linear Systems & Algorithms <span class="topic-badge">Applied</span></div>
+      <ul class="topic-items">
+        <li>Gaussian elimination with partial pivoting</li>
+        <li>LU factorization algorithms</li>
+        <li>Iterative solvers: Jacobi, Gauss-Seidel</li>
+        <li>Least squares (normal equations)</li>
+        <li>Sparse matrix methods</li>
+        <li>Computational complexity (Big O)</li>
+      </ul>
+    </div>
+    <div class="topic-card">
+      <div class="topic-name">Monte Carlo Methods <span class="topic-badge">Applied</span></div>
+      <ul class="topic-items">
+        <li>Random number generation</li>
+        <li>Monte Carlo integration</li>
+        <li>Bootstrap resampling</li>
+        <li>Simulation-based inference</li>
+        <li>Variance reduction techniques</li>
+        <li>Applications in risk analysis</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="resources-section">
+    <div class="resources-title">📚 Resources for this section</div>
+    <div class="resources-grid">
+      <div class="resource-item"><div class="resource-icon">📖</div><div><div class="resource-name">Numerical Recipes (free chapters)</div><div class="resource-type">Free Web · numerical.recipes</div></div></div>
+      <div class="resource-item"><div class="resource-icon">🌐</div><div><div class="resource-name">Coursera — Numerical Methods</div><div class="resource-type">Web · coursera.org</div></div></div>
+      <div class="resource-item"><div class="resource-icon">🌐</div><div><div class="resource-name">SciPy Documentation</div><div class="resource-type">Reference · scipy.org</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════ SECTION 7 ══════════════════════════════════ -->
+<div class="section s7" id="sec7">
+  <div class="section-header">
+    <div class="section-icon">ℍ</div>
+    <div class="section-meta">
+      <div class="section-num">07 — Advanced</div>
+      <h2>Information Theory & Optimization</h2>
+      <div class="section-tagline">Mathematical foundations of feature selection, model evaluation, and loss functions.</div>
+    </div>
+  </div>
+
+  <div class="topics-grid">
+    <div class="topic-card">
+      <div class="topic-name">Information Theory <span class="topic-badge">Advanced</span></div>
+      <ul class="topic-items">
+        <li>Entropy H(X) = -Σ p(x) log p(x)</li>
+        <li>Joint entropy and conditional entropy</li>
+        <li>Mutual information I(X;Y)</li>
+        <li>Kullback-Leibler (KL) Divergence</li>
+        <li>Cross-entropy loss</li>
+        <li>Jensen-Shannon divergence</li>
+        <li>Information gain (used in decision trees)</li>
+        <li>Minimum description length</li>
+      </ul>
+    </div>
+    <div class="topic-card">
+      <div class="topic-name">Mathematical Optimization <span class="topic-badge">Advanced</span></div>
+      <ul class="topic-items">
+        <li>Convex sets and convex functions</li>
+        <li>Optimality conditions (KKT conditions)</li>
+        <li>Constrained optimization (Lagrangian method)</li>
+        <li>Linear programming (simplex method)</li>
+        <li>Quadratic programming</li>
+        <li>Dual problems and strong duality</li>
+        <li>Subgradients for non-smooth functions</li>
+        <li>Proximal methods (ADMM)</li>
+      </ul>
+    </div>
+    <div class="topic-card">
+      <div class="topic-name">Time Series Mathematics <span class="topic-badge">Applied</span></div>
+      <ul class="topic-items">
+        <li>Stationarity and unit roots</li>
+        <li>Autocorrelation (ACF) and partial autocorrelation (PACF)</li>
+        <li>Autocovariance function</li>
+        <li>ARIMA model formulation</li>
+        <li>Fourier transforms and frequency domain</li>
+        <li>Discrete Fourier Transform (DFT)</li>
+        <li>Exponential smoothing (Holt-Winters)</li>
+        <li>Spectral analysis</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="resources-section">
+    <div class="resources-title">📚 Resources for this section</div>
+    <div class="resources-grid">
+      <div class="resource-item"><div class="resource-icon">📖</div><div><div class="resource-name">Elements of Information Theory (free)</div><div class="resource-type">PDF · Thomas Cover</div></div></div>
+      <div class="resource-item"><div class="resource-icon">🌐</div><div><div class="resource-name">Convex Optimization (Boyd & Vandenberghe)</div><div class="resource-type">Free PDF · stanford.edu/~boyd</div></div></div>
+      <div class="resource-item"><div class="resource-icon">📺</div><div><div class="resource-name">Ritvikmath (Time Series)</div><div class="resource-type">YouTube · Free</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════ SECTION 8 ══════════════════════════════════ -->
+<div class="section s8" id="sec8">
+  <div class="section-header">
+    <div class="section-icon">𝜃</div>
+    <div class="section-meta">
+      <div class="section-num">08 — Applied ML</div>
+      <h2>Machine Learning Mathematics</h2>
+      <div class="section-tagline">The unified mathematics underpinning modern ML and data science models.</div>
+    </div>
+  </div>
+
+  <div class="topics-grid">
+    <div class="topic-card">
+      <div class="topic-name">Loss Functions & Metrics <span class="topic-badge">Essential</span></div>
+      <ul class="topic-items">
+        <li>Mean Squared Error (MSE), MAE, RMSE</li>
+        <li>Cross-entropy (binary & categorical)</li>
+        <li>Hinge loss (SVM)</li>
+        <li>Huber loss</li>
+        <li>Log-likelihood and MLE</li>
+        <li>Precision, Recall, F1, AUC-ROC</li>
+        <li>Confusion matrix mathematics</li>
+      </ul>
+    </div>
+    <div class="topic-card">
+      <div class="topic-name">Dimensionality Reduction <span class="topic-badge">Essential</span></div>
+      <ul class="topic-items">
+        <li>Principal Component Analysis (PCA) — full derivation</li>
+        <li>Singular Value Decomposition in PCA</li>
+        <li>Explained variance ratio</li>
+        <li>t-SNE mathematics (Kullback-Leibler)</li>
+        <li>UMAP (topology and fuzzy sets)</li>
+        <li>Linear Discriminant Analysis (LDA)</li>
+        <li>Factor analysis</li>
+      </ul>
+    </div>
+    <div class="topic-card">
+      <div class="topic-name">Probabilistic Models <span class="topic-badge">Advanced</span></div>
+      <ul class="topic-items">
+        <li>Naive Bayes classifier mathematics</li>
+        <li>Gaussian Mixture Models (GMM) — EM algorithm</li>
+        <li>Hidden Markov Models (HMM)</li>
+        <li>Expectation-Maximization (E-step, M-step)</li>
+        <li>Variational inference basics</li>
+        <li>Gaussian processes</li>
+      </ul>
+    </div>
+    <div class="topic-card">
+      <div class="topic-name">Neural Network Math <span class="topic-badge">Advanced</span></div>
+      <ul class="topic-items">
+        <li>Feedforward propagation (matrix form)</li>
+        <li>Activation functions and derivatives: ReLU, sigmoid, tanh, softmax</li>
+        <li>Backpropagation via chain rule</li>
+        <li>Vanishing/exploding gradients</li>
+        <li>Weight initialization strategies</li>
+        <li>Batch normalization mathematics</li>
+        <li>Dropout as regularization</li>
+        <li>Attention mechanism: Q, K, V matrices</li>
+      </ul>
+    </div>
+    <div class="topic-card">
+      <div class="topic-name">Kernel Methods & SVMs <span class="topic-badge">Advanced</span></div>
+      <ul class="topic-items">
+        <li>Margin maximization (SVM primal)</li>
+        <li>Dual formulation and support vectors</li>
+        <li>Kernel trick: k(x,x') = φ(x)·φ(x')</li>
+        <li>Linear, polynomial, RBF kernels</li>
+        <li>Kernel matrix (Gram matrix)</li>
+        <li>Mercer's theorem</li>
+      </ul>
+    </div>
+    <div class="topic-card">
+      <div class="topic-name">Decision Trees & Ensemble Math <span class="topic-badge">Essential</span></div>
+      <ul class="topic-items">
+        <li>Gini impurity: 1 - Σpᵢ²</li>
+        <li>Information gain (entropy-based splitting)</li>
+        <li>Variance reduction (regression trees)</li>
+        <li>Bagging and bootstrap aggregation</li>
+        <li>Bias-variance decomposition</li>
+        <li>AdaBoost weight updates</li>
+        <li>Gradient Boosting — additive model math</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="resources-section">
+    <div class="resources-title">📚 Resources for this section</div>
+    <div class="resources-grid">
+      <div class="resource-item"><div class="resource-icon">📖</div><div><div class="resource-name">Mathematics for ML (Deisenroth)</div><div class="resource-type">Free PDF · mml-book.github.io</div></div></div>
+      <div class="resource-item"><div class="resource-icon">📺</div><div><div class="resource-name">StatQuest — ML Math</div><div class="resource-type">YouTube · Free</div></div></div>
+      <div class="resource-item"><div class="resource-icon">🌐</div><div><div class="resource-name">fast.ai — Practical Deep Learning</div><div class="resource-type">Web · Free · fast.ai</div></div></div>
+      <div class="resource-item"><div class="resource-icon">📖</div><div><div class="resource-name">Pattern Recognition (Bishop)</div><div class="resource-type">Free PDF · microsoft.com/en-us/research</div></div></div>
+      <div class="resource-item"><div class="resource-icon">🌐</div><div><div class="resource-name">Distill.pub</div><div class="resource-type">Interactive Web · distill.pub</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════ GLOBAL RESOURCES ══════════════════════════════════ -->
+<div class="global-resources" id="global">
+  <h2>📦 All Downloadable & Online Resources</h2>
+  <p class="sub">Organized by format — websites, apps, free textbooks, and video courses.</p>
+
+  <div class="res-category">
+    <div class="res-cat-title">🌐 Websites & Interactive Platforms</div>
+    <div class="res-list">
+      <div class="res-chip"><div class="res-chip-name">Khan Academy</div><div class="res-chip-url">khanacademy.org</div></div>
+      <div class="res-chip"><div class="res-chip-name">Brilliant.org</div><div class="res-chip-url">brilliant.org</div></div>
+      <div class="res-chip"><div class="res-chip-name">Wolfram Alpha</div><div class="res-chip-url">wolframalpha.com</div></div>
+      <div class="res-chip"><div class="res-chip-name">Desmos Calculator</div><div class="res-chip-url">desmos.com</div></div>
+      <div class="res-chip"><div class="res-chip-name">GeoGebra</div><div class="res-chip-url">geogebra.org</div></div>
+      <div class="res-chip"><div class="res-chip-name">Seeing Theory</div><div class="res-chip-url">seeingtheory.brown.edu</div></div>
+      <div class="res-chip"><div class="res-chip-name">Immersive Linear Algebra</div><div class="res-chip-url">immersivemath.com</div></div>
+      <div class="res-chip"><div class="res-chip-name">Paul's Online Math Notes</div><div class="res-chip-url">tutorial.math.lamar.edu</div></div>
+      <div class="res-chip"><div class="res-chip-name">Distill.pub</div><div class="res-chip-url">distill.pub</div></div>
+      <div class="res-chip"><div class="res-chip-name">Towards Data Science</div><div class="res-chip-url">towardsdatascience.com</div></div>
+    </div>
+  </div>
+
+  <div class="res-category">
+    <div class="res-cat-title">📱 Mobile Apps (iOS & Android)</div>
+    <div class="res-list">
+      <div class="res-chip"><div class="res-chip-name">Photomath</div><div class="res-chip-url">Step-by-step solver</div></div>
+      <div class="res-chip"><div class="res-chip-name">Mathway</div><div class="res-chip-url">Problem solver + explanations</div></div>
+      <div class="res-chip"><div class="res-chip-name">Khan Academy App</div><div class="res-chip-url">Full course catalog</div></div>
+      <div class="res-chip"><div class="res-chip-name">Brilliant App</div><div class="res-chip-url">Interactive problem-solving</div></div>
+      <div class="res-chip"><div class="res-chip-name">GeoGebra App</div><div class="res-chip-url">Graphing + geometry</div></div>
+      <div class="res-chip"><div class="res-chip-name">Symbolab</div><div class="res-chip-url">Calculus & algebra solver</div></div>
+      <div class="res-chip"><div class="res-chip-name">Wolfram Alpha App</div><div class="res-chip-url">Computation engine</div></div>
+      <div class="res-chip"><div class="res-chip-name">Microsoft Math Solver</div><div class="res-chip-url">Free OCR solver</div></div>
+    </div>
+  </div>
+
+  <div class="res-category">
+    <div class="res-cat-title">📖 Free Textbooks (PDF Download)</div>
+    <div class="res-list">
+      <div class="res-chip"><div class="res-chip-name">Mathematics for ML</div><div class="res-chip-url">mml-book.github.io</div></div>
+      <div class="res-chip"><div class="res-chip-name">OpenIntro Statistics</div><div class="res-chip-url">openintro.org/book/os</div></div>
+      <div class="res-chip"><div class="res-chip-name">Think Stats</div><div class="res-chip-url">greenteapress.com</div></div>
+      <div class="res-chip"><div class="res-chip-name">Convex Optimization (Boyd)</div><div class="res-chip-url">web.stanford.edu/~boyd/cvxbook</div></div>
+      <div class="res-chip"><div class="res-chip-name">OpenStax College Algebra</div><div class="res-chip-url">openstax.org/details/books/college-algebra</div></div>
+      <div class="res-chip"><div class="res-chip-name">Calculus Made Easy</div><div class="res-chip-url">gutenberg.org</div></div>
+      <div class="res-chip"><div class="res-chip-name">Deep Learning Book (Goodfellow)</div><div class="res-chip-url">deeplearningbook.org</div></div>
+      <div class="res-chip"><div class="res-chip-name">Pattern Recognition (Bishop)</div><div class="res-chip-url">microsoft.com/en-us/research</div></div>
+    </div>
+  </div>
+
+  <div class="res-category">
+    <div class="res-cat-title">📺 YouTube Channels</div>
+    <div class="res-list">
+      <div class="res-chip"><div class="res-chip-name">3Blue1Brown</div><div class="res-chip-url">Visual intuition (LA & Calculus)</div></div>
+      <div class="res-chip"><div class="res-chip-name">StatQuest w/ Josh Starmer</div><div class="res-chip-url">Stats & ML explained clearly</div></div>
+      <div class="res-chip"><div class="res-chip-name">Ritvikmath</div><div class="res-chip-url">Time series & probability</div></div>
+      <div class="res-chip"><div class="res-chip-name">TrevTutor</div><div class="res-chip-url">Discrete mathematics</div></div>
+      <div class="res-chip"><div class="res-chip-name">Zach Star</div><div class="res-chip-url">Applied math in data science</div></div>
+      <div class="res-chip"><div class="res-chip-name">Numberphile</div><div class="res-chip-url">Math concepts & curiosity</div></div>
+    </div>
+  </div>
+
+  <div class="res-category">
+    <div class="res-cat-title">🎓 Online Course Platforms</div>
+    <div class="res-list">
+      <div class="res-chip"><div class="res-chip-name">MIT OpenCourseWare</div><div class="res-chip-url">ocw.mit.edu</div></div>
+      <div class="res-chip"><div class="res-chip-name">Coursera</div><div class="res-chip-url">coursera.org (audit free)</div></div>
+      <div class="res-chip"><div class="res-chip-name">edX</div><div class="res-chip-url">edx.org (audit free)</div></div>
+      <div class="res-chip"><div class="res-chip-name">fast.ai</div><div class="res-chip-url">fast.ai (deep learning + math)</div></div>
+      <div class="res-chip"><div class="res-chip-name">DataCamp</div><div class="res-chip-url">datacamp.com (applied stats)</div></div>
+      <div class="res-chip"><div class="res-chip-name">DeepLearning.AI</div><div class="res-chip-url">deeplearning.ai</div></div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<div class="footer">MATHEMATICS FOR DATA ANALYTICS · COMPLETE REFERENCE · 8 DOMAINS · 60+ TOPICS</div>
+
+</body>
+</html>
