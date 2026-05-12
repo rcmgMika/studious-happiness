@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Challenge Problems — Linear Equations & Systems</title>
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wght@400;600;700;800&family=Mulish:wght@300;400;500;600&family=Inconsolata:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f4ee;
+    --paper: #ffffff;
+    --ink: #18140a;
+    --muted: #7a7060;
+    --rule: #e5dfd2;
+    --faint: #f0ece2;
+
+    /* Topic 1 — slate blue */
+    --t1: #2f5fc4;
+    --t1-bg: #eef3ff;
+    --t1-border: #c0d0f8;
+    --t1-mid: #4a74e8;
+
+    /* Topic 2 — warm red */
+    --t2: #c43030;
+    --t2-bg: #fff0f0;
+    --t2-border: #f8c0c0;
+    --t2-mid: #e84a4a;
+
+    /* difficulty colors */
+    --easy:   #1a8a4a;
+    --easy-bg: #edfaf3;
+    --easy-b:  #9de0c0;
+    --med:    #b07000;
+    --med-bg:  #fff8e6;
+    --med-b:   #f0d080;
+    --hard:   #a01830;
+    --hard-bg: #fff0f2;
+    --hard-b:  #f0a8b0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Mulish', sans-serif;
+    font-weight: 300;
+    line-height: 1.75;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--ink);
+    color: #f5f0e4;
+    padding: 56px 40px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::after {
+    content: '?';
+    position: absolute;
+    right: 30px; top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Anybody', sans-serif;
+    font-size: 18rem;
+    font-weight: 800;
+    opacity: 0.04;
+    line-height: 1;
+    pointer-events: none;
+  }
+  .header-inner { max-width: 900px; margin: 0 auto; position: relative; z-index: 1; }
+  .crumb {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #6a6050;
+    margin-bottom: 18px;
+  }
+  .mode-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,200,60,0.12);
+    border: 1px solid rgba(255,200,60,0.25);
+    border-radius: 4px;
+    padding: 5px 14px;
+    font-family: 'Inconsolata', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #f0c040;
+    margin-bottom: 18px;
+  }
+  .mode-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #f0c040;
+    animation: blink 1.4s ease-in-out infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+  h1 {
+    font-family: 'Anybody', sans-serif;
+    font-size: clamp(1.9rem, 4.5vw, 3rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 14px;
+    color: #fff;
+  }
+  h1 .t1c { color: #7a9ef8; }
+  h1 .t2c { color: #f87a7a; }
+
+  .header-desc {
+    color: #8a8070;
+    font-size: 0.92rem;
+    max-width: 560px;
+    margin-bottom: 24px;
+  }
+  .header-stats { display: flex; gap: 28px; flex-wrap: wrap; }
+  .hs { font-family: 'Inconsolata', monospace; }
+  .hs-val { font-size: 1.4rem; color: #f0c040; font-weight: 500; }
+  .hs-lbl { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: #6a6050; }
+
+  /* ── INSTRUCTIONS ── */
+  .instructions {
+    background: var(--faint);
+    border-bottom: 2px solid var(--rule);
+    padding: 18px 40px;
+  }
+  .instr-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .instr-label {
+    font-family: 'Inconsolata', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .instr-text { font-size: 0.85rem; color: var(--ink); }
+  .diff-chips { display: flex; gap: 8px; align-items: center; }
+  .diff-chip {
+    font-family: 'Inconsolata', monospace;
+    font-size: 9.5px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .dc-e { background: var(--easy-bg); color: var(--easy); border: 1px solid var(--easy-b); }
+  .dc-m { background: var(--med-bg);  color: var(--med);  border: 1px solid var(--med-b);  }
+  .dc-h { background: var(--hard-bg); color: var(--hard); border: 1px solid var(--hard-b); }
+
+  /* ── MAIN ── */
+  main { max-width: 900px; margin: 0 auto; padding: 52px 24px 80px; }
+
+  /* ── TOPIC BLOCK ── */
+  .topic { margin-bottom: 72px; }
+
+  .topic-header {
+    border-radius: 12px;
+    padding: 22px 26px;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+  }
+  .t1-header { background: var(--t1-bg); border: 1.5px solid var(--t1-border); }
+  .t2-header { background: var(--t2-bg); border: 1.5px solid var(--t2-border); }
+
+  .topic-icon {
+    width: 50px; height: 50px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+  }
+  .t1-icon { background: var(--t1); }
+  .t2-icon { background: var(--t2); }
+
+  .topic-title-area {}
+  .t-tag {
+    font-family: 'Inconsolata', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .t1-tag { color: var(--t1); }
+  .t2-tag { color: var(--t2); }
+
+  h2 {
+    font-family: 'Anybody', sans-serif;
+    font-size: 1.45rem;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+  .t1-h2 { color: var(--t1); }
+  .t2-h2 { color: var(--t2); }
+  .topic-desc { font-size: 0.86rem; color: var(--muted); margin-top: 5px; }
+
+  /* ── PROBLEM CARD ── */
+  .problem {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    margin-bottom: 16px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+
+  .prob-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 13px 22px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .prob-num {
+    font-family: 'Anybody', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    color: white;
+  }
+  .t1-num { background: var(--t1); }
+  .t2-num { background: var(--t2); }
+
+  .prob-meta { flex: 1; }
+  .prob-title { font-size: 0.93rem; font-weight: 600; color: var(--ink); }
+  .prob-subtitle { font-size: 0.8rem; color: var(--muted); }
+
+  .diff-badge {
+    font-family: 'Inconsolata', monospace;
+    font-size: 9px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+  }
+  .db-e { background: var(--easy-bg); color: var(--easy); border: 1px solid var(--easy-b); }
+  .db-m { background: var(--med-bg);  color: var(--med);  border: 1px solid var(--med-b);  }
+  .db-h { background: var(--hard-bg); color: var(--hard); border: 1px solid var(--hard-b); }
+
+  .prob-body { padding: 20px 24px; }
+
+  /* ── PROBLEM STATEMENT ── */
+  .prob-stmt {
+    background: var(--faint);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+  }
+  .stmt-label {
+    font-family: 'Inconsolata', monospace;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .stmt-text {
+    font-size: 0.9rem;
+    color: var(--ink);
+    line-height: 1.7;
+  }
+  .stmt-eq {
+    font-family: 'Inconsolata', monospace;
+    font-size: 1rem;
+    color: var(--ink);
+    font-weight: 500;
+    display: block;
+    margin: 10px 0 4px;
+    letter-spacing: 0.02em;
+  }
+  .stmt-note {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-style: italic;
+    margin-top: 6px;
+  }
+
+  /* ── HINT ── */
+  .hint {
+    background: #fffef5;
+    border: 1px solid #f0e080;
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .hint-icon { font-size: 0.95rem; flex-shrink: 0; margin-top: 1px; }
+  .hint-text { font-size: 0.83rem; color: #6a5800; line-height: 1.7; }
+  .hint-text strong { color: #3a3000; font-weight: 600; }
+
+  /* ── ANSWER SPACE ── */
+  .answer-space {
+    background: var(--faint);
+    border: 1.5px dashed var(--rule);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-top: 14px;
+    min-height: 70px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .ans-icon { font-size: 1.1rem; opacity: 0.4; }
+  .ans-prompt { font-size: 0.83rem; color: var(--muted); font-style: italic; }
+
+  /* ── TOPIC DIVIDER ── */
+  .topic-divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 60px 0;
+  }
+  .topic-divider::before, .topic-divider::after {
+    content: ''; flex: 1;
+    height: 1px; background: var(--rule);
+  }
+  .td-label {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* ── REMINDER BOX ── */
+  .reminder {
+    background: var(--faint);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin-bottom: 28px;
+  }
+  .reminder-title {
+    font-family: 'Inconsolata', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .reminder-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 8px;
+    font-size: 0.83rem;
+    color: var(--ink);
+  }
+  .reminder-item {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    line-height: 1.6;
+  }
+  .reminder-item::before { content: '→'; color: var(--muted); flex-shrink: 0; font-family: 'Inconsolata', monospace; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 28px;
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    border-top: 1px solid var(--rule);
+  }
+
+  @media (max-width: 580px) {
+    .header { padding: 44px 20px 40px; }
+    main { padding: 36px 16px 60px; }
+    .instructions { padding: 14px 16px; }
+    .prob-body { padding: 16px; }
+    h1 { font-size: 1.7rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div class="crumb">Mathematics for Data Analytics → Pre-Algebra & Algebra</div>
+    <div class="mode-badge"><span class="mode-dot"></span> Interactive Mode — You Solve</div>
+    <h1><span class="t1c">Linear Equations</span><br>&amp; <span class="t2c">Systems</span> — Challenge Problems</h1>
+    <p class="header-desc">5 problems per subtopic, ordered by difficulty. Solve each one, then share your answers for review and feedback.</p>
+    <div class="header-stats">
+      <div class="hs"><div class="hs-val">10</div><div class="hs-lbl">Total Problems</div></div>
+      <div class="hs"><div class="hs-val">2</div><div class="hs-lbl">Subtopics</div></div>
+      <div class="hs"><div class="hs-val">Easy → Hard</div><div class="hs-lbl">Difficulty Range</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- INSTRUCTIONS -->
+<div class="instructions">
+  <div class="instr-inner">
+    <div>
+      <div class="instr-label">How to use</div>
+      <div class="instr-text">Read each problem, write your full solution (not just the answer), then share it for feedback.</div>
+    </div>
+    <div>
+      <div class="instr-label">Difficulty scale</div>
+      <div class="diff-chips">
+        <span class="diff-chip dc-e">Easy</span>
+        <span class="diff-chip dc-m">Medium</span>
+        <span class="diff-chip dc-h">Hard</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main>
+
+<!-- ══════════════════════════════════════════════════════
+     TOPIC 1 — SOLVING LINEAR EQUATIONS & INEQUALITIES
+══════════════════════════════════════════════════════ -->
+<div class="topic">
+
+  <div class="topic-header t1-header">
+    <div class="topic-icon t1-icon">⚖️</div>
+    <div class="topic-title-area">
+      <div class="t-tag t1-tag">Subtopic 01 · 5 Problems</div>
+      <h2 class="t1-h2">Solving Linear Equations & Inequalities</h2>
+      <div class="topic-desc">Isolate the variable. Maintain balance. Handle inequalities with care around negatives.</div>
+    </div>
+  </div>
+
+  <div class="reminder">
+    <div class="reminder-title">Quick Reminders Before You Start</div>
+    <div class="reminder-grid">
+      <div class="reminder-item">Whatever you do to one side, do to the other.</div>
+      <div class="reminder-item">Distribute before collecting like terms.</div>
+      <div class="reminder-item">When multiplying or dividing an inequality by a negative number, flip the inequality sign.</div>
+      <div class="reminder-item">Always verify your equation answer by substituting back.</div>
+      <div class="reminder-item">For inequalities, express the solution as an interval or inequality, not just a number.</div>
+    </div>
+  </div>
+
+  <!-- PROBLEM 1 -->
+  <div class="problem">
+    <div class="prob-head">
+      <div class="prob-num t1-num">1</div>
+      <div class="prob-meta">
+        <div class="prob-title">Solve for x — Basic one-step linear equation</div>
+        <div class="prob-subtitle">Equations · Single variable</div>
+      </div>
+      <span class="diff-badge db-e">Easy</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-stmt">
+        <div class="stmt-label">Problem</div>
+        <div class="stmt-text">Solve for x:</div>
+        <span class="stmt-eq">4x − 9 = 19</span>
+        <div class="stmt-note">Express your answer as an exact value.</div>
+      </div>
+      <div class="hint">
+        <div class="hint-icon">💡</div>
+        <div class="hint-text"><strong>Hint:</strong> Move the constant to the right side first, then divide. After solving, substitute back into the original equation to check.</div>
+      </div>
+      <div class="answer-space">
+        <div class="ans-icon">✏️</div>
+        <div class="ans-prompt">Write your full working steps and answer here, then share it.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROBLEM 2 -->
+  <div class="problem">
+    <div class="prob-head">
+      <div class="prob-num t1-num">2</div>
+      <div class="prob-meta">
+        <div class="prob-title">Solve for x — Equation with distribution</div>
+        <div class="prob-subtitle">Equations · Distribution required</div>
+      </div>
+      <span class="diff-badge db-e">Easy</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-stmt">
+        <div class="stmt-label">Problem</div>
+        <div class="stmt-text">Solve for x:</div>
+        <span class="stmt-eq">3(2x − 4) = 2(x + 6)</span>
+        <div class="stmt-note">Distribute on both sides before solving.</div>
+      </div>
+      <div class="hint">
+        <div class="hint-icon">💡</div>
+        <div class="hint-text"><strong>Hint:</strong> Expand both sides fully first, then move all x-terms to one side and all constants to the other.</div>
+      </div>
+      <div class="answer-space">
+        <div class="ans-icon">✏️</div>
+        <div class="ans-prompt">Write your full working steps and answer here, then share it.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROBLEM 3 -->
+  <div class="problem">
+    <div class="prob-head">
+      <div class="prob-num t1-num">3</div>
+      <div class="prob-meta">
+        <div class="prob-title">Solve and graph the inequality</div>
+        <div class="prob-subtitle">Inequalities · Negative coefficient</div>
+      </div>
+      <span class="diff-badge db-m">Medium</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-stmt">
+        <div class="stmt-label">Problem</div>
+        <div class="stmt-text">Solve the inequality and express your answer in interval notation:</div>
+        <span class="stmt-eq">−3x + 7 ≥ 1</span>
+        <div class="stmt-note">Watch for the rule about dividing by a negative number.</div>
+      </div>
+      <div class="hint">
+        <div class="hint-icon">💡</div>
+        <div class="hint-text"><strong>Hint:</strong> When you divide or multiply both sides of an inequality by a <strong>negative number</strong>, the inequality sign flips. For example: −2x &gt; 4 → x &lt; −2 (sign flipped). Interval notation: x ≤ 2 is written as (−∞, 2].</div>
+      </div>
+      <div class="answer-space">
+        <div class="ans-icon">✏️</div>
+        <div class="ans-prompt">Write your inequality solution and interval notation, then share it.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROBLEM 4 -->
+  <div class="problem">
+    <div class="prob-head">
+      <div class="prob-num t1-num">4</div>
+      <div class="prob-meta">
+        <div class="prob-title">Solve the compound inequality</div>
+        <div class="prob-subtitle">Inequalities · Compound / three-part</div>
+      </div>
+      <span class="diff-badge db-m">Medium</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-stmt">
+        <div class="stmt-label">Problem</div>
+        <div class="stmt-text">Solve for x and express in interval notation:</div>
+        <span class="stmt-eq">−4 ≤ 2x + 6 ≤ 10</span>
+        <div class="stmt-note">This is a three-part (compound) inequality. Solve all three parts simultaneously.</div>
+      </div>
+      <div class="hint">
+        <div class="hint-icon">💡</div>
+        <div class="hint-text"><strong>Hint:</strong> Treat the middle expression as what you are isolating. Apply the same operation to <strong>all three parts</strong> at once. Your answer will be a range of values: a ≤ x ≤ b, written as [a, b] in interval notation.</div>
+      </div>
+      <div class="answer-space">
+        <div class="ans-icon">✏️</div>
+        <div class="ans-prompt">Write your three-part working and interval notation answer, then share it.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROBLEM 5 -->
+  <div class="problem">
+    <div class="prob-head">
+      <div class="prob-num t1-num">5</div>
+      <div class="prob-meta">
+        <div class="prob-title">Word problem — build and solve the equation</div>
+        <div class="prob-subtitle">Equations · Modeling · Real-world</div>
+      </div>
+      <span class="diff-badge db-h">Hard</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-stmt">
+        <div class="stmt-label">Problem</div>
+        <div class="stmt-text">
+          A data analyst has two project plans. <br><br>
+          <strong>Plan A</strong> costs a flat fee of $200 plus $45 per hour of work.<br>
+          <strong>Plan B</strong> costs a flat fee of $80 plus $60 per hour of work.<br><br>
+          For how many hours of work do both plans cost the same? And for how many hours is Plan A <em>strictly cheaper</em> than Plan B?
+        </div>
+        <div class="stmt-note">Part 1: Set up and solve an equation. Part 2: Set up and solve an inequality.</div>
+      </div>
+      <div class="hint">
+        <div class="hint-icon">💡</div>
+        <div class="hint-text"><strong>Hint:</strong> Let h = number of hours. Write a cost expression for each plan. For Part 1: set them equal. For Part 2: set Plan A &lt; Plan B, then solve for h. Think about what the direction of the inequality tells you about which plan to choose.</div>
+      </div>
+      <div class="answer-space">
+        <div class="ans-icon">✏️</div>
+        <div class="ans-prompt">Write your equations, inequality, full working, and a sentence interpreting the answer, then share it.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- DIVIDER -->
+<div class="topic-divider">
+  <span class="td-label">End of Subtopic 01 · Beginning of Subtopic 02</span>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     TOPIC 2 — SYSTEMS OF LINEAR EQUATIONS
+══════════════════════════════════════════════════════ -->
+<div class="topic">
+
+  <div class="topic-header t2-header">
+    <div class="topic-icon t2-icon">🔗</div>
+    <div class="topic-title-area">
+      <div class="t-tag t2-tag">Subtopic 02 · 5 Problems</div>
+      <h2 class="t2-h2">Systems of Linear Equations</h2>
+      <div class="topic-desc">Two or more equations, two or more unknowns. Find the values that satisfy all equations simultaneously.</div>
+    </div>
+  </div>
+
+  <div class="reminder">
+    <div class="reminder-title">Quick Reminders Before You Start</div>
+    <div class="reminder-grid">
+      <div class="reminder-item">Substitution: isolate one variable in one equation, substitute into the other.</div>
+      <div class="reminder-item">Elimination: multiply equations to match one variable's coefficient, then add or subtract to cancel it.</div>
+      <div class="reminder-item">Always solve for BOTH variables — not just the first one you find.</div>
+      <div class="reminder-item">Verify by substituting your (x, y) into BOTH original equations.</div>
+      <div class="reminder-item">No solution → parallel lines. Infinite solutions → same line.</div>
+    </div>
+  </div>
+
+  <!-- PROBLEM 6 -->
+  <div class="problem">
+    <div class="prob-head">
+      <div class="prob-num t2-num">6</div>
+      <div class="prob-meta">
+        <div class="prob-title">Solve the system — Substitution method</div>
+        <div class="prob-subtitle">Systems · 2 variables · Substitution</div>
+      </div>
+      <span class="diff-badge db-e">Easy</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-stmt">
+        <div class="stmt-label">Problem</div>
+        <div class="stmt-text">Solve the system of equations:</div>
+        <span class="stmt-eq">y = 2x − 3</span>
+        <span class="stmt-eq">3x + y = 12</span>
+        <div class="stmt-note">Express your answer as an ordered pair (x, y).</div>
+      </div>
+      <div class="hint">
+        <div class="hint-icon">💡</div>
+        <div class="hint-text"><strong>Hint:</strong> The first equation already has y isolated. Substitute the expression for y directly into the second equation to get one equation with one variable.</div>
+      </div>
+      <div class="answer-space">
+        <div class="ans-icon">✏️</div>
+        <div class="ans-prompt">Write your full working and answer as (x, y), then share it.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROBLEM 7 -->
+  <div class="problem">
+    <div class="prob-head">
+      <div class="prob-num t2-num">7</div>
+      <div class="prob-meta">
+        <div class="prob-title">Solve the system — Elimination method</div>
+        <div class="prob-subtitle">Systems · 2 variables · Elimination</div>
+      </div>
+      <span class="diff-badge db-e">Easy</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-stmt">
+        <div class="stmt-label">Problem</div>
+        <div class="stmt-text">Solve the system of equations using elimination:</div>
+        <span class="stmt-eq">3x + 2y = 16</span>
+        <span class="stmt-eq">5x − 2y = 8</span>
+        <div class="stmt-note">Notice the y-coefficients. Express your answer as an ordered pair (x, y).</div>
+      </div>
+      <div class="hint">
+        <div class="hint-icon">💡</div>
+        <div class="hint-text"><strong>Hint:</strong> The y-terms are already set up for elimination. Adding the two equations directly will cancel the y-terms. Then solve for x, and back-substitute to find y.</div>
+      </div>
+      <div class="answer-space">
+        <div class="ans-icon">✏️</div>
+        <div class="ans-prompt">Write your elimination steps and answer as (x, y), then share it.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROBLEM 8 -->
+  <div class="problem">
+    <div class="prob-head">
+      <div class="prob-num t2-num">8</div>
+      <div class="prob-meta">
+        <div class="prob-title">Identify the type of system</div>
+        <div class="prob-subtitle">Systems · Inconsistent · No solution</div>
+      </div>
+      <span class="diff-badge db-m">Medium</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-stmt">
+        <div class="stmt-label">Problem</div>
+        <div class="stmt-text">Attempt to solve the system below. State how many solutions it has and why:</div>
+        <span class="stmt-eq">2x − 4y = 8</span>
+        <span class="stmt-eq">x − 2y = 6</span>
+        <div class="stmt-note">Try solving it, and describe what happens and what it means geometrically.</div>
+      </div>
+      <div class="hint">
+        <div class="hint-icon">💡</div>
+        <div class="hint-text"><strong>Hint:</strong> Try multiplying the second equation by 2 and compare it to the first. Ask yourself: what do you get when you subtract? What does that result (like 0 = 4) tell you? Remember: parallel lines never intersect.</div>
+      </div>
+      <div class="answer-space">
+        <div class="ans-icon">✏️</div>
+        <div class="ans-prompt">Write your working, state the number of solutions, and explain what it means geometrically, then share it.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROBLEM 9 -->
+  <div class="problem">
+    <div class="prob-head">
+      <div class="prob-num t2-num">9</div>
+      <div class="prob-meta">
+        <div class="prob-title">Solve the system — Elimination with scaling</div>
+        <div class="prob-subtitle">Systems · 2 variables · Multiply before eliminating</div>
+      </div>
+      <span class="diff-badge db-m">Medium</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-stmt">
+        <div class="stmt-label">Problem</div>
+        <div class="stmt-text">Solve the system of equations:</div>
+        <span class="stmt-eq">4x + 3y = 10</span>
+        <span class="stmt-eq">6x − 5y = 4</span>
+        <div class="stmt-note">Neither variable cancels directly. You will need to multiply both equations by something first.</div>
+      </div>
+      <div class="hint">
+        <div class="hint-icon">💡</div>
+        <div class="hint-text"><strong>Hint:</strong> To eliminate x, multiply the first equation by 3 and the second by 2, then subtract. Alternatively, to eliminate y, multiply the first equation by 5 and the second by 3, then add. Choose whichever feels cleaner.</div>
+      </div>
+      <div class="answer-space">
+        <div class="ans-icon">✏️</div>
+        <div class="ans-prompt">Show which variable you chose to eliminate, your scaling steps, and answer as (x, y), then share it.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROBLEM 10 -->
+  <div class="problem">
+    <div class="prob-head">
+      <div class="prob-num t2-num">10</div>
+      <div class="prob-meta">
+        <div class="prob-title">Word problem — build a system and solve it</div>
+        <div class="prob-subtitle">Systems · Real-world modeling · Data context</div>
+      </div>
+      <span class="diff-badge db-h">Hard</span>
+    </div>
+    <div class="prob-body">
+      <div class="prob-stmt">
+        <div class="stmt-label">Problem</div>
+        <div class="stmt-text">
+          A company runs two types of ad campaigns — <strong>digital ads</strong> and <strong>print ads</strong>.<br><br>
+          In Week 1, they ran <strong>5 digital</strong> and <strong>3 print</strong> ads, generating <strong>1,340 total clicks</strong>.<br>
+          In Week 2, they ran <strong>2 digital</strong> and <strong>7 print</strong> ads, generating <strong>1,020 total clicks</strong>.<br><br>
+          Assuming each digital ad generates <em>d</em> clicks and each print ad generates <em>p</em> clicks consistently, find the average clicks per digital ad and per print ad.
+        </div>
+        <div class="stmt-note">Set up a system of two equations with two unknowns (d and p), then solve. Interpret your answer in a sentence.</div>
+      </div>
+      <div class="hint">
+        <div class="hint-icon">💡</div>
+        <div class="hint-text"><strong>Hint:</strong> Equation 1 comes from Week 1's data: 5d + 3p = 1340. Write Equation 2 from Week 2's data. Then solve the system using substitution or elimination. After solving, write a sentence stating what each value means.</div>
+      </div>
+      <div class="answer-space">
+        <div class="ans-icon">✏️</div>
+        <div class="ans-prompt">Write both equations, your full solution steps, and a sentence interpreting d and p, then share it.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</main>
+
+<footer>ALGEBRA I · LINEAR EQUATIONS & INEQUALITIES · SYSTEMS OF LINEAR EQUATIONS · INTERACTIVE CHALLENGE MODE</footer>
+</body>
+</html>

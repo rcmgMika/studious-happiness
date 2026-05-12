@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pre-Algebra: Scientific Notation & Variables</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,500&family=Source+Sans+3:wght@300;400;500;600&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --surface: #13161e;
+    --surface2: #1a1e29;
+    --border: rgba(255,255,255,0.07);
+    --text: #dde3f0;
+    --muted: #7a859e;
+    --faint: #3a4255;
+
+    /* Topic 1 — deep teal/cyan */
+    --t1: #00c2cc;
+    --t1-dim: rgba(0,194,204,0.12);
+    --t1-border: rgba(0,194,204,0.25);
+
+    /* Topic 2 — warm gold */
+    --t2: #f0a500;
+    --t2-dim: rgba(240,165,0,0.1);
+    --t2-border: rgba(240,165,0,0.25);
+
+    /* Card accent colors */
+    --c-desc: #60a5fa;
+    --c-desc-bg: rgba(96,165,250,0.08);
+    --c-purp: #a78bfa;
+    --c-purp-bg: rgba(167,139,250,0.08);
+    --c-how: #34d399;
+    --c-how-bg: rgba(52,211,153,0.08);
+    --c-samp: #fb923c;
+    --c-samp-bg: rgba(251,146,60,0.08);
+    --c-chall: #f472b6;
+    --c-chall-bg: rgba(244,114,182,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 300;
+    line-height: 1.75;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    padding: 60px 40px 52px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(160deg, #0d0f14 60%, #101520 100%);
+  }
+  .header-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  .header-inner { max-width: 880px; margin: 0 auto; position: relative; z-index: 1; }
+  .breadcrumb {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+  .breadcrumb span { color: var(--t1); }
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 14px;
+    color: #fff;
+  }
+  h1 .em { font-style: italic; font-weight: 500; color: var(--t2); }
+  .header-desc {
+    color: var(--muted);
+    font-size: 0.92rem;
+    max-width: 520px;
+    margin-bottom: 28px;
+  }
+  .topic-badges { display: flex; gap: 10px; flex-wrap: wrap; }
+  .badge {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 10px;
+    padding: 5px 14px;
+    border-radius: 3px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .badge-1 { background: var(--t1-dim); color: var(--t1); border: 1px solid var(--t1-border); }
+  .badge-2 { background: var(--t2-dim); color: var(--t2); border: 1px solid var(--t2-border); }
+
+  /* ── MAIN ── */
+  main { max-width: 880px; margin: 0 auto; padding: 64px 24px 80px; }
+
+  /* ── TOPIC BLOCK ── */
+  .topic { margin-bottom: 84px; }
+
+  .topic-header {
+    display: grid;
+    grid-template-columns: 4px 1fr;
+    gap: 0 20px;
+    margin-bottom: 36px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .topic-stripe { border-radius: 4px; }
+  .t1-stripe { background: var(--t1); }
+  .t2-stripe { background: var(--t2); }
+  .topic-header-text {}
+  .topic-meta {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .t1-meta { color: var(--t1); }
+  .t2-meta { color: var(--t2); }
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: #fff;
+  }
+  .topic-tagline { color: var(--muted); font-size: 0.88rem; margin-top: 5px; }
+
+  /* ── CRITERIA CARDS ── */
+  .criteria { display: flex; flex-direction: column; gap: 16px; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .card-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 13px 22px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card-icon {
+    width: 34px; height: 34px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+  .card-label {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1px;
+  }
+  .card-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .card-body { padding: 22px 24px; font-size: 0.88rem; }
+  .card-body p { margin-bottom: 12px; color: var(--text); }
+  .card-body p:last-child { margin-bottom: 0; }
+
+  /* criterion colors */
+  .c-desc .card-icon { background: var(--c-desc-bg); }
+  .c-desc .card-title { color: var(--c-desc); }
+  .c-purp .card-icon { background: var(--c-purp-bg); }
+  .c-purp .card-title { color: var(--c-purp); }
+  .c-how .card-icon { background: var(--c-how-bg); }
+  .c-how .card-title { color: var(--c-how); }
+  .c-samp .card-icon { background: var(--c-samp-bg); }
+  .c-samp .card-title { color: var(--c-samp); }
+  .c-chall .card-icon { background: var(--c-chall-bg); }
+  .c-chall .card-title { color: var(--c-chall); }
+
+  /* ── MATH BLOCK ── */
+  .math {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 12px 0;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.85rem;
+    line-height: 2.1;
+    color: #c8d8f0;
+  }
+  .math.t1 { border-left: 3px solid var(--t1); }
+  .math.t2 { border-left: 3px solid var(--t2); }
+
+  /* ── STEPS ── */
+  .steps { display: flex; flex-direction: column; gap: 10px; margin: 12px 0; }
+  .step { display: flex; gap: 14px; align-items: flex-start; }
+  .step-n {
+    min-width: 26px; height: 26px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .step-n-t1 { background: var(--t1-dim); color: var(--t1); border: 1px solid var(--t1-border); }
+  .step-n-t2 { background: var(--t2-dim); color: var(--t2); border: 1px solid var(--t2-border); }
+  .step-txt { font-size: 0.87rem; line-height: 1.75; color: var(--text); }
+
+  /* ── SAMPLE BOX ── */
+  .sample {
+    background: var(--surface2);
+    border: 1px solid rgba(251,146,60,0.15);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin: 12px 0;
+  }
+  .sample-lbl {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--c-samp);
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+  .sample-math {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.85rem;
+    line-height: 2.1;
+    color: #fde8d0;
+  }
+  .sample-note {
+    font-size: 0.81rem;
+    color: var(--muted);
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(251,146,60,0.12);
+  }
+
+  /* ── PURPOSE ROW ── */
+  .purp-rows { display: flex; flex-direction: column; gap: 10px; }
+  .purp-row { display: flex; gap: 12px; align-items: flex-start; font-size: 0.87rem; line-height: 1.75; }
+  .ptag {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 9px;
+    padding: 3px 10px;
+    border-radius: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 4px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .ptag-1 { background: var(--t1-dim); color: var(--t1); border: 1px solid var(--t1-border); }
+  .ptag-2 { background: var(--t2-dim); color: var(--t2); border: 1px solid var(--t2-border); }
+
+  /* ── CHALLENGE ── */
+  .challenge {
+    background: rgba(244,114,182,0.05);
+    border: 1px solid rgba(244,114,182,0.15);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin: 10px 0;
+  }
+  .chall-q {
+    font-size: 0.87rem;
+    font-weight: 500;
+    color: var(--c-chall);
+    margin-bottom: 8px;
+    display: flex;
+    gap: 9px;
+  }
+  .chall-q::before { content: '!'; font-family: 'Source Code Pro', monospace; flex-shrink: 0; opacity: 0.7; }
+  .chall-a {
+    font-size: 0.84rem;
+    color: var(--muted);
+    padding-left: 18px;
+    line-height: 1.75;
+  }
+  .chall-a strong { color: var(--text); font-weight: 500; }
+
+  /* ── RULE TABLE ── */
+  .rule-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.84rem; }
+  .rule-table th {
+    text-align: left;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .rule-table td {
+    padding: 9px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    vertical-align: top;
+    color: var(--text);
+  }
+  .rule-table td:first-child {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.82rem;
+    color: var(--c-how);
+    white-space: nowrap;
+  }
+  .rule-table tr:last-child td { border-bottom: none; }
+
+  /* ── HIGHLIGHT ── */
+  .hl1 { color: var(--t1); font-weight: 500; }
+  .hl2 { color: var(--t2); font-weight: 500; }
+  .hlw { color: #fff; font-weight: 500; }
+
+  /* ── DIVIDER ── */
+  .divider {
+    display: flex; align-items: center; gap: 16px;
+    margin: 64px 0;
+    color: var(--faint);
+    font-family: 'Source Code Pro', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+  }
+  .divider::before, .divider::after {
+    content: ''; flex: 1;
+    height: 1px; background: var(--border);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 28px;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--faint);
+    border-top: 1px solid var(--border);
+  }
+
+  @media (max-width: 580px) {
+    .header { padding: 44px 20px 40px; }
+    main { padding: 44px 16px 60px; }
+    .card-body { padding: 16px; }
+    .card-head { padding: 12px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-grid"></div>
+  <div class="header-inner">
+    <div class="breadcrumb">Mathematics for Data Analytics → <span>Pre-Algebra & Algebra</span></div>
+    <h1>Scientific Notation <span class="em">&amp;</span><br>Variables, Expressions, Equations</h1>
+    <p class="header-desc">Two subtopics explained with full criteria — description, purpose, how it works, samples, and common challenges with solutions.</p>
+    <div class="topic-badges">
+      <span class="badge badge-1">01 · Scientific Notation</span>
+      <span class="badge badge-2">02 · Variables, Expressions & Equations</span>
+    </div>
+  </div>
+</div>
+
+<main>
+
+<!-- ══════════════════ TOPIC 1: SCIENTIFIC NOTATION ══════════════════ -->
+<div class="topic">
+  <div class="topic-header">
+    <div class="topic-stripe t1-stripe"></div>
+    <div class="topic-header-text">
+      <div class="topic-meta t1-meta">Pre-Algebra · Subtopic 01</div>
+      <h2>Scientific Notation</h2>
+      <div class="topic-tagline">A standardized way to express very large or very small numbers compactly and precisely.</div>
+    </div>
+  </div>
+
+  <div class="criteria">
+
+    <!-- DESCRIPTION -->
+    <div class="card c-desc">
+      <div class="card-head">
+        <div class="card-icon">📋</div>
+        <div class="card-head-text">
+          <div class="card-label">Criterion 01</div>
+          <div class="card-title">Description</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <p><span class="hl1">Scientific notation</span> is a way of writing numbers as a product of two parts: a <hlw class="hlw">coefficient</hlw> and a <span class="hlw">power of 10</span>. The standard form is:</p>
+        <div class="math t1">a × 10ⁿ
+  where:  1 ≤ |a| &lt; 10   (the coefficient — always one non-zero digit before the decimal)
+          n = any integer  (positive, negative, or zero)</div>
+        <p>If the number is <strong>large</strong> (≥ 10), the exponent n is <span class="hl1">positive</span>. If the number is <strong>small</strong> (between 0 and 1), the exponent n is <span class="hl1">negative</span>.</p>
+        <div class="math t1">Large:  93,000,000    = 9.3 × 10⁷
+Small:  0.000045      = 4.5 × 10⁻⁵
+Normal: 620           = 6.2 × 10²</div>
+        <p>Scientific notation is built directly on <strong>exponents and place value</strong>. Moving the decimal point right increases the exponent; moving it left decreases it.</p>
+      </div>
+    </div>
+
+    <!-- PURPOSE -->
+    <div class="card c-purp">
+      <div class="card-head">
+        <div class="card-icon">🎯</div>
+        <div class="card-head-text">
+          <div class="card-label">Criterion 02</div>
+          <div class="card-title">Purpose</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="purp-rows">
+          <div class="purp-row"><span class="ptag ptag-1">Readability</span><span>Avoids writing out dozens of zeros. Comparing 3.0 × 10²³ to 6.0 × 10²³ is far clearer than comparing their full digit forms.</span></div>
+          <div class="purp-row"><span class="ptag ptag-1">Data Scale</span><span>In data analytics, datasets can have values ranging from nanoseconds (10⁻⁹) to petabytes (10¹⁵). Scientific notation keeps these manageable in calculations and displays.</span></div>
+          <div class="purp-row"><span class="ptag ptag-1">Precision</span><span>It explicitly shows <strong>significant figures</strong> — making the precision of a measurement unambiguous. 4.50 × 10³ shows 3 significant figures; 4500 does not clarify this.</span></div>
+          <div class="purp-row"><span class="ptag ptag-1">Computing</span><span>Computers and calculators use scientific notation (floating-point representation) internally. Understanding it helps interpret output like <code>1.23e+8</code> or <code>5.6e-4</code> in Python/R/Excel.</span></div>
+          <div class="purp-row"><span class="ptag ptag-1">ML / Stats</span><span>Loss values, learning rates, and probability values in machine learning often appear as very small decimals — reading 1.5e-7 correctly is an everyday data skill.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <div class="card c-how">
+      <div class="card-head">
+        <div class="card-icon">⚙️</div>
+        <div class="card-head-text">
+          <div class="card-label">Criterion 03</div>
+          <div class="card-title">How This Works</div>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <p><strong>Converting a standard number → scientific notation</strong></p>
+        <div class="steps">
+          <div class="step"><div class="step-n step-n-t1">1</div><div class="step-txt">Move the decimal point until only <strong>one non-zero digit</strong> sits to its left. This gives you the coefficient <em>a</em>.</div></div>
+          <div class="step"><div class="step-n step-n-t1">2</div><div class="step-txt">Count how many places you moved the decimal. That count becomes the exponent <em>n</em>.</div></div>
+          <div class="step"><div class="step-n step-n-t1">3</div><div class="step-txt">If you moved the decimal <strong>left</strong> (large number), exponent is <strong>positive</strong>. If you moved it <strong>right</strong> (small number), exponent is <strong>negative</strong>.</div></div>
+        </div>
+        <div class="math t1">
+  0.000307  →  move decimal right 4 places  →  3.07 × 10⁻⁴
+  56,800    →  move decimal left  4 places  →  5.68 × 10⁴</div>
+
+        <p><strong>Arithmetic with Scientific Notation</strong></p>
+        <table class="rule-table">
+          <tr><th>Operation</th><th>Rule</th><th>Example</th></tr>
+          <tr><td>Multiply</td><td>Multiply coefficients, ADD exponents</td><td>(3×10⁴)(2×10³) = 6×10⁷</td></tr>
+          <tr><td>Divide</td><td>Divide coefficients, SUBTRACT exponents</td><td>(8×10⁶)÷(2×10²) = 4×10⁴</td></tr>
+          <tr><td>Add/Subtract</td><td>Make exponents equal first, then add/subtract coefficients</td><td>3×10⁴ + 2×10³ = 3×10⁴ + 0.2×10⁴ = 3.2×10⁴</td></tr>
+          <tr><td>Power</td><td>Raise coefficient to power, MULTIPLY exponents</td><td>(2×10³)² = 4×10⁶</td></tr>
+        </table>
+
+        <p><strong>Reading computer/calculator output:</strong></p>
+        <div class="math t1">Python/R output:  1.23e+8   means  1.23 × 10⁸  =  123,000,000
+                  5.6e-4    means  5.6  × 10⁻⁴ =  0.00056
+Excel output:     1.23E+08  — same format, capital E</div>
+      </div>
+    </div>
+
+    <!-- SAMPLE -->
+    <div class="card c-samp">
+      <div class="card-head">
+        <div class="card-icon">🧪</div>
+        <div class="card-head-text">
+          <div class="card-label">Criterion 04</div>
+          <div class="card-title">Sample Problems</div>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <div class="sample">
+          <div class="sample-lbl">Sample A — Convert to Scientific Notation</div>
+          <div class="sample-math">
+Write 0.00000892 in scientific notation.
+
+Step 1: Move decimal right until one non-zero digit is left of it.
+        0.00000892  →  8.92  (moved 6 places right)
+Step 2: Moving right → negative exponent
+Result: 8.92 × 10⁻⁶
+          </div>
+          <div class="sample-note">✔ Check: 8.92 × 10⁻⁶ = 8.92 ÷ 1,000,000 = 0.00000892 ✓</div>
+        </div>
+
+        <div class="sample">
+          <div class="sample-lbl">Sample B — Convert FROM Scientific Notation</div>
+          <div class="sample-math">
+Write 7.04 × 10⁵ as a standard number.
+
+10⁵ = 100,000  →  move decimal 5 places RIGHT
+7.04  →  704,000
+
+Result: 704,000
+          </div>
+          <div class="sample-note">✔ Positive exponent = large number = move decimal right.</div>
+        </div>
+
+        <div class="sample">
+          <div class="sample-lbl">Sample C — Multiply in Scientific Notation</div>
+          <div class="sample-math">
+(4.5 × 10⁶) × (3.0 × 10⁻²)
+
+Step 1 — Coefficients: 4.5 × 3.0 = 13.5
+Step 2 — Exponents:    10⁶ × 10⁻² = 10^(6+(−2)) = 10⁴
+Step 3 — Combine:      13.5 × 10⁴
+Step 4 — Adjust:       13.5 is not in [1,10) → 1.35 × 10¹ × 10⁴ = 1.35 × 10⁵
+
+Result: 1.35 × 10⁵  =  135,000
+          </div>
+          <div class="sample-note">✔ Always re-adjust after multiplying if the coefficient goes outside [1, 10).</div>
+        </div>
+
+        <div class="sample">
+          <div class="sample-lbl">Sample D — Data Analytics Context</div>
+          <div class="sample-math">
+A dataset has 2,400,000 rows.
+Each row uses 512 bytes of memory.
+Total memory = 2,400,000 × 512 bytes
+
+In scientific notation:
+  2,400,000 = 2.4 × 10⁶
+  512       = 5.12 × 10²
+
+Multiply: (2.4 × 5.12) × 10^(6+2)
+        = 12.288 × 10⁸
+        = 1.2288 × 10⁹ bytes
+        ≈ 1.23 GB
+          </div>
+          <div class="sample-note">✔ Scientific notation makes memory/storage estimation fast and readable.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- CHALLENGES -->
+    <div class="card c-chall">
+      <div class="card-head">
+        <div class="card-icon">⚠️</div>
+        <div class="card-head-text">
+          <div class="card-label">Criterion 05</div>
+          <div class="card-title">Common Challenges & How to Solve Them</div>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <div class="challenge">
+          <div class="chall-q">Moving the decimal in the wrong direction — making a large number small or vice versa.</div>
+          <div class="chall-a"><strong>Fix:</strong> Use this anchor: large number (≥10) → positive exponent → moved decimal LEFT. Small number (0 &lt; x &lt; 1) → negative exponent → moved decimal RIGHT. After converting, always verify by mentally expanding: 3.5 × 10³ should give thousands-range, not decimals.</div>
+        </div>
+
+        <div class="challenge">
+          <div class="chall-q">Forgetting to re-adjust the coefficient after multiplication or division — leaving a result like 14.7 × 10⁵.</div>
+          <div class="chall-a"><strong>Fix:</strong> After any arithmetic, always check: is the coefficient between 1 and 10 (not including 10)? If not, adjust. 14.7 × 10⁵ = 1.47 × 10⁶. Rule: for each step you move the decimal right in the coefficient, subtract 1 from the exponent, and vice versa.</div>
+        </div>
+
+        <div class="challenge">
+          <div class="chall-q">Adding/subtracting without matching exponents first — incorrect result.</div>
+          <div class="chall-a"><strong>Fix:</strong> You MUST equalize exponents before adding or subtracting coefficients. Convert both to the same power of 10 first. Example: 4.2×10³ + 3.1×10² → convert to same exponent → 4.2×10³ + 0.31×10³ = 4.51×10³. Think of it like adding km and m — you must convert units first.</div>
+        </div>
+
+        <div class="challenge">
+          <div class="chall-q">Misreading e-notation from Python/R — confusing 1e-3 as 1 to the power of -3.</div>
+          <div class="chall-a"><strong>Fix:</strong> In code output, "e" means "× 10^". So 1e-3 = 1 × 10⁻³ = 0.001. It is NOT 1³ or -3 or anything else. This is floating-point notation and is identical to scientific notation. Practice converting a few: 2.5e4 = 25,000 · 6e-7 = 0.0000006.</div>
+        </div>
+
+        <div class="challenge">
+          <div class="chall-q">Significant figures confusion — treating all digits in a standard number as significant.</div>
+          <div class="chall-a"><strong>Fix:</strong> Scientific notation removes ambiguity. 3,400 could mean 2, 3, or 4 significant figures. In scientific notation: 3.4×10³ (2 sig figs), 3.40×10³ (3 sig figs), 3.400×10³ (4 sig figs). The coefficient always shows exactly how many digits are significant.</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="divider">TOPIC 02</div>
+
+<!-- ══════════════════ TOPIC 2: VARIABLES, EXPRESSIONS, EQUATIONS ══════════════════ -->
+<div class="topic">
+  <div class="topic-header">
+    <div class="topic-stripe t2-stripe"></div>
+    <div class="topic-header-text">
+      <div class="topic-meta t2-meta">Algebra I · Subtopic 02</div>
+      <h2>Variables, Expressions, and Equations</h2>
+      <div class="topic-tagline">The transition from arithmetic to algebra — where symbols replace specific numbers and relationships become general rules.</div>
+    </div>
+  </div>
+
+  <div class="criteria">
+
+    <!-- DESCRIPTION -->
+    <div class="card c-desc">
+      <div class="card-head">
+        <div class="card-icon">📋</div>
+        <div class="card-head-text">
+          <div class="card-label">Criterion 01</div>
+          <div class="card-title">Description</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <p>A <span class="hl2">variable</span> is a symbol — usually a letter — that represents an unknown or changeable value. Variables allow us to write general rules instead of specific calculations.</p>
+        <div class="math t2">
+  x, y, n, a, b  →  common variable names
+  x = 5 means "the variable x holds the value 5"
+  x can represent any value until it is defined or solved for</div>
+
+        <p>An <span class="hl2">expression</span> is a combination of variables, numbers, and operations — but with <strong>no equals sign</strong>. It has a value but poses no question. It cannot be "solved" — only simplified or evaluated.</p>
+        <div class="math t2">
+  3x + 7         →  algebraic expression
+  2a² − 5b + 1   →  expression with two variables
+  4(x + 3)       →  expression with grouping</div>
+
+        <p>An <span class="hl2">equation</span> is a statement that two expressions are <strong>equal</strong>, indicated by an equals sign (=). An equation can be solved — finding the value(s) of the variable that make it true.</p>
+        <div class="math t2">
+  3x + 7 = 22         →  linear equation (one variable)
+  2a + b = 10         →  equation with two variables
+  x² − 5x + 6 = 0    →  quadratic equation
+
+  KEY DISTINCTION:
+  Expression:  3x + 7        (no = sign, cannot be solved)
+  Equation:    3x + 7 = 22   (has = sign, can be solved → x = 5)</div>
+      </div>
+    </div>
+
+    <!-- PURPOSE -->
+    <div class="card c-purp">
+      <div class="card-head">
+        <div class="card-icon">🎯</div>
+        <div class="card-head-text">
+          <div class="card-label">Criterion 02</div>
+          <div class="card-title">Purpose</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="purp-rows">
+          <div class="purp-row"><span class="ptag ptag-2">Foundation</span><span>This is the <strong>gateway to all of algebra</strong>. Every formula, function, model, and algorithm in mathematics uses variables and equations. Nothing above this level works without it.</span></div>
+          <div class="purp-row"><span class="ptag ptag-2">Modeling</span><span>Variables let you represent unknown or changing quantities — dataset columns, model parameters, input features — as <strong>general symbols that apply to any value</strong>.</span></div>
+          <div class="purp-row"><span class="ptag ptag-2">Data</span><span>In data analytics, every column in a table is a variable. Every formula in Excel or SQL is an expression. Every constraint in optimization is an equation or inequality.</span></div>
+          <div class="purp-row"><span class="ptag ptag-2">ML</span><span>A machine learning model is fundamentally a collection of equations: ŷ = w₁x₁ + w₂x₂ + b. Variables are features (xᵢ), parameters (wᵢ, b), and predictions (ŷ). Understanding this is step zero of ML mathematics.</span></div>
+          <div class="purp-row"><span class="ptag ptag-2">Logic</span><span>Writing and solving equations is how you find <strong>unknowns from known relationships</strong> — the core activity in data-driven problem solving.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <div class="card c-how">
+      <div class="card-head">
+        <div class="card-icon">⚙️</div>
+        <div class="card-head-text">
+          <div class="card-label">Criterion 03</div>
+          <div class="card-title">How This Works</div>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <p><strong>Part 1 — Evaluating Expressions</strong><br>Substitute a value for each variable, then follow order of operations (PEMDAS).</p>
+        <div class="math t2">
+  Expression: 4x² − 3x + 1,  evaluate at x = 2
+
+  Step 1: substitute  →  4(2)² − 3(2) + 1
+  Step 2: exponent    →  4(4)  − 3(2) + 1
+  Step 3: multiply    →  16    − 6    + 1
+  Step 4: left→right  →  11</div>
+
+        <p><strong>Part 2 — Simplifying Expressions</strong><br>Combine like terms (same variable and same exponent) and apply the distributive property.</p>
+        <div class="math t2">
+  Like terms:    5x + 3y − 2x + 7y  =  3x + 10y
+                 (combine x-terms and y-terms separately)
+
+  Distribution:  3(2x − 4)  =  6x − 12
+                 (multiply 3 into each term inside the parentheses)
+
+  Expand & simplify:
+    2(x + 3) + 4(x − 1)
+  = 2x + 6 + 4x − 4
+  = 6x + 2</div>
+
+        <p><strong>Part 3 — Solving Linear Equations</strong><br>The goal: isolate the variable on one side using inverse operations. Whatever you do to one side, you MUST do to the other.</p>
+        <div class="steps">
+          <div class="step"><div class="step-n step-n-t2">1</div><div class="step-txt">Distribute and simplify both sides fully.</div></div>
+          <div class="step"><div class="step-n step-n-t2">2</div><div class="step-txt">Move all variable terms to one side using addition or subtraction.</div></div>
+          <div class="step"><div class="step-n step-n-t2">3</div><div class="step-txt">Move all constants to the other side.</div></div>
+          <div class="step"><div class="step-n step-n-t2">4</div><div class="step-txt">Divide (or multiply) both sides to isolate the variable.</div></div>
+          <div class="step"><div class="step-n step-n-t2">5</div><div class="step-txt">Verify: substitute your answer back into the original equation.</div></div>
+        </div>
+        <div class="math t2">
+  Solve: 5(x − 2) = 3x + 4
+
+  Step 1: distribute  →  5x − 10 = 3x + 4
+  Step 2: move vars   →  5x − 3x = 4 + 10
+  Step 3: simplify    →  2x = 14
+  Step 4: divide      →  x = 7
+
+  Verify: 5(7−2) = 5(5) = 25  and  3(7)+4 = 21+4 = 25  ✓</div>
+
+        <p><strong>Types of equations by solution:</strong></p>
+        <div class="math t2">
+  One solution:     x + 3 = 7     →  x = 4  (most common)
+  No solution:      x + 3 = x + 5 →  3 = 5  (contradiction, impossible)
+  Infinite solutions: 2(x+1) = 2x+2 →  2 = 2  (identity, always true)</div>
+
+      </div>
+    </div>
+
+    <!-- SAMPLE -->
+    <div class="card c-samp">
+      <div class="card-head">
+        <div class="card-icon">🧪</div>
+        <div class="card-head-text">
+          <div class="card-label">Criterion 04</div>
+          <div class="card-title">Sample Problems</div>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <div class="sample">
+          <div class="sample-lbl">Sample A — Evaluating an Expression</div>
+          <div class="sample-math">
+Evaluate 3a² + 2b − ab  at  a = 4, b = −1
+
+Substitute: 3(4)² + 2(−1) − (4)(−1)
+Exponent:   3(16) + 2(−1) − (4)(−1)
+Multiply:   48    + (−2)  − (−4)
+Simplify:   48 − 2 + 4  =  50
+          </div>
+          <div class="sample-note">✔ Note: subtracting a negative = adding a positive. −(−4) = +4.</div>
+        </div>
+
+        <div class="sample">
+          <div class="sample-lbl">Sample B — Simplifying an Expression</div>
+          <div class="sample-math">
+Simplify: 4(3x − 2) − 2(x + 5) + 7x
+
+Step 1 — Distribute:  12x − 8 − 2x − 10 + 7x
+Step 2 — Group x-terms:  (12x − 2x + 7x) + (−8 − 10)
+Step 3 — Combine:         17x + (−18)
+Result:  17x − 18
+          </div>
+          <div class="sample-note">✔ You can only combine terms with the exact same variable and exponent (like terms).</div>
+        </div>
+
+        <div class="sample">
+          <div class="sample-lbl">Sample C — Solving a Linear Equation</div>
+          <div class="sample-math">
+Solve: 3(2x + 1) − 4 = 2(x + 5) + 3
+
+Left side:   6x + 3 − 4  =  6x − 1
+Right side:  2x + 10 + 3 =  2x + 13
+
+Equation:  6x − 1 = 2x + 13
+
+Move vars:  6x − 2x = 13 + 1
+Simplify:   4x = 14
+Divide:     x = 14/4 = 7/2  =  3.5
+
+Verify:
+  Left:  3(2×3.5 + 1) − 4 = 3(8) − 4 = 20
+  Right: 2(3.5 + 5) + 3   = 2(8.5) + 3 = 20  ✓
+          </div>
+          <div class="sample-note">✔ Always verify by substituting back — this catches arithmetic errors instantly.</div>
+        </div>
+
+        <div class="sample">
+          <div class="sample-lbl">Sample D — Writing an Equation from a Word Problem</div>
+          <div class="sample-math">
+"A data analyst earns a base salary of $3,000/month plus
+$150 for each report completed. Last month she earned $4,350.
+How many reports did she complete?"
+
+Let r = number of reports.
+Equation: 3000 + 150r = 4350
+
+Solve:
+  150r = 4350 − 3000
+  150r = 1350
+  r    = 9
+
+She completed 9 reports.
+
+Verify: 3000 + 150(9) = 3000 + 1350 = 4350 ✓
+          </div>
+          <div class="sample-note">✔ Translating words → equation is one of the most important real-world algebra skills.</div>
+        </div>
+
+        <div class="sample">
+          <div class="sample-lbl">Sample E — ML Equation Connection</div>
+          <div class="sample-math">
+Linear regression model:  ŷ = w·x + b
+
+Given: w = 2.5,  b = −1.3
+Find ŷ when x = 4.
+
+ŷ = 2.5(4) + (−1.3)
+  = 10 − 1.3
+  = 8.7
+
+This is just evaluating an algebraic expression —
+the exact same skill as Sample A, applied to ML.
+          </div>
+          <div class="sample-note">✔ Every ML prediction is an expression evaluation. Understanding this connects algebra directly to data science.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- CHALLENGES -->
+    <div class="card c-chall">
+      <div class="card-head">
+        <div class="card-icon">⚠️</div>
+        <div class="card-head-text">
+          <div class="card-label">Criterion 05</div>
+          <div class="card-title">Common Challenges & How to Solve Them</div>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <div class="challenge">
+          <div class="chall-q">Confusing expressions and equations — trying to "solve" an expression or forgetting you need an equals sign to solve.</div>
+          <div class="chall-a"><strong>Fix:</strong> Simple check — does it have an = sign? Yes → equation (solve it). No → expression (simplify or evaluate it). You cannot find a specific value of x from 3x + 7 alone — you need 3x + 7 = something.</div>
+        </div>
+
+        <div class="challenge">
+          <div class="chall-q">Incorrect distribution — especially with negatives: −2(x − 3) written as −2x − 6 instead of −2x + 6.</div>
+          <div class="chall-a"><strong>Fix:</strong> The negative sign multiplies EVERY term inside. −2(x − 3) = (−2)(x) + (−2)(−3) = −2x + 6. Write each multiplication explicitly until it becomes automatic. Negative × negative = positive is the rule to internalize.</div>
+        </div>
+
+        <div class="challenge">
+          <div class="chall-q">Combining unlike terms — adding 3x + 5x² and getting 8x².</div>
+          <div class="chall-a"><strong>Fix:</strong> Like terms must share the same variable AND the same exponent. 3x and 5x² are different terms — one is linear, one is quadratic. They cannot be combined. Think of them as different "types" of objects: you can't add apples and oranges. 3x + 5x² stays as 3x + 5x².</div>
+        </div>
+
+        <div class="challenge">
+          <div class="chall-q">Performing an operation to only one side of an equation — breaking the balance.</div>
+          <div class="chall-a"><strong>Fix:</strong> An equation is a balance scale. Whatever you do to one side, you must do identically to the other. If you add 5 to the left, add 5 to the right. If you divide the left by 3, divide the right by 3. Writing each step on a new line and labeling the operation helps enforce this habit.</div>
+        </div>
+
+        <div class="challenge">
+          <div class="chall-q">Not verifying the solution — getting the wrong answer and not catching it.</div>
+          <div class="chall-a"><strong>Fix:</strong> Always substitute your answer back into the original equation (not a simplified form — the original). If both sides are equal, you're correct. This takes 10 seconds and catches nearly every arithmetic mistake. Build it into every solve as a non-negotiable last step.</div>
+        </div>
+
+        <div class="challenge">
+          <div class="chall-q">Forgetting that equations can have no solution or infinite solutions — assuming every equation has exactly one answer.</div>
+          <div class="chall-a"><strong>Fix:</strong> If your solving process results in a false statement (e.g., 3 = 7), the equation has NO solution. If it results in a true identity (e.g., 0 = 0), it has INFINITE solutions. These are valid mathematical outcomes, not mistakes. Recognize them by what remains after the variable cancels out.</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</main>
+
+<footer>PRE-ALGEBRA & ALGEBRA · SCIENTIFIC NOTATION · VARIABLES, EXPRESSIONS & EQUATIONS · MATHEMATICS FOR DATA ANALYTICS</footer>
+</body>
+</html>

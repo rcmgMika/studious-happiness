@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Functions & Linear Functions — Full Deep Dive</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:    #f5f2eb;
+    --paper: #fdfcf8;
+    --ink:   #1c1710;
+    --muted: #7a7260;
+    --faint: #ede9de;
+    --rule:  #ddd8c8;
+
+    /* T1 — indigo violet */
+    --t1:    #3730a3;
+    --t1m:   #4f46e5;
+    --t1l:   #eef2ff;
+    --t1b:   #c7d2fe;
+
+    /* T2 — forest green */
+    --t2:    #166534;
+    --t2m:   #16a34a;
+    --t2l:   #f0fdf4;
+    --t2b:   #86efac;
+
+    /* criterion accents */
+    --c1:#1e56a8; --c1d:rgba(30,86,168,.09);
+    --c2:#7c3aed; --c2d:rgba(124,58,237,.09);
+    --c3:#0f766e; --c3d:rgba(15,118,110,.09);
+    --c4:#c26800; --c4d:rgba(194,104,0,.09);
+    --c5:#be123c; --c5d:rgba(190,18,60,.09);
+
+    --easy:#15803d; --easyd:rgba(21,128,61,.1); --easyb:rgba(21,128,61,.3);
+    --med: #92400e; --medd: rgba(146,64,14,.1);  --medb: rgba(146,64,14,.3);
+    --hard:#9f1239; --hardd:rgba(159,18,57,.1);  --hardb:rgba(159,18,57,.3);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--ink);font-family:'Manrope',sans-serif;font-weight:300;line-height:1.8;}
+
+  /* ── HERO ── */
+  .hero{background:var(--ink);color:#f0ece0;overflow:hidden;position:relative;padding:70px 40px 58px;}
+  .hero-tex{position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(255,255,255,.025) 39px,rgba(255,255,255,.025) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(255,255,255,.025) 39px,rgba(255,255,255,.025) 40px);pointer-events:none;}
+  .hero-orb1{position:absolute;width:500px;height:500px;border-radius:50%;right:-60px;top:-100px;background:radial-gradient(circle,rgba(79,70,229,.16) 0%,transparent 65%);pointer-events:none;}
+  .hero-orb2{position:absolute;width:400px;height:400px;border-radius:50%;left:-60px;bottom:-80px;background:radial-gradient(circle,rgba(22,163,74,.12) 0%,transparent 65%);pointer-events:none;}
+  .hero-inner{max-width:1000px;margin:0 auto;position:relative;z-index:2;}
+  .crumb{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#5a5448;margin-bottom:16px;}
+  .crumb .hi{color:#a5b4fc;}
+  .hero-flag{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:5px 14px;margin-bottom:18px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#a89c80;background:rgba(255,255,255,.04);}
+  h1{font-family:'Instrument Serif',serif;font-size:clamp(2.4rem,5vw,3.9rem);font-weight:400;line-height:1.06;letter-spacing:-.02em;color:#fff;margin-bottom:14px;}
+  h1 .e1{font-style:italic;color:#a5b4fc;}
+  h1 .e2{font-style:italic;color:#86efac;}
+  .hero-desc{color:#7a7060;font-size:.93rem;max-width:580px;line-height:1.75;margin-bottom:26px;}
+  .hero-pills{display:flex;gap:8px;flex-wrap:wrap;}
+  .hp{font-family:'JetBrains Mono',monospace;font-size:9px;padding:4px 12px;border-radius:2px;letter-spacing:.05em;text-transform:uppercase;}
+  .hp1{background:rgba(79,70,229,.18);color:#a5b4fc;border:1px solid rgba(79,70,229,.3);}
+  .hp2{background:rgba(22,163,74,.14);color:#86efac;border:1px solid rgba(22,163,74,.25);}
+  .hpn{background:rgba(255,255,255,.05);color:#5a5448;border:1px solid rgba(255,255,255,.1);}
+
+  /* ── STICKY NAV ── */
+  .snav{background:var(--faint);border-bottom:2px solid var(--rule);position:sticky;top:0;z-index:100;padding:0 40px;overflow-x:auto;}
+  .snav::-webkit-scrollbar{display:none;}
+  .snav-inner{max-width:1000px;margin:0 auto;display:flex;gap:0;white-space:nowrap;}
+  .sn-item{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;padding:13px 16px;color:var(--muted);text-decoration:none;border-bottom:2px solid transparent;transition:all .2s;flex-shrink:0;}
+  .sn-item.s1:hover{color:var(--t1);border-color:var(--t1);}
+  .sn-item.s2:hover{color:var(--t2);border-color:var(--t2);}
+  .sn-sep{width:1px;background:var(--rule);margin:8px 4px;}
+
+  /* ── MAIN ── */
+  main{max-width:1000px;margin:0 auto;padding:60px 24px 100px;}
+
+  /* ── TOPIC HEADER ── */
+  .topic-hdr{border-radius:14px;padding:26px 30px;margin-bottom:40px;display:flex;align-items:flex-start;gap:18px;}
+  .th1{background:var(--t1l);border:1.5px solid var(--t1b);}
+  .th2{background:var(--t2l);border:1.5px solid var(--t2b);}
+  .t-icon{width:56px;height:56px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;margin-top:2px;}
+  .ti1{background:var(--t1);color:white;} .ti2{background:var(--t2);color:white;}
+  .t-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:5px;}
+  .tl1{color:var(--t1);} .tl2{color:var(--t2);}
+  h2{font-family:'Instrument Serif',serif;font-size:1.95rem;font-weight:400;line-height:1.18;letter-spacing:-.01em;}
+  .h21{color:var(--t1);} .h22{color:var(--t2);}
+  .t-sub{font-size:.87rem;color:var(--muted);margin-top:4px;}
+
+  /* ── CRITERION HEADER ── */
+  .crit-block{margin-bottom:50px;}
+  .crit-hdr{display:flex;align-items:center;gap:15px;margin-bottom:22px;padding-bottom:13px;border-bottom:1px solid var(--rule);}
+  .cbadge{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Instrument Serif',serif;font-size:1.3rem;font-style:italic;color:#fff;flex-shrink:0;}
+  .cb1{background:var(--c1);} .cb2{background:var(--c2);} .cb3{background:var(--c3);} .cb4{background:var(--c4);} .cb5{background:var(--c5);}
+  .crit-meta{}
+  .c-tag{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:3px;}
+  .ct1{color:var(--c1);}.ct2{color:var(--c2);}.ct3{color:var(--c3);}.ct4{color:var(--c4);}.ct5{color:var(--c5);}
+  h3{font-family:'Instrument Serif',serif;font-size:1.4rem;font-weight:400;color:var(--ink);line-height:1.2;}
+  .c-sub{font-size:.84rem;color:var(--muted);margin-top:2px;}
+
+  /* ── PROSE ── */
+  .prose p{font-size:.9rem;color:var(--ink);margin-bottom:12px;line-height:1.8;}
+  .prose p:last-child{margin-bottom:0;}
+  .hl1{color:var(--t1);font-weight:600;} .hl2{color:var(--t2);font-weight:600;}
+  .hlk{color:var(--ink);font-weight:600;}
+
+  /* ── MATH BLOCK ── */
+  .math{background:var(--faint);border:1px solid var(--rule);border-radius:8px;padding:15px 20px;margin:12px 0;font-family:'JetBrains Mono',monospace;font-size:.82rem;line-height:2.15;color:#1a1200;}
+  .math.m1{border-left:3px solid var(--t1m);}
+  .math.m2{border-left:3px solid var(--t2m);}
+  .math .dim{color:var(--muted);font-size:.75rem;}
+  .math .h1{color:var(--t1);font-weight:700;}
+  .math .h2{color:var(--t2);font-weight:700;}
+  .math .hg{color:var(--c3);font-weight:700;}
+  .math .hy{color:var(--c4);font-weight:700;}
+  .math .hr{color:var(--c5);font-weight:700;}
+
+  /* ── DEFINITION CARD ── */
+  .def-card{background:var(--paper);border:1px solid var(--rule);border-radius:10px;padding:18px 22px;margin:13px 0;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+  .def-title{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:9px;}
+
+  /* ── GRID CARDS ── */
+  .grid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:12px;margin:13px 0;}
+  .gcard{background:var(--paper);border:1px solid var(--rule);border-radius:10px;padding:16px 18px;transition:transform .2s,border-color .2s;}
+  .gcard:hover{transform:translateY(-2px);border-color:rgba(0,0,0,.14);}
+  .gc-name{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.13em;text-transform:uppercase;margin-bottom:7px;}
+  .gc-form{font-family:'JetBrains Mono',monospace;font-size:.85rem;font-weight:700;margin-bottom:8px;}
+  .gc-note{font-size:.82rem;color:var(--muted);line-height:1.65;}
+  .g1 .gc-name{color:var(--t1);} .g1 .gc-form{color:var(--t1);}
+  .g2 .gc-name{color:var(--t2);} .g2 .gc-form{color:var(--t2);}
+
+  /* ── TABLE ── */
+  .tbl{width:100%;border-collapse:collapse;margin:12px 0;font-size:.83rem;}
+  .tbl th{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:9px 14px;text-align:left;border-bottom:2px solid var(--rule);background:var(--faint);}
+  .tbl td{padding:10px 14px;border-bottom:1px solid var(--rule);vertical-align:top;line-height:1.65;}
+  .tbl td:first-child{font-family:'JetBrains Mono',monospace;font-size:.8rem;white-space:nowrap;}
+  .tbl tr:last-child td{border-bottom:none;}
+  .tbl tr:hover td{background:#faf8f2;}
+  .tb1 td:first-child{color:var(--t1);}
+  .tb2 td:first-child{color:var(--t2);}
+
+  /* ── METHOD BLOCK ── */
+  .mblock{background:var(--paper);border:1px solid var(--rule);border-radius:12px;overflow:hidden;margin:14px 0;}
+  .mb-hd{padding:12px 20px;border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:12px;background:var(--faint);}
+  .mb-ico{width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;}
+  .mb-title{font-size:.9rem;font-weight:700;color:var(--ink);}
+  .mb-when{font-size:.78rem;color:var(--muted);}
+  .mb-bd{padding:16px 20px;}
+
+  /* ── STEPS ── */
+  .steps{display:flex;flex-direction:column;gap:9px;margin:11px 0;}
+  .step{display:flex;gap:13px;align-items:flex-start;}
+  .sn{min-width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;flex-shrink:0;margin-top:2px;}
+  .sn1{background:var(--t1l);color:var(--t1);border:1px solid var(--t1b);}
+  .sn2{background:var(--t2l);color:var(--t2);border:1px solid var(--t2b);}
+  .st{font-size:.87rem;line-height:1.75;}
+
+  /* ── PURPOSE ROWS ── */
+  .purp-rows{display:flex;flex-direction:column;gap:10px;}
+  .purp-row{display:flex;gap:12px;align-items:flex-start;font-size:.88rem;line-height:1.75;}
+  .ptag{font-family:'JetBrains Mono',monospace;font-size:8.5px;padding:3px 9px;border-radius:3px;white-space:nowrap;flex-shrink:0;margin-top:4px;letter-spacing:.06em;text-transform:uppercase;}
+  .pt1{background:var(--t1l);color:var(--t1);border:1px solid var(--t1b);}
+  .pt2{background:var(--t2l);color:var(--t2);border:1px solid var(--t2b);}
+
+  /* ── SAMPLE CARD ── */
+  .sc{background:var(--paper);border:1px solid var(--rule);border-radius:12px;overflow:hidden;margin:14px 0;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+  .sc-hd{padding:12px 20px;border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--faint);}
+  .sc-n{font-family:'Instrument Serif',serif;font-size:1.1rem;font-style:italic;flex-shrink:0;}
+  .sn-1{color:var(--c4);} .sn-2{color:var(--c4);}
+  .sc-title{font-size:.91rem;font-weight:600;color:var(--ink);flex:1;}
+  .sc-tag{font-family:'JetBrains Mono',monospace;font-size:8.5px;padding:3px 9px;border-radius:20px;letter-spacing:.05em;text-transform:uppercase;flex-shrink:0;}
+  .st1{background:var(--t1l);color:var(--t1);border:1px solid var(--t1b);}
+  .st2{background:var(--t2l);color:var(--t2);border:1px solid var(--t2b);}
+  .sc-bd{padding:18px 20px;}
+  .sc-ctx{font-size:.86rem;color:var(--muted);margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--rule);line-height:1.75;}
+  .sc-ctx strong{color:var(--ink);font-weight:500;}
+  .sc-work{font-family:'JetBrains Mono',monospace;font-size:.8rem;line-height:2.1;background:var(--faint);border:1px solid var(--rule);border-radius:8px;padding:14px 16px;margin-bottom:10px;color:#1a1000;}
+  .sc-tw{font-size:.82rem;color:var(--muted);padding-top:8px;border-top:1px solid var(--rule);line-height:1.7;}
+  .sc-tw strong{color:var(--c3);font-weight:600;}
+
+  /* ── CHALLENGES ── */
+  .ch-intro{border-radius:10px;padding:18px 22px;margin-bottom:20px;}
+  .chi1{background:var(--t1l);border:1px solid var(--t1b);}
+  .chi2{background:var(--t2l);border:1px solid var(--t2b);}
+  .chi-tag{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:8px;}
+  .ct-1{color:var(--t1);} .ct-2{color:var(--t2);}
+  .chi-txt{font-size:.88rem;line-height:1.75;}
+  .diff-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+  .dtag{font-family:'JetBrains Mono',monospace;font-size:8.5px;padding:3px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em;}
+  .de{background:var(--easyd);color:var(--easy);border:1px solid var(--easyb);}
+  .dm{background:var(--medd);color:var(--med);border:1px solid var(--medb);}
+  .dh{background:var(--hardd);color:var(--hard);border:1px solid var(--hardb);}
+
+  .prob{background:var(--paper);border:1px solid var(--rule);border-radius:12px;overflow:hidden;margin-bottom:13px;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+  .prob-hd{display:flex;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid var(--rule);background:var(--faint);}
+  .pnum{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Instrument Serif',serif;font-size:1.1rem;font-style:italic;flex-shrink:0;color:#fff;}
+  .pn1{background:var(--t1);} .pn2{background:var(--t2);}
+  .pmeta{flex:1;}
+  .ptitle{font-size:.91rem;font-weight:600;color:var(--ink);}
+  .psub{font-size:.77rem;color:var(--muted);}
+  .dbadge{font-family:'JetBrains Mono',monospace;font-size:8.5px;padding:3px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em;flex-shrink:0;}
+  .prob-bd{padding:17px 20px;}
+  .pstmt{background:var(--faint);border:1px solid var(--rule);border-radius:8px;padding:14px 18px;margin-bottom:12px;}
+  .plbl{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+  .ptxt{font-size:.88rem;color:var(--ink);line-height:1.75;}
+  .peq{font-family:'JetBrains Mono',monospace;font-size:.92rem;font-weight:700;display:block;margin:6px 0 2px;}
+  .pnote{font-size:.78rem;color:var(--muted);margin-top:5px;font-style:italic;}
+  .hint{background:#fffef3;border:1px solid #e8d850;border-radius:8px;padding:10px 14px;display:flex;gap:9px;align-items:flex-start;margin-bottom:11px;}
+  .h-ico{font-size:.88rem;flex-shrink:0;margin-top:1px;}
+  .h-txt{font-size:.82rem;color:#5a4800;line-height:1.7;}
+  .h-txt strong{color:#2a1e00;}
+  .ans{background:var(--faint);border:1.5px dashed var(--rule);border-radius:8px;padding:13px 18px;min-height:58px;display:flex;align-items:center;gap:10px;}
+  .a-ico{font-size:.92rem;opacity:.35;}
+  .a-txt{font-size:.81rem;color:var(--muted);font-style:italic;}
+
+  /* ── DIVIDERS ── */
+  .big-div{display:flex;align-items:center;gap:16px;margin:72px 0 56px;}
+  .big-div::before,.big-div::after{content:'';flex:1;height:2px;background:var(--rule);}
+  .bd-lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);white-space:nowrap;padding:0 8px;}
+  .sec-div{display:flex;align-items:center;gap:12px;margin:40px 0 28px;}
+  .sec-div::before,.sec-div::after{content:'';flex:1;height:1px;background:var(--rule);}
+  .sd-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);}
+
+  /* ── CALLOUT BOX ── */
+  .callout{border-radius:10px;padding:16px 20px;margin:13px 0;display:flex;gap:13px;align-items:flex-start;}
+  .ca1{background:var(--t1l);border:1px solid var(--t1b);}
+  .ca2{background:var(--t2l);border:1px solid var(--t2b);}
+  .ca-ico{font-size:1.1rem;flex-shrink:0;margin-top:2px;}
+  .ca-txt{font-size:.87rem;line-height:1.75;}
+  .ca-txt strong{font-weight:600;}
+  .ca1 .ca-txt strong{color:var(--t1);}
+  .ca2 .ca-txt strong{color:var(--t2);}
+
+  /* ── FOOTER ── */
+  footer{text-align:center;padding:26px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;color:var(--muted);border-top:2px solid var(--rule);}
+
+  code{font-family:'JetBrains Mono',monospace;font-size:.8rem;background:var(--faint);border:1px solid var(--rule);padding:1px 6px;border-radius:4px;}
+
+  @media(max-width:600px){
+    .hero{padding:48px 20px 44px;}
+    main{padding:40px 14px 60px;}
+    h1{font-size:2rem;}
+    .snav{padding:0 12px;}
+    .sc-bd,.prob-bd,.mb-bd{padding:14px 15px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<div class="hero">
+  <div class="hero-tex"></div>
+  <div class="hero-orb1"></div>
+  <div class="hero-orb2"></div>
+  <div class="hero-inner">
+    <div class="crumb">Mathematics for Data Analytics → Algebra I → <span class="hi">Functions & Linear Functions</span></div>
+    <div class="hero-flag">Full Deep Dive · 2 Subtopics · All 5 Criteria Each</div>
+    <h1><span class="e1">Functions:</span> Definition,<br>Notation, Domain &amp; Range<br><span style="font-size:.5em;opacity:.35;display:block;margin:4px 0">and</span><span class="e2">Slope</span> and Linear Functions</h1>
+    <p class="hero-desc">The two subtopics that bridge pure algebra and data analytics — functions formalize the input→output relationship every model uses, while linear functions describe the simplest and most widely deployed relationship in all of data science.</p>
+    <div class="hero-pills">
+      <span class="hp hp1">01 · Functions</span>
+      <span class="hp hp2">02 · Slope & Linear Functions</span>
+      <span class="hp hpn">5 Criteria Each</span>
+      <span class="hp hpn">5 Samples Each</span>
+      <span class="hp hpn">5 Challenges Each</span>
+    </div>
+  </div>
+</div>
+
+<!-- STICKY NAV -->
+<div class="snav">
+  <div class="snav-inner">
+    <a href="#t1c1" class="sn-item s1">01 Description</a>
+    <a href="#t1c2" class="sn-item s1">02 Purpose</a>
+    <a href="#t1c3" class="sn-item s1">03 How It Works</a>
+    <a href="#t1c4" class="sn-item s1">04 Samples</a>
+    <a href="#t1c5" class="sn-item s1">05 Challenges</a>
+    <div class="sn-sep"></div>
+    <a href="#t2c1" class="sn-item s2">L01 Description</a>
+    <a href="#t2c2" class="sn-item s2">L02 Purpose</a>
+    <a href="#t2c3" class="sn-item s2">L03 How It Works</a>
+    <a href="#t2c4" class="sn-item s2">L04 Samples</a>
+    <a href="#t2c5" class="sn-item s2">L05 Challenges</a>
+  </div>
+</div>
+
+<main>
+
+<!-- ████████████████████████████████████████████
+     TOPIC 1 — FUNCTIONS: DEFINITION, NOTATION, DOMAIN, RANGE
+████████████████████████████████████████████ -->
+<div class="topic-hdr th1">
+  <div class="t-icon ti1">𝑓</div>
+  <div>
+    <div class="t-label tl1">Algebra I · Subtopic 01 of 02</div>
+    <h2 class="h21">Functions: Definition, Notation, Domain & Range</h2>
+    <div class="t-sub">The formal mathematical structure that turns every data model into a precise, well-defined rule.</div>
+  </div>
+</div>
+
+<!-- C1 DESCRIPTION -->
+<div class="crit-block" id="t1c1">
+  <div class="crit-hdr">
+    <div class="cbadge cb1">1</div>
+    <div class="crit-meta">
+      <div class="c-tag ct1">Criterion 01</div>
+      <h3>Description</h3>
+      <div class="c-sub">What a function is, how to read its notation, and what domain and range mean precisely.</div>
+    </div>
+  </div>
+
+  <div class="prose">
+    <p>A <span class="hl1">function</span> is a rule that assigns to each input value <strong>exactly one</strong> output value. The critical word is <span class="hlk">exactly one</span> — not zero outputs, not two outputs — one. This is what separates a function from a general relation.</p>
+    <p>Think of a function as a machine: you feed in an input, the machine processes it according to a fixed rule, and it produces one specific output. The same input always produces the same output — this is called <span class="hlk">determinism</span>, and it is the same property that makes data models reliable and reproducible.</p>
+  </div>
+
+  <div class="math m1">
+<span class="dim">-- Formal definition:</span>
+A function f from set A to set B is a rule such that
+every element x in A is paired with <span class="h1">exactly one</span> element y in B.
+
+Written:  <span class="h1">f : A → B</span>   or   <span class="h1">y = f(x)</span>
+
+<span class="dim">-- Reading the notation:</span>
+  f(x)   → "f of x" — the output when input is x
+  f(3)   → "f of 3" — substitute x=3, compute the output
+  f(x)=2x+1 → "f is the rule: multiply x by 2 and add 1"
+
+<span class="dim">-- Examples:</span>
+  f(x) = 3x − 4       →  f(2) = 3(2)−4 = 2
+  g(x) = x² + 1       →  g(−3) = (−3)²+1 = 10
+  h(x) = √(x − 5)     →  h(9) = √4 = 2
+  </div>
+
+  <div class="callout ca1">
+    <div class="ca-ico">⚠️</div>
+    <div class="ca-txt"><strong>The Vertical Line Test:</strong> A graph represents a function if and only if every vertical line crosses the graph at most once. If any vertical line crosses the graph twice, it means one x-value maps to two y-values — violating the "exactly one output" rule. This is the visual definition of a function.</div>
+  </div>
+
+  <div class="prose" style="margin-top:14px;">
+    <p>The <span class="hl1">domain</span> of a function is the complete set of all valid input values — all values of x for which the function is defined and produces a real output. The <span class="hl1">range</span> is the complete set of all possible output values — every value that f(x) can actually produce.</p>
+  </div>
+
+  <div class="math m1">
+<span class="dim">-- Domain restrictions arise from:</span>
+  1. Square roots (or any even root): expression inside must be ≥ 0
+  2. Denominators: denominator must ≠ 0
+  3. Logarithms: argument must be > 0
+  4. Real-world context: e.g., time cannot be negative
+
+<span class="dim">-- Finding domain and range:</span>
+  f(x) = √(x − 3)
+    Domain: x − 3 ≥ 0  →  x ≥ 3  →  <span class="h1">[3, ∞)</span>
+    Range:  √ always ≥ 0  →  <span class="h1">[0, ∞)</span>
+
+  g(x) = 1 / (x − 2)
+    Domain: x − 2 ≠ 0  →  x ≠ 2  →  <span class="h1">(−∞, 2) ∪ (2, ∞)</span>
+    Range:  all real numbers except 0  →  <span class="h1">(−∞, 0) ∪ (0, ∞)</span>
+
+  h(x) = x² + 1
+    Domain: all real numbers  →  <span class="h1">(−∞, ∞)</span>
+    Range:  x²≥0, so x²+1≥1  →  <span class="h1">[1, ∞)</span>
+  </div>
+
+  <div class="def-card">
+    <div class="def-title">Interval Notation — How to Write Domain and Range</div>
+    <table class="tbl tb1">
+      <tr><th>Notation</th><th>Meaning</th><th>Includes endpoints?</th><th>Example</th></tr>
+      <tr><td>(a, b)</td><td>All x between a and b, not including a or b</td><td>No</td><td>(2, 5): x is 2 &lt; x &lt; 5</td></tr>
+      <tr><td>[a, b]</td><td>All x between a and b, including both a and b</td><td>Yes</td><td>[2, 5]: x is 2 ≤ x ≤ 5</td></tr>
+      <tr><td>[a, b)</td><td>Includes a, excludes b</td><td>Left only</td><td>[3, ∞): x ≥ 3</td></tr>
+      <tr><td>(a, ∞)</td><td>All x greater than a</td><td>No (∞ is never included)</td><td>(0, ∞): x &gt; 0</td></tr>
+      <tr><td>A ∪ B</td><td>All x in A or in B (union — used for gaps)</td><td>Depends on brackets</td><td>(−∞,2) ∪ (2,∞): all x except 2</td></tr>
+    </table>
+  </div>
+
+  <div class="prose">
+    <p>Two special types worth memorizing: a <span class="hl1">one-to-one function</span> means each output is produced by exactly one input (no two inputs share the same output) — this is needed for a function to have an inverse. A <span class="hl1">constant function</span> maps every input to the same output: f(x) = k for all x.</p>
+  </div>
+</div>
+
+<div class="sec-div"><span class="sd-lbl">Purpose</span></div>
+
+<!-- C2 PURPOSE -->
+<div class="crit-block" id="t1c2">
+  <div class="crit-hdr">
+    <div class="cbadge cb2">2</div>
+    <div class="crit-meta">
+      <div class="c-tag ct2">Criterion 02</div>
+      <h3>Purpose</h3>
+      <div class="c-sub">Why the function concept is the most foundational idea in all of data science.</div>
+    </div>
+  </div>
+
+  <div class="purp-rows">
+    <div class="purp-row"><span class="ptag pt1">Modeling</span><span>Every machine learning model is literally a function — it maps inputs (features) to outputs (predictions). Linear regression: ŷ = f(x) = wx + b. Neural network: ŷ = f(x) = σ(Wx + b). Understanding what a function is, what its domain is, and what its range represents is the starting point for understanding every model you will ever build or use.</span></div>
+    <div class="purp-row"><span class="ptag pt1">Domain</span><span>Domain defines <strong>what inputs are valid</strong> for a model or transformation. In data preprocessing, this is critical: a log transform has domain x&gt;0 — applying it to data with zeros or negatives will throw errors. A square root transform has domain x≥0. Domain restrictions in mathematics translate directly to data validation rules in code.</span></div>
+    <div class="purp-row"><span class="ptag pt1">Range</span><span>Range tells you <strong>what outputs are possible</strong>. The sigmoid function has range (0,1) — this is why it works as a probability output. The softmax function has range [0,1] with all outputs summing to 1. Knowing the range tells you whether a model's output can represent what you need it to represent.</span></div>
+    <div class="purp-row"><span class="ptag pt1">Composition</span><span>Function composition f(g(x)) is how neural networks work — each layer applies a function to the output of the previous layer. A deep neural network with n layers is literally a chain of composed functions: f_n(f_{n-1}(...f_1(x)...)). Understanding composition is essential for understanding how information flows through a model.</span></div>
+    <div class="purp-row"><span class="ptag pt1">Inverse</span><span>Inverse functions undo each other: f⁻¹(f(x)) = x. The natural log is the inverse of eˣ (which you already know). In ML, the link function and its inverse are used in generalized linear models (logistic regression uses sigmoid and logit as inverses). Data transformations and their inverses are used to encode and decode predictions.</span></div>
+    <div class="purp-row"><span class="ptag pt1">Notation</span><span>Function notation f(x) is the universal language of mathematics. Every formula in statistics (density functions, CDF, likelihood), every loss function in ML (L(w)), every model evaluation metric is written using function notation. Fluency in reading and writing it is non-negotiable.</span></div>
+  </div>
+</div>
+
+<div class="sec-div"><span class="sd-lbl">How It Works</span></div>
+
+<!-- C3 HOW IT WORKS -->
+<div class="crit-block" id="t1c3">
+  <div class="crit-hdr">
+    <div class="cbadge cb3">3</div>
+    <div class="crit-meta">
+      <div class="c-tag ct3">Criterion 03</div>
+      <h3>How This Works</h3>
+      <div class="c-sub">Evaluating functions, finding domain and range, function composition, and inverses — all with worked examples.</div>
+    </div>
+  </div>
+
+  <div class="prose"><p><strong>Part A — Evaluating a Function</strong><br>Substitute the input value for x everywhere in the expression. Follow order of operations precisely.</p></div>
+
+  <div class="math m1">
+f(x) = 2x² − 3x + 1
+
+f(4):    2(4)² − 3(4) + 1 = 2(16) − 12 + 1 = 32 − 12 + 1 = <span class="h1">21</span>
+f(−2):   2(−2)² − 3(−2) + 1 = 2(4) + 6 + 1 = <span class="h1">15</span>
+f(a+1):  2(a+1)² − 3(a+1) + 1
+       = 2(a²+2a+1) − 3a − 3 + 1
+       = 2a² + 4a + 2 − 3a − 2
+       = <span class="h1">2a² + a</span>    ← evaluating at expressions, not just numbers
+  </div>
+
+  <div class="prose" style="margin-top:14px;"><p><strong>Part B — Finding the Domain</strong><br>Always ask: what values of x would cause a problem? The domain is everything that does NOT cause a problem.</p></div>
+
+  <div class="mblock">
+    <div class="mb-hd">
+      <div class="mb-ico" style="background:var(--t1)">D</div>
+      <div><div class="mb-title">Domain-Finding Algorithm</div><div class="mb-when">Apply to every function before using it in analytics — including data transformations.</div></div>
+    </div>
+    <div class="mb-bd">
+      <div class="steps">
+        <div class="step"><div class="sn sn1">1</div><div class="st"><strong>Start with all real numbers (−∞, ∞)</strong> as the assumed domain.</div></div>
+        <div class="step"><div class="sn sn1">2</div><div class="st"><strong>Check for square roots / even roots:</strong> set the expression inside ≥ 0 and solve the inequality. Remove values that make it negative.</div></div>
+        <div class="step"><div class="sn sn1">3</div><div class="st"><strong>Check for denominators:</strong> set the denominator = 0 and solve. Remove those x-values.</div></div>
+        <div class="step"><div class="sn sn1">4</div><div class="st"><strong>Check for logarithms:</strong> set the argument &gt; 0 and solve. Remove values that make it ≤ 0.</div></div>
+        <div class="step"><div class="sn sn1">5</div><div class="st"><strong>Apply all restrictions simultaneously.</strong> Write the final domain in interval notation, combining restrictions with ∩ (intersection) or expressing as a union of valid intervals.</div></div>
+      </div>
+      <div class="math m1">
+<span class="dim">Example — multiple restrictions at once:</span>
+f(x) = √(x+4) / (x − 1)
+
+Restriction from √: x+4 ≥ 0  →  x ≥ −4
+Restriction from ÷: x − 1 ≠ 0  →  x ≠ 1
+
+Combined domain: x ≥ −4 AND x ≠ 1
+<span class="h1">Domain: [−4, 1) ∪ (1, ∞)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="prose"><p><strong>Part C — Function Composition</strong><br>f(g(x)) means: first apply g to x, then apply f to the result. The output of g becomes the input of f.</p></div>
+
+  <div class="math m1">
+f(x) = 2x + 1     g(x) = x² − 3
+
+<span class="dim">-- f(g(x)):</span>
+  Replace x in f with the entire expression g(x):
+  f(g(x)) = 2(x² − 3) + 1 = 2x² − 6 + 1 = <span class="h1">2x² − 5</span>
+
+<span class="dim">-- g(f(x)):</span>
+  Replace x in g with the entire expression f(x):
+  g(f(x)) = (2x+1)² − 3 = 4x²+4x+1−3 = <span class="h1">4x²+4x−2</span>
+
+<span class="dim">IMPORTANT: f(g(x)) ≠ g(f(x)) in general!</span>
+Order of composition matters — just like order of operations in neural network layers.
+  </div>
+
+  <div class="prose"><p><strong>Part D — Inverse Functions</strong><br>The inverse function f⁻¹ reverses what f does. If f(a) = b, then f⁻¹(b) = a. Only one-to-one functions have inverses.</p></div>
+
+  <div class="math m1">
+Find f⁻¹(x) for  f(x) = 3x − 7:
+
+Step 1 — Replace f(x) with y:   y = 3x − 7
+Step 2 — Swap x and y:           x = 3y − 7
+Step 3 — Solve for y:
+  x + 7 = 3y
+  y = (x + 7)/3
+Step 4 — Write as inverse:  <span class="h1">f⁻¹(x) = (x + 7)/3</span>
+
+Verify: f(f⁻¹(x)) = 3·((x+7)/3) − 7 = x + 7 − 7 = x  ✓
+        f⁻¹(f(x)) = ((3x−7)+7)/3 = 3x/3 = x  ✓
+  </div>
+
+  <div class="def-card" style="margin-top:14px;">
+    <div class="def-title">Common Functions in Data Analytics — Domain & Range Summary</div>
+    <table class="tbl tb1">
+      <tr><th>Function</th><th>Expression</th><th>Domain</th><th>Range</th><th>Used in</th></tr>
+      <tr><td>Linear</td><td>f(x) = mx + b</td><td>(−∞, ∞)</td><td>(−∞, ∞)</td><td>Linear regression, scaling</td></tr>
+      <tr><td>Quadratic</td><td>f(x) = ax² + bx + c</td><td>(−∞, ∞)</td><td>[k, ∞) or (−∞, k] where k is vertex y</td><td>Polynomial regression, MSE</td></tr>
+      <tr><td>Square Root</td><td>f(x) = √x</td><td>[0, ∞)</td><td>[0, ∞)</td><td>Standard deviation, distance</td></tr>
+      <tr><td>Natural Log</td><td>f(x) = ln(x)</td><td>(0, ∞)</td><td>(−∞, ∞)</td><td>Loss functions, log transforms</td></tr>
+      <tr><td>Exponential</td><td>f(x) = eˣ</td><td>(−∞, ∞)</td><td>(0, ∞)</td><td>Growth models, softmax</td></tr>
+      <tr><td>Sigmoid</td><td>f(x) = 1/(1+e⁻ˣ)</td><td>(−∞, ∞)</td><td>(0, 1)</td><td>Logistic regression, neural nets</td></tr>
+      <tr><td>Absolute Value</td><td>f(x) = |x|</td><td>(−∞, ∞)</td><td>[0, ∞)</td><td>MAE loss, distances</td></tr>
+      <tr><td>ReLU</td><td>f(x) = max(0, x)</td><td>(−∞, ∞)</td><td>[0, ∞)</td><td>Neural network activation</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="sec-div"><span class="sd-lbl">Samples</span></div>
+
+<!-- C4 SAMPLES -->
+<div class="crit-block" id="t1c4">
+  <div class="crit-hdr">
+    <div class="cbadge cb4">4</div>
+    <div class="crit-meta">
+      <div class="c-tag ct4">Criterion 04</div>
+      <h3>Samples</h3>
+      <div class="c-sub">Five worked examples from pure algebra to ML and data analytics applications.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-hd"><span class="sc-n sn-1">S1</span><span class="sc-title">Evaluate a function at values and expressions</span><span class="sc-tag st1">Pure Algebra</span></div>
+    <div class="sc-bd">
+      <div class="sc-ctx">Given <strong>f(x) = x² − 4x + 3</strong>, evaluate f(0), f(5), f(−1), and find f(x+h) — a key step in the calculus limit definition of the derivative.</div>
+      <div class="sc-work">
+f(x) = x² − 4x + 3
+
+f(0)  = (0)² − 4(0) + 3 = 0 − 0 + 3 = 3
+f(5)  = (5)² − 4(5) + 3 = 25 − 20 + 3 = 8
+f(−1) = (−1)² − 4(−1) + 3 = 1 + 4 + 3 = 8
+
+f(x+h) — replace every x with (x+h):
+  = (x+h)² − 4(x+h) + 3
+  = x² + 2xh + h² − 4x − 4h + 3
+
+[f(x+h) − f(x)] / h:                 ← this is the difference quotient
+  = [x²+2xh+h²−4x−4h+3 − (x²−4x+3)] / h
+  = [2xh + h² − 4h] / h
+  = h(2x + h − 4) / h
+  = 2x + h − 4
+
+As h→0: limit = 2x − 4 = f'(x)  ← derivative of f(x)
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> Evaluating f(x+h) and forming the difference quotient is how calculus defines the derivative. This is function notation working in full force — substituting an entire expression (x+h) instead of just a number.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-hd"><span class="sc-n sn-1">S2</span><span class="sc-title">Domain of a composite data transformation function</span><span class="sc-tag st1">Data Analytics</span></div>
+    <div class="sc-bd">
+      <div class="sc-ctx">A data analyst applies the transformation <strong>T(x) = ln(√(x − 2))</strong> to a feature column. Before running the code, they must determine the valid domain — which rows of data can be transformed without error.</div>
+      <div class="sc-work">
+T(x) = ln(√(x − 2))
+
+Step 1 — Inner restriction (√): x − 2 ≥ 0  →  x ≥ 2
+Step 2 — Outer restriction (ln): argument must be > 0
+  √(x−2) > 0  →  x − 2 > 0  →  x > 2
+  (√(x−2) = 0 when x=2, and ln(0) is undefined)
+
+Final domain: x > 2  →  (2, ∞)
+
+Also simplify T(x):
+  T(x) = ln(√(x−2)) = ln((x−2)^(1/2)) = (1/2)·ln(x−2)
+
+Range of T: since ln(x−2) → (−∞,∞) for x>2,
+  T(x) = (1/2)·ln(x−2) also has range (−∞, ∞)
+
+In practice: filter data before transforming:
+  df_clean = df[df['x'] > 2].copy()
+  df_clean['T'] = 0.5 * np.log(df_clean['x'] - 2)
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> Every data transformation is a function application, and the domain determines which values are valid. Computing the domain before transforming is equivalent to writing data validation logic — it prevents runtime errors and NaN/Inf values in your pipeline.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-hd"><span class="sc-n sn-1">S3</span><span class="sc-title">Neural network as composed functions</span><span class="sc-tag st1">Machine Learning</span></div>
+    <div class="sc-bd">
+      <div class="sc-ctx">A simple neural network with 2 layers applies: <strong>Layer 1:</strong> g(x) = ReLU(2x − 1) = max(0, 2x−1). <strong>Layer 2:</strong> f(z) = σ(3z − 0.5) = 1/(1+e^(−(3z−0.5))). Show the composed function f(g(x)), find its domain and range, and evaluate at x = 0.8.</div>
+      <div class="sc-work">
+g(x) = max(0, 2x − 1)
+f(z) = 1 / (1 + e^(−(3z − 0.5)))
+
+Composition: f(g(x)) = f(max(0, 2x−1))
+           = 1 / (1 + e^(−(3·max(0,2x−1) − 0.5)))
+
+Domain of g: all real numbers (ReLU takes any input)
+Range  of g: [0, ∞) (ReLU outputs 0 or positive values)
+
+Domain of f(g(x)): inherits domain of g → (−∞, ∞)
+Range  of f(g(x)): sigmoid always outputs (0, 1)
+
+Evaluate at x = 0.8:
+  g(0.8) = max(0, 2(0.8)−1) = max(0, 0.6) = 0.6
+  f(0.6) = 1 / (1 + e^(−(3(0.6)−0.5)))
+         = 1 / (1 + e^(−(1.8−0.5)))
+         = 1 / (1 + e^(−1.3))
+         = 1 / (1 + 0.2725)
+         ≈ 0.786  (78.6% predicted probability)
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> A neural network IS a composition of functions. The range of each layer is the domain of the next. Knowing the range of ReLU ([0,∞)) and sigmoid ((0,1)) tells you exactly what values flow between layers — critical for understanding vanishing gradients and output interpretation.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-hd"><span class="sc-n sn-1">S4</span><span class="sc-title">Finding and applying an inverse function</span><span class="sc-tag st1">Algebra / Preprocessing</span></div>
+    <div class="sc-bd">
+      <div class="sc-ctx">A data analyst <strong>standardizes</strong> a feature using z-score: f(x) = (x − μ) / σ, with μ = 50 and σ = 8. Find the inverse function, which converts z-scores back to original values. Then use it to interpret a model output of z = 1.5.</div>
+      <div class="sc-work">
+f(x) = (x − 50) / 8       ← standardization (z-score)
+
+Find f⁻¹(z):
+  Step 1: z = (x − 50) / 8
+  Step 2: swap x and z: x = (z − 50)/8... no, let's be precise.
+  
+  Let z = (x−50)/8. Solve for x:
+    8z = x − 50
+    x  = 8z + 50
+
+  f⁻¹(z) = 8z + 50       ← converts z-score back to original scale
+
+Verify: f(f⁻¹(z)) = ((8z+50) − 50)/8 = 8z/8 = z  ✓
+        f⁻¹(f(x)) = 8·((x−50)/8) + 50 = x−50+50 = x  ✓
+
+Interpret z = 1.5:
+  x = f⁻¹(1.5) = 8(1.5) + 50 = 12 + 50 = 62
+  → A z-score of 1.5 corresponds to an original value of 62.
+  → This value is 1.5 standard deviations above the mean.
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> Standardization is a function. Its inverse is the de-standardization function. When a model produces a prediction in standardized space, you apply the inverse function to recover the real-world value. This is function inversion applied to preprocessing.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-hd"><span class="sc-n sn-1">S5</span><span class="sc-title">Piecewise function — real-world threshold model</span><span class="sc-tag st1">Analytics / Modeling</span></div>
+    <div class="sc-bd">
+      <div class="sc-ctx">A shipping cost function is defined by three tiers: free for orders under $30, flat $5 for orders $30–$100, and 5% of order value for orders over $100. Write this as a piecewise function, state its domain and range, and evaluate for orders of $20, $65, and $150.</div>
+      <div class="sc-work">
+Let x = order value in dollars.
+
+C(x) = { 0         if 0 ≤ x < 30
+        { 5         if 30 ≤ x ≤ 100
+        { 0.05x     if x > 100
+
+Domain: [0, ∞)   (order value must be non-negative)
+Range:  {0} ∪ {5} ∪ (5, ∞)
+      = [0, ∞) — well, specifically {0, 5} ∪ (5, ∞)
+      Simplified: [0, ∞) \ (0, 5)  i.e., 0, 5, or any value >5
+
+Evaluate:
+  C(20)  = 0               ← 20 < 30 → free shipping
+  C(65)  = 5               ← 30 ≤ 65 ≤ 100 → flat $5
+  C(150) = 0.05(150) = 7.50  ← 150 > 100 → 5% of order
+
+In code (Python):
+  def shipping(x):
+      if x < 30:    return 0
+      elif x <= 100: return 5
+      else:          return 0.05 * x
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> Piecewise functions model any situation where behavior changes based on input value — tax brackets, pricing tiers, activation functions (ReLU is a piecewise function!), and business rules. Writing them clearly defines exactly what happens at each threshold.</div>
+    </div>
+  </div>
+</div>
+
+<div class="sec-div"><span class="sd-lbl">Challenges</span></div>
+
+<!-- C5 CHALLENGES -->
+<div class="crit-block" id="t1c5">
+  <div class="crit-hdr">
+    <div class="cbadge cb5">5</div>
+    <div class="crit-meta">
+      <div class="c-tag ct5">Criterion 05</div>
+      <h3>Challenges</h3>
+      <div class="c-sub">Five problems to solve — show full working for every step.</div>
+    </div>
+  </div>
+
+  <div class="ch-intro chi1">
+    <div class="chi-tag ct-1">Instructions</div>
+    <div class="chi-txt">Each problem isolates a key concept from this subtopic. Show all work. For domain and range problems, write the final answer in interval notation. For composition, show each step separately before combining.</div>
+    <div class="diff-row"><span class="dtag de">Easy</span><span class="dtag dm">Medium</span><span class="dtag dh">Hard</span></div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-hd"><div class="pnum pn1">1</div><div class="pmeta"><div class="ptitle">Evaluate a function at numbers and an expression</div><div class="psub">Function evaluation · Algebraic substitution</div></div><span class="dbadge de">Easy</span></div>
+    <div class="prob-bd">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptxt">Given f(x) = 3x² − 2x + 4, evaluate the following. Show every substitution step.</div><span class="peq">(a) f(0) &nbsp;&nbsp;&nbsp; (b) f(−3) &nbsp;&nbsp;&nbsp; (c) f(2a) &nbsp;&nbsp;&nbsp; (d) f(x+1)</span><div class="pnote">For (c) and (d), substitute the entire expression for x and expand fully.</div></div>
+      <div class="hint"><div class="h-ico">💡</div><div class="h-txt"><strong>Hint (d):</strong> Replace every x with (x+1). Expand (x+1)² = x²+2x+1 first, then distribute the 3. Collect like terms at the end.</div></div>
+      <div class="ans"><div class="a-ico">✏️</div><div class="a-txt">Show all four evaluations with full steps, then share for review.</div></div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-hd"><div class="pnum pn1">2</div><div class="pmeta"><div class="ptitle">Find the domain and range of three functions</div><div class="psub">Domain · Range · Interval notation</div></div><span class="dbadge de">Easy</span></div>
+    <div class="prob-bd">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptxt">Find the domain and range of each function. Write both in interval notation and explain your reasoning for each restriction.</div><span class="peq">(a) f(x) = √(2x − 6)</span><span class="peq">(b) g(x) = 4 / (x² − 9)</span><span class="peq">(c) h(x) = x² − 4x + 7</span><div class="pnote">For (b), factor the denominator to find where it equals zero. For (c), complete the square to find the minimum y-value (this gives the range).</div></div>
+      <div class="hint"><div class="h-ico">💡</div><div class="h-txt"><strong>Hint (a):</strong> Set 2x−6 ≥ 0. <strong>Hint (b):</strong> x²−9 = (x−3)(x+3). Denominator ≠ 0 at x = ±3. Also think: can the output ever equal 0? (Can 4/something = 0?) <strong>Hint (c):</strong> Complete the square: vertex is at x=2. The minimum y-value is the range lower bound.</div></div>
+      <div class="ans"><div class="a-ico">✏️</div><div class="a-txt">Write domain and range for each in interval notation with a reasoning sentence. Then share.</div></div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-hd"><div class="pnum pn1">3</div><div class="pmeta"><div class="ptitle">Compute and compare function compositions</div><div class="psub">Composition · Order matters</div></div><span class="dbadge dm">Medium</span></div>
+    <div class="prob-bd">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptxt">Given f(x) = 2x + 3 and g(x) = x² − 1, find both compositions and evaluate each at x = 2. Show they give different results.</div><span class="peq">(a) f(g(x)) &nbsp;&nbsp;&nbsp; (b) g(f(x))</span><span class="peq">(c) f(g(2)) &nbsp;&nbsp;&nbsp; (d) g(f(2))</span><div class="pnote">Work symbolically first, then substitute x=2. Also find the domain of each composition.</div></div>
+      <div class="hint"><div class="h-ico">💡</div><div class="h-txt"><strong>Hint:</strong> For f(g(x)): substitute the entire g(x) expression wherever x appears in f. So f(g(x)) = 2(x²−1)+3. For g(f(x)): substitute f(x) into g → (2x+3)²−1. Expand (2x+3)² using the perfect square formula.</div></div>
+      <div class="ans"><div class="a-ico">✏️</div><div class="a-txt">Show symbolic compositions, evaluate at x=2, confirm f(g(2)) ≠ g(f(2)), then share.</div></div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-hd"><div class="pnum pn1">4</div><div class="pmeta"><div class="ptitle">Find the inverse function and verify it</div><div class="psub">Inverse functions · Full verification</div></div><span class="dbadge dm">Medium</span></div>
+    <div class="prob-bd">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptxt">Find the inverse of each function. Verify by showing f(f⁻¹(x)) = x and f⁻¹(f(x)) = x.</div><span class="peq">(a) f(x) = 5x − 3</span><span class="peq">(b) g(x) = (x + 4) / 2</span><div class="pnote">Remember the steps: replace f(x) with y → swap x and y → solve for y → write as inverse. State the domain of each inverse.</div></div>
+      <div class="hint"><div class="h-ico">💡</div><div class="h-txt"><strong>Hint (a):</strong> Swap to get x = 5y−3, then solve for y: y=(x+3)/5. <strong>Verification:</strong> plug f⁻¹(x) into f and simplify — the result must be exactly x. Then plug f(x) into f⁻¹ — also must give x.</div></div>
+      <div class="ans"><div class="a-ico">✏️</div><div class="a-txt">Show the inverse derivation and full two-way verification for both functions, then share.</div></div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-hd"><div class="pnum pn1">5</div><div class="pmeta"><div class="ptitle">Build and analyze a data transformation function</div><div class="psub">Word Problem · Domain · Range · ML context</div></div><span class="dbadge dh">Hard</span></div>
+    <div class="prob-bd">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptxt">A data scientist applies the following transformation pipeline to a feature column x:<br><br><strong>Step 1:</strong> Subtract 4 → g(x) = x − 4<br><strong>Step 2:</strong> Take the square root → h(t) = √t<br><strong>Step 3:</strong> Apply log → k(s) = ln(s)<br><br>(a) Write the full composed transformation T(x) = k(h(g(x))).<br>(b) Find the domain of T(x) — which input values are valid?<br>(c) Simplify T(x) using log laws.<br>(d) Find T⁻¹(x) — the inverse transformation that recovers original x from T(x).<br>(e) If a model returns T(x) = 2.1, what was the original feature value x?</div><div class="pnote">For domain: trace restrictions from the innermost function outward. For (d): use the inverse of ln (which is e^x), then work backwards through each step.</div></div>
+      <div class="hint"><div class="h-ico">💡</div><div class="h-txt"><strong>Hint (a):</strong> T(x) = ln(√(x−4)) = (1/2)·ln(x−4). <strong>Hint (b):</strong> x−4 must be &gt; 0 (combining √ and ln restrictions). <strong>Hint (d):</strong> T(x) = y → (1/2)ln(x−4) = y → ln(x−4) = 2y → x−4 = e^(2y) → x = e^(2y)+4. Swap x and y for the inverse. <strong>Hint (e):</strong> Plug 2.1 into T⁻¹(x).</div></div>
+      <div class="ans"><div class="a-ico">✏️</div><div class="a-txt">Show all five parts with full working. Part (e) requires a numerical answer. Then share for review.</div></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ████████████████████████████████████████████
+     BIG DIVIDER
+████████████████████████████████████████████ -->
+<div class="big-div"><span class="bd-lbl">End of Subtopic 01 · Beginning of Subtopic 02</span></div>
+
+
+<!-- ████████████████████████████████████████████
+     TOPIC 2 — SLOPE AND LINEAR FUNCTIONS
+████████████████████████████████████████████ -->
+<div class="topic-hdr th2">
+  <div class="t-icon ti2">m</div>
+  <div>
+    <div class="t-label tl2">Algebra I · Subtopic 02 of 02</div>
+    <h2 class="h22">Slope and Linear Functions</h2>
+    <div class="t-sub">The mathematics of constant-rate relationships — the single most deployed mathematical concept in all of data analytics.</div>
+  </div>
+</div>
+
+<!-- T2 C1 DESCRIPTION -->
+<div class="crit-block" id="t2c1">
+  <div class="crit-hdr">
+    <div class="cbadge cb1">1</div>
+    <div class="crit-meta">
+      <div class="c-tag ct1">Criterion 01</div>
+      <h3>Description</h3>
+      <div class="c-sub">What slope is, what linear functions are, and all the forms they come in.</div>
+    </div>
+  </div>
+
+  <div class="prose">
+    <p><span class="hl2">Slope</span> measures the <span class="hlk">rate of change</span> of a linear relationship — how much the output (y) changes for each one-unit increase in the input (x). It is a single number that completely characterizes the direction and steepness of a line.</p>
+  </div>
+
+  <div class="math m2">
+<span class="dim">-- Slope formula (given two points (x₁,y₁) and (x₂,y₂)):</span>
+<span class="h2">m = (y₂ − y₁) / (x₂ − x₁) = Δy / Δx = rise / run</span>
+
+<span class="dim">-- Interpreting slope:</span>
+  m > 0   → line rises left to right (positive relationship)
+  m < 0   → line falls left to right (negative relationship)
+  m = 0   → horizontal line (no change in y, constant function)
+  m → ±∞  → vertical line (undefined slope — NOT a function!)
+  |m|     → steepness: larger absolute value = steeper line
+
+Example:
+  m = 3    → for every 1 unit increase in x, y increases by 3
+  m = −0.5 → for every 1 unit increase in x, y decreases by 0.5
+  </div>
+
+  <div class="prose">
+    <p>A <span class="hl2">linear function</span> is a function whose graph is a straight line — one where the rate of change is constant. It has the defining property: equal changes in x always produce equal changes in y. This constancy is what makes linear relationships so tractable and so widely used.</p>
+  </div>
+
+  <div class="def-card">
+    <div class="def-title">Three Forms of a Linear Equation — When to Use Each</div>
+    <div class="grid2">
+      <div class="gcard g2">
+        <div class="gc-name">Slope-Intercept Form</div>
+        <div class="gc-form">y = mx + b</div>
+        <div class="gc-note">Most common. m = slope, b = y-intercept. Use when you know the slope and y-intercept, or for graphing. This is also the form of every linear regression model: ŷ = w₁x + w₀.</div>
+      </div>
+      <div class="gcard g2">
+        <div class="gc-name">Point-Slope Form</div>
+        <div class="gc-form">y − y₁ = m(x − x₁)</div>
+        <div class="gc-note">Best when: you know the slope and one point on the line (x₁, y₁). Most useful for constructing a line when intercept is unknown.</div>
+      </div>
+      <div class="gcard g2">
+        <div class="gc-name">Standard Form</div>
+        <div class="gc-form">Ax + By = C</div>
+        <div class="gc-note">All terms on one side. A, B, C are integers with A ≥ 0. Used in systems of equations and linear programming constraints.</div>
+      </div>
+      <div class="gcard g2">
+        <div class="gc-name">Two-Point Form</div>
+        <div class="gc-form">(y−y₁)/(y₂−y₁) = (x−x₁)/(x₂−x₁)</div>
+        <div class="gc-note">When only two points are given. Compute slope first, then use point-slope form. Common in interpolation.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="math m2">
+<span class="dim">-- Special lines:</span>
+  Horizontal: y = k   (slope = 0, parallel to x-axis)
+              → f(x) = k is a constant function
+  Vertical:   x = c   (slope undefined, NOT a function)
+
+<span class="dim">-- Parallel and perpendicular lines:</span>
+  Parallel lines:      same slope m₁ = m₂, different intercepts
+  Perpendicular lines: slopes are negative reciprocals: m₁ · m₂ = −1
+                       e.g., m₁ = 2  →  m₂ = −1/2
+  </div>
+</div>
+
+<div class="sec-div"><span class="sd-lbl">Purpose</span></div>
+
+<!-- T2 C2 PURPOSE -->
+<div class="crit-block" id="t2c2">
+  <div class="crit-hdr">
+    <div class="cbadge cb2">2</div>
+    <div class="crit-meta">
+      <div class="c-tag ct2">Criterion 02</div>
+      <h3>Purpose</h3>
+      <div class="c-sub">Why slope and linear functions are the most deployed mathematical concept in data analytics.</div>
+    </div>
+  </div>
+
+  <div class="purp-rows">
+    <div class="purp-row"><span class="ptag pt2">Regression</span><span><strong>Linear regression</strong> is a linear function: ŷ = w₀ + w₁x₁ + w₂x₂ + ... The coefficients wᵢ ARE slopes — each wᵢ measures how much ŷ changes per unit change in xᵢ, holding all other features constant. Understanding slope = understanding what a regression coefficient means. This is the interpretability engine of linear models.</span></div>
+    <div class="purp-row"><span class="ptag pt2">Gradient</span><span>In calculus, the <strong>derivative of a function at a point</strong> is the slope of the tangent line at that point. Gradient descent — the optimization algorithm that trains every ML model — moves in the direction of steepest slope (gradient) to minimize the loss. Slope is the most fundamental concept in optimization.</span></div>
+    <div class="purp-row"><span class="ptag pt2">Scaling</span><span>Min-max normalization is a linear function: x' = (x − min) / (max − min). Z-score standardization is linear: z = (x − μ) / σ. Every linear scaling and normalization applied to features is a linear function with computable slope and intercept. Understanding this means understanding what preprocessing does to your data.</span></div>
+    <div class="purp-row"><span class="ptag pt2">Interpolation</span><span>Given two known data points, <strong>linear interpolation</strong> uses the two-point form to estimate values in between. This is used in time series gap-filling, upsampling, and computer graphics. The slope between two points is the constant rate of change assumed between them.</span></div>
+    <div class="purp-row"><span class="ptag pt2">Correlation</span><span>The <strong>correlation coefficient r</strong> measures the strength and direction of a linear relationship. A positive r means positive slope; negative r means negative slope. The line of best fit has slope b₁ = r × (sᵧ/sₓ). Understanding slope is the geometric interpretation of correlation.</span></div>
+    <div class="purp-row"><span class="ptag pt2">Cost Functions</span><span>Many business models are linear in their cost structure: Total Cost = Fixed Cost + (Variable Cost × Units). The variable cost IS the slope. Break-even analysis, marginal analysis, and pricing optimization all rely on identifying and manipulating the slope of a cost or revenue line.</span></div>
+  </div>
+</div>
+
+<div class="sec-div"><span class="sd-lbl">How It Works</span></div>
+
+<!-- T2 C3 HOW IT WORKS -->
+<div class="crit-block" id="t2c3">
+  <div class="crit-hdr">
+    <div class="cbadge cb3">3</div>
+    <div class="crit-meta">
+      <div class="c-tag ct3">Criterion 03</div>
+      <h3>How This Works</h3>
+      <div class="c-sub">Computing slope, writing equations of lines in all forms, parallel/perpendicular, and connecting to regression.</div>
+    </div>
+  </div>
+
+  <div class="mblock">
+    <div class="mb-hd">
+      <div class="mb-ico" style="background:var(--t2)">A</div>
+      <div><div class="mb-title">Computing Slope from Two Points</div><div class="mb-when">Any two distinct points define exactly one line — and one slope.</div></div>
+    </div>
+    <div class="mb-bd">
+      <div class="steps">
+        <div class="step"><div class="sn sn2">1</div><div class="st">Label the two points: (x₁, y₁) and (x₂, y₂). Order doesn't matter.</div></div>
+        <div class="step"><div class="sn sn2">2</div><div class="st">Compute Δy = y₂ − y₁ (change in output).</div></div>
+        <div class="step"><div class="sn sn2">3</div><div class="st">Compute Δx = x₂ − x₁ (change in input).</div></div>
+        <div class="step"><div class="sn sn2">4</div><div class="st">Divide: m = Δy / Δx. If Δx = 0, slope is undefined (vertical line).</div></div>
+      </div>
+      <div class="math m2">
+Points: (3, 7) and (9, 1)
+
+Δy = 1 − 7 = −6
+Δx = 9 − 3 = 6
+m = −6/6 = <span class="h2">−1</span>
+
+Interpretation: for every 1 unit increase in x, y decreases by 1.
+      </div>
+    </div>
+  </div>
+
+  <div class="mblock">
+    <div class="mb-hd">
+      <div class="mb-ico" style="background:var(--t2)">B</div>
+      <div><div class="mb-title">Writing the Equation of a Line</div><div class="mb-when">From two points, or from slope and one point.</div></div>
+    </div>
+    <div class="mb-bd">
+      <div class="steps">
+        <div class="step"><div class="sn sn2">1</div><div class="st"><strong>Compute slope m</strong> (if not given) from two points.</div></div>
+        <div class="step"><div class="sn sn2">2</div><div class="st"><strong>Use point-slope form</strong>: y − y₁ = m(x − x₁), using any known point (x₁, y₁).</div></div>
+        <div class="step"><div class="sn sn2">3</div><div class="st"><strong>Solve for y</strong> to get slope-intercept form: y = mx + b. Identify b (y-intercept).</div></div>
+        <div class="step"><div class="sn sn2">4</div><div class="st"><strong>Verify</strong>: substitute both original points into the final equation — both must satisfy it.</div></div>
+      </div>
+      <div class="math m2">
+Find the line through (2, 5) and (6, 13):
+
+Step 1 — Slope: m = (13−5)/(6−2) = 8/4 = 2
+Step 2 — Point-slope (using (2,5)):
+  y − 5 = 2(x − 2)
+Step 3 — Slope-intercept:
+  y = 2x − 4 + 5
+  <span class="h2">y = 2x + 1</span>
+
+Verify (2,5):  2(2)+1 = 5  ✓
+Verify (6,13): 2(6)+1 = 13 ✓
+      </div>
+    </div>
+  </div>
+
+  <div class="mblock">
+    <div class="mb-hd">
+      <div class="mb-ico" style="background:var(--t2)">C</div>
+      <div><div class="mb-title">Parallel & Perpendicular Lines</div><div class="mb-when">Knowing slope relationships prevents errors in modeling and constraint formulation.</div></div>
+    </div>
+    <div class="mb-bd">
+      <div class="math m2">
+<span class="dim">-- Parallel: same slope, different intercept</span>
+Line:     y = 3x + 5
+Parallel through (1, 2):
+  Same slope m = 3.  y − 2 = 3(x − 1)  →  <span class="h2">y = 3x − 1</span>
+
+<span class="dim">-- Perpendicular: slopes multiply to −1 (negative reciprocal)</span>
+Line:     y = (2/3)x + 4    →  m = 2/3
+Perp. slope: m⊥ = −3/2
+Perp. through (4, 1):
+  y − 1 = −(3/2)(x − 4)
+  y = −(3/2)x + 6 + 1
+  <span class="h2">y = −(3/2)x + 7</span>
+
+Check: (2/3) × (−3/2) = −6/6 = −1  ✓
+      </div>
+    </div>
+  </div>
+
+  <div class="mblock">
+    <div class="mb-hd">
+      <div class="mb-ico" style="background:var(--t2)">D</div>
+      <div><div class="mb-title">Slope as a Regression Coefficient — The ML Connection</div><div class="mb-when">This is why slope matters in data science beyond geometry.</div></div>
+    </div>
+    <div class="mb-bd">
+      <div class="prose">
+        <p>In simple linear regression ŷ = w₀ + w₁x, the coefficient w₁ is exactly the slope of the fitted line — it tells you the expected change in y per unit change in x. The formula for computing it from data is a direct extension of the two-point slope formula:</p>
+      </div>
+      <div class="math m2">
+<span class="dim">-- Regression slope from data (OLS formula):</span>
+<span class="h2">w₁ = Σ[(xᵢ − x̄)(yᵢ − ȳ)] / Σ[(xᵢ − x̄)²] = Cov(x,y) / Var(x)</span>
+
+<span class="dim">-- Regression intercept:</span>
+<span class="h2">w₀ = ȳ − w₁·x̄</span>
+
+This is the point-slope form of the regression line through the means!
+If we know w₁ (slope) and the point (x̄, ȳ) lies on the line:
+  ŷ − ȳ = w₁(x − x̄)   ← exactly point-slope form
+
+<span class="dim">-- Interpretation of w₁:</span>
+  w₁ = 2.5 means: holding all else equal, a 1-unit increase
+  in x is associated with a 2.5-unit increase in predicted y.
+  This is slope. Every regression coefficient IS a slope.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec-div"><span class="sd-lbl">Samples</span></div>
+
+<!-- T2 C4 SAMPLES -->
+<div class="crit-block" id="t2c4">
+  <div class="crit-hdr">
+    <div class="cbadge cb4">4</div>
+    <div class="crit-meta">
+      <div class="c-tag ct4">Criterion 04</div>
+      <h3>Samples</h3>
+      <div class="c-sub">Five worked examples — from computing slope to regression and business analytics.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-hd"><span class="sc-n sn-2">S1</span><span class="sc-title">Find the line through two points — all three forms</span><span class="sc-tag st2">Pure Algebra</span></div>
+    <div class="sc-bd">
+      <div class="sc-ctx">Find the equation of the line through <strong>(−2, 3)</strong> and <strong>(4, −9)</strong>. Express in slope-intercept, point-slope, and standard form.</div>
+      <div class="sc-work">
+Points: (−2, 3) and (4, −9)
+
+Slope: m = (−9 − 3) / (4 − (−2)) = −12 / 6 = −2
+
+Point-slope form (using (−2, 3)):
+  y − 3 = −2(x − (−2))
+  y − 3 = −2(x + 2)
+
+Slope-intercept form:
+  y = −2x − 4 + 3
+  y = −2x − 1
+
+Standard form (Ax + By = C, A ≥ 0):
+  2x + y = −1
+
+Verify (−2, 3): −2(−2) − 1 = 4−1 = 3  ✓
+Verify (4, −9): −2(4) − 1 = −8−1 = −9  ✓
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> All three forms describe the same line. Slope-intercept is best for reading slope and intercept. Point-slope is best for constructing. Standard form is best for systems of equations. Know which to reach for when.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-hd"><span class="sc-n sn-2">S2</span><span class="sc-title">Min-Max normalization — slope and intercept of scaling</span><span class="sc-tag st2">Data Preprocessing</span></div>
+    <div class="sc-bd">
+      <div class="sc-ctx">A feature column contains values with min = 20 and max = 80. The analyst applies <strong>min-max normalization</strong>: x' = (x − min)/(max − min). Show this is a linear function, identify its slope and y-intercept, and interpret what they mean for the data.</div>
+      <div class="sc-work">
+Min-max formula: x' = (x − 20) / (80 − 20) = (x − 20) / 60
+
+Expand: x' = (1/60)x − 20/60 = (1/60)x − 1/3
+
+This is a linear function:
+  Slope:     m = 1/60 ≈ 0.0167
+  Intercept: b = −1/3 ≈ −0.333
+
+Interpretation:
+  Slope: every 1-unit increase in x increases x' by 1/60
+  Intercept: when x = 0, x' = −1/3 (but x=0 is outside domain here)
+
+Domain: [20, 80]  (original feature range)
+Range:  [0, 1]    (normalized output — guaranteed by min-max)
+
+Verify:
+  x = 20: x' = (20−20)/60 = 0  ✓ (min maps to 0)
+  x = 80: x' = (80−20)/60 = 1  ✓ (max maps to 1)
+  x = 50: x' = (50−20)/60 = 30/60 = 0.5  ✓ (midpoint maps to 0.5)
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> Min-max normalization is a linear function with slope 1/(max−min) and intercept −min/(max−min). Understanding it as a linear function means you can reason about what it does to slope, intercept, relationships, and outliers — not just apply it blindly.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-hd"><span class="sc-n sn-2">S3</span><span class="sc-title">Compute regression slope and intercept from scratch</span><span class="sc-tag st2">Linear Regression / ML</span></div>
+    <div class="sc-bd">
+      <div class="sc-ctx">Given 5 data points, manually compute the OLS regression line ŷ = w₀ + w₁x. This connects the slope formula directly to the regression coefficient formula.</div>
+      <div class="sc-work">
+Data: x = [1, 2, 3, 4, 5],  y = [3, 5, 4, 7, 8]
+n = 5
+
+Step 1 — Compute means:
+  x̄ = (1+2+3+4+5)/5 = 15/5 = 3
+  ȳ = (3+5+4+7+8)/5 = 27/5 = 5.4
+
+Step 2 — Compute Σ(xᵢ−x̄)(yᵢ−ȳ):
+  i=1: (1−3)(3−5.4) = (−2)(−2.4) =  4.8
+  i=2: (2−3)(5−5.4) = (−1)(−0.4) =  0.4
+  i=3: (3−3)(4−5.4) = (0)(−1.4)  =  0.0
+  i=4: (4−3)(7−5.4) = (1)(1.6)   =  1.6
+  i=5: (5−3)(8−5.4) = (2)(2.6)   =  5.2
+  Sum = 12.0
+
+Step 3 — Compute Σ(xᵢ−x̄)²:
+  (−2)²+(−1)²+0²+1²+2² = 4+1+0+1+4 = 10
+
+Step 4 — Slope: w₁ = 12.0 / 10 = 1.2
+Step 5 — Intercept: w₀ = ȳ − w₁·x̄ = 5.4 − 1.2(3) = 5.4−3.6 = 1.8
+
+Regression line: ŷ = 1.8 + 1.2x
+
+Interpretation: each 1-unit increase in x is associated
+with a 1.2-unit increase in predicted y.
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> The OLS regression formula w₁ = Cov(x,y)/Var(x) is the slope formula generalized to many data points. The intercept formula w₀ = ȳ − w₁x̄ is the point-slope form applied to the centroid (x̄, ȳ). Linear regression IS slope, computed from data.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-hd"><span class="sc-n sn-2">S4</span><span class="sc-title">Linear interpolation — filling time series gaps</span><span class="sc-tag st2">Time Series / Data Engineering</span></div>
+    <div class="sc-bd">
+      <div class="sc-ctx">A sensor records temperature at t=0 (18°C) and t=6 (30°C), but data is missing for t=1,2,3,4,5. Use linear interpolation to estimate the missing values.</div>
+      <div class="sc-work">
+Known points: (t=0, T=18) and (t=6, T=30)
+
+Step 1 — Slope:
+  m = (30 − 18) / (6 − 0) = 12/6 = 2 °C per time unit
+
+Step 2 — Line equation (slope-intercept):
+  T = 2t + 18   (b=18 since T(0) = 18 = y-intercept)
+
+Step 3 — Fill missing values:
+  T(1) = 2(1) + 18 = 20°C
+  T(2) = 2(2) + 18 = 22°C
+  T(3) = 2(3) + 18 = 24°C
+  T(4) = 2(4) + 18 = 26°C
+  T(5) = 2(5) + 18 = 28°C
+  T(6) = 2(6) + 18 = 30°C  ✓
+
+Python:
+  import numpy as np
+  t = np.arange(0, 7)
+  T_known = {0: 18, 6: 30}
+  T_interp = 2 * t + 18
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> Linear interpolation is literally finding a line through two known points and reading off values at intermediate x-inputs. It is the simplest gap-filling strategy in time series and uses only the slope and intercept of a line between two anchor points.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-hd"><span class="sc-n sn-2">S5</span><span class="sc-title">Marginal cost analysis — slope in business intelligence</span><span class="sc-tag st2">Business Analytics</span></div>
+    <div class="sc-bd">
+      <div class="sc-ctx">A manufacturer's total cost is <strong>C(x) = 4500 + 38x</strong> (dollars), where x = units produced. Revenue is <strong>R(x) = 65x</strong>. (a) Identify slope and intercept of each function and interpret. (b) Find break-even. (c) For what production range is profit increasing? (d) What is the marginal profit?</div>
+      <div class="sc-work">
+C(x) = 4500 + 38x    R(x) = 65x
+
+(a) Interpret:
+  C: slope = 38 (each unit costs $38 more to produce)
+     intercept = 4500 (fixed costs even at x=0)
+  R: slope = 65 (each unit sold earns $65)
+     intercept = 0 (no revenue if nothing sold)
+
+(b) Break-even: R(x) = C(x)
+  65x = 4500 + 38x
+  27x = 4500
+  x = 166.67  →  167 units (round up)
+
+(c) Profit function: P(x) = R(x) − C(x)
+  = 65x − (4500 + 38x)
+  = 27x − 4500
+
+P is linear with slope = 27 > 0
+→ Profit is ALWAYS increasing once production starts.
+→ P > 0 when 27x > 4500, i.e., x > 166.67
+
+(d) Marginal profit = slope of P(x) = $27 per unit
+   Every additional unit produced earns $27 in profit.
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> In business analytics, every linear cost/revenue/profit model is a slope problem. The slope of the profit function IS the marginal profit — the economic concept of "how much extra profit per extra unit." This connects algebra slope directly to economic decision-making.</div>
+    </div>
+  </div>
+</div>
+
+<div class="sec-div"><span class="sd-lbl">Challenges</span></div>
+
+<!-- T2 C5 CHALLENGES -->
+<div class="crit-block" id="t2c5">
+  <div class="crit-hdr">
+    <div class="cbadge cb5">5</div>
+    <div class="crit-meta">
+      <div class="c-tag ct5">Criterion 05</div>
+      <h3>Challenges</h3>
+      <div class="c-sub">Five problems — ordered from direct computation to full modeling and interpretation.</div>
+    </div>
+  </div>
+
+  <div class="ch-intro chi2">
+    <div class="chi-tag ct-2">Instructions</div>
+    <div class="chi-txt">Show all working for full marks. For word problems, define variables, write the linear function first, then solve. Verify every line equation by substituting the given points back in.</div>
+    <div class="diff-row"><span class="dtag de">Easy</span><span class="dtag dm">Medium</span><span class="dtag dh">Hard</span></div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-hd"><div class="pnum pn2">1</div><div class="pmeta"><div class="ptitle">Compute slope and write the equation of a line</div><div class="psub">Slope · Point-slope · Slope-intercept · Verification</div></div><span class="dbadge de">Easy</span></div>
+    <div class="prob-bd">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptxt">Given the two points, compute the slope, write the equation in slope-intercept form, and verify both points satisfy the equation.</div><span class="peq">(a) &nbsp;(1, 4) and (5, 12)</span><span class="peq">(b) &nbsp;(−3, 7) and (6, 1)</span><div class="pnote">For each, show: slope calculation → point-slope step → slope-intercept form → verification of both points.</div></div>
+      <div class="hint"><div class="h-ico">💡</div><div class="h-txt"><strong>Hint (b):</strong> The slope will be a fraction. Keep it as a fraction throughout — don't round. For point-slope, use either point and confirm you get the same equation from both.</div></div>
+      <div class="ans"><div class="a-ico">✏️</div><div class="a-txt">Show all steps for both (a) and (b), then share for review.</div></div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-hd"><div class="pnum pn2">2</div><div class="pmeta"><div class="ptitle">Identify parallel and perpendicular lines</div><div class="psub">Slope relationships · Line equations</div></div><span class="dbadge de">Easy</span></div>
+    <div class="prob-bd">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptxt">Given the line y = (3/4)x − 2:<br><br>(a) Write the equation of the line parallel to it passing through (8, 5).<br>(b) Write the equation of the line perpendicular to it passing through (3, 1).<br>(c) Do the original line and the perpendicular line from (b) intersect? If yes, at what point?</div><div class="pnote">For (c), set the two equations equal and solve — this is a system of two linear equations.</div></div>
+      <div class="hint"><div class="h-ico">💡</div><div class="h-txt"><strong>Hint (b):</strong> Perpendicular slope = −4/3 (negative reciprocal of 3/4). <strong>Hint (c):</strong> Set (3/4)x − 2 = (−4/3)x + b. You'll need to find b first from part (b), then solve for x.</div></div>
+      <div class="ans"><div class="a-ico">✏️</div><div class="a-txt">Write equations for (a) and (b), then find the intersection point for (c). Share your work.</div></div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-hd"><div class="pnum pn2">3</div><div class="pmeta"><div class="ptitle">Interpret regression coefficients as slopes</div><div class="psub">Regression · Slope interpretation · Prediction</div></div><span class="dbadge dm">Medium</span></div>
+    <div class="prob-bd">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptxt">A linear regression model for house prices gives: <strong>ŷ = 85,000 + 150·sqft + 12,000·bedrooms</strong><br><br>(a) Identify the slope associated with each feature and interpret it in plain English.<br>(b) Predict the price of a 1,200 sq ft house with 3 bedrooms.<br>(c) A 1,400 sq ft house with 3 bedrooms costs $245,000 in the actual market. What is the residual (actual − predicted)?<br>(d) If the model is rewritten as a function of only sqft (holding bedrooms=2), write it as a simple linear function y = mx + b and identify its slope and intercept.</div><div class="pnote">For (c), compute the predicted price first, then subtract from actual. A negative residual means the model overpredicted.</div></div>
+      <div class="hint"><div class="h-ico">💡</div><div class="h-txt"><strong>Hint (a):</strong> In multiple regression, each coefficient is the slope for that variable — the expected change in y per unit change in that variable, holding others fixed. 150 means each extra sq ft adds $150 to the predicted price.</div></div>
+      <div class="ans"><div class="a-ico">✏️</div><div class="a-txt">Answer all four parts. For (d), write the explicit y = mx + b form. Then share your work.</div></div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-hd"><div class="pnum pn2">4</div><div class="pmeta"><div class="ptitle">Linear interpolation for missing data</div><div class="psub">Time Series · Two-point form · Data engineering</div></div><span class="dbadge dm">Medium</span></div>
+    <div class="prob-bd">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptxt">A stock's closing price is recorded at two times: <strong>Day 3: $142</strong> and <strong>Day 9: $172</strong>. Data is missing for Days 4, 5, 6, 7, and 8.<br><br>(a) Write the linear interpolation function P(t) for the price at day t.<br>(b) Fill in the missing prices for Days 4 through 8.<br>(c) At what day would the price reach $160 (according to this linear model)?<br>(d) Is linear interpolation appropriate for stock prices? State one advantage and one limitation.</div><div class="pnote">For (c), set P(t) = 160 and solve for t. The answer may be a non-integer — interpret what that means.</div></div>
+      <div class="hint"><div class="h-ico">💡</div><div class="h-txt"><strong>Hint (a):</strong> Use the two-point slope formula with (3, 142) and (9, 172). Then use point-slope form to build P(t). Verify P(3) = 142 and P(9) = 172.</div></div>
+      <div class="ans"><div class="a-ico">✏️</div><div class="a-txt">Show P(t), fill all 5 missing values, solve for the Day $160 is reached, and write the advantage/limitation. Then share.</div></div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-hd"><div class="pnum pn2">5</div><div class="pmeta"><div class="ptitle">Build a full linear model from business data</div><div class="psub">Word Problem · Regression · Break-even · Optimization</div></div><span class="dbadge dh">Hard</span></div>
+    <div class="prob-bd">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptxt">A subscription service tracks monthly ad spend (x, in $thousands) and new subscribers gained (y). Two data points: <strong>(2, 180)</strong> and <strong>(8, 420)</strong>.<br><br>(a) Find the linear function y = mx + b that fits these two points. Interpret the slope and intercept in context.<br>(b) The company wants 500 new subscribers next month. How much should they spend on ads?<br>(c) Each new subscriber is worth $25 in lifetime value. Each $1,000 in ad spend costs $1,000. Write a profit function P(x) = Revenue − Cost and simplify.<br>(d) Find the ad spend that breaks even (P = 0) and the spend that maximizes profit. What do you notice about this linear profit function?<br>(e) Should the company keep increasing ad spend indefinitely? Explain using the slope of P(x).</div><div class="pnote">This is a full end-to-end business analytics problem. Define all variables clearly. Interpret every answer in terms of the business context.</div></div>
+      <div class="hint"><div class="h-ico">💡</div><div class="h-txt"><strong>Hint (a):</strong> Slope = (420−180)/(8−2) = 240/6 = 40. Each $1k in ad spend yields 40 new subscribers. <strong>Hint (c):</strong> Revenue = 25y = 25(40x+b). Cost = 1000x (in dollars, not thousands — watch units!). <strong>Hint (d):</strong> P(x) is linear — if slope &gt;0, profit always increases. Think about what that implies for "maximizing."</div></div>
+      <div class="ans"><div class="a-ico">✏️</div><div class="a-txt">Show all five parts with full working. Part (e) requires a written interpretation sentence. Then share for full review.</div></div>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<footer>ALGEBRA I · FUNCTIONS: DEFINITION, NOTATION, DOMAIN & RANGE · SLOPE AND LINEAR FUNCTIONS · MATHEMATICS FOR DATA ANALYTICS</footer>
+</body>
+</html>

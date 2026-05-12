@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pre-Algebra: GCF, LCM & Exponents</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf7f2;
+    --paper: #ffffff;
+    --ink: #1a1208;
+    --muted: #7a6f5e;
+    --rule: #e8e0d4;
+    --t1: #c84b0f;   /* warm orange-red for topic 1 */
+    --t1-bg: #fff4ef;
+    --t1-mid: #f4825a;
+    --t2: #1a6b4a;   /* deep forest green for topic 2 */
+    --t2-bg: #edf7f2;
+    --t2-mid: #3aaa78;
+    --desc: #1d4ed8;
+    --desc-bg: #eff6ff;
+    --purp: #6d28d9;
+    --purp-bg: #f5f3ff;
+    --amber: #b45309;
+    --amber-bg: #fffbeb;
+    --rose: #be185d;
+    --rose-bg: #fdf2f8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.75;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--ink);
+    color: #faf7f2;
+    padding: 52px 40px 44px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::after {
+    content: 'PRE-ALGEBRA';
+    position: absolute;
+    right: -10px;
+    bottom: -20px;
+    font-family: 'Fraunces', serif;
+    font-size: 9rem;
+    font-weight: 900;
+    opacity: 0.04;
+    letter-spacing: -0.04em;
+    pointer-events: none;
+    line-height: 1;
+  }
+  .breadcrumb {
+    font-family: 'DM Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #a89c88;
+    margin-bottom: 16px;
+  }
+  .header h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 10px;
+  }
+  .header h1 em { font-style: italic; font-weight: 400; color: #c8b99a; }
+  .header-sub {
+    color: #a89c88;
+    font-size: 0.9rem;
+    max-width: 500px;
+  }
+  .topic-pills {
+    display: flex;
+    gap: 10px;
+    margin-top: 22px;
+    flex-wrap: wrap;
+  }
+  .pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 5px 14px;
+    border-radius: 20px;
+    letter-spacing: 0.06em;
+  }
+  .pill-1 { background: rgba(200,75,15,0.2); color: #f4825a; border: 1px solid rgba(200,75,15,0.3); }
+  .pill-2 { background: rgba(26,107,74,0.2); color: #3aaa78; border: 1px solid rgba(26,107,74,0.3); }
+
+  /* LAYOUT */
+  main { max-width: 860px; margin: 0 auto; padding: 56px 24px 80px; }
+
+  /* TOPIC BLOCK */
+  .topic {
+    margin-bottom: 80px;
+  }
+
+  /* TOPIC TITLE BAR */
+  .topic-titlebar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+    padding-bottom: 18px;
+    border-bottom: 2px solid var(--rule);
+  }
+  .topic-num {
+    font-family: 'Fraunces', serif;
+    font-size: 3rem;
+    font-weight: 900;
+    line-height: 1;
+    opacity: 0.12;
+  }
+  .topic-1 .topic-num { color: var(--t1); opacity: 1; }
+  .topic-2 .topic-num { color: var(--t2); opacity: 1; }
+  .topic-title-text {}
+  .topic-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 3px;
+  }
+  .topic-title-text h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 1.7rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+  .topic-1 .topic-title-text h2 { color: var(--t1); }
+  .topic-2 .topic-title-text h2 { color: var(--t2); }
+
+  /* CRITERIA CARDS */
+  .criteria { display: flex; flex-direction: column; gap: 18px; }
+
+  .card {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .card-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 22px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .card-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.95rem;
+    flex-shrink: 0;
+  }
+  .card-head-text {}
+  .card-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .card-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+  .card-body { padding: 20px 22px; font-size: 0.9rem; }
+  .card-body p { margin-bottom: 10px; }
+  .card-body p:last-child { margin-bottom: 0; }
+
+  /* DESCRIPTION */
+  .c-desc .card-icon { background: var(--desc-bg); color: var(--desc); }
+  .c-desc .card-title { color: var(--desc); }
+
+  /* PURPOSE */
+  .c-purp .card-icon { background: var(--purp-bg); color: var(--purp); }
+  .c-purp .card-title { color: var(--purp); }
+
+  /* HOW IT WORKS */
+  .c-how .card-icon { background: var(--amber-bg); color: var(--amber); }
+  .c-how .card-title { color: var(--amber); }
+
+  /* SAMPLE */
+  .c-sample .card-icon { background: #f0fdf4; color: #166534; }
+  .c-sample .card-title { color: #166534; }
+
+  /* CHALLENGES */
+  .c-chall .card-icon { background: var(--rose-bg); color: var(--rose); }
+  .c-chall .card-title { color: var(--rose); }
+
+  /* STEPS */
+  .steps { counter-reset: step; display: flex; flex-direction: column; gap: 10px; }
+  .step {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .step-num {
+    counter-increment: step;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--amber-bg);
+    border: 1.5px solid #f0c060;
+    color: var(--amber);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .step-text { font-size: 0.88rem; line-height: 1.7; }
+
+  /* MATH BLOCK */
+  .math-block {
+    background: #f8f5f0;
+    border: 1px solid var(--rule);
+    border-left: 3px solid;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 12px 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.87rem;
+    line-height: 2;
+  }
+  .topic-1 .math-block { border-left-color: var(--t1-mid); }
+  .topic-2 .math-block { border-left-color: var(--t2-mid); }
+
+  /* SAMPLE BOX */
+  .sample-box {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin: 12px 0;
+  }
+  .sample-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #166534;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  .sample-math {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.88rem;
+    line-height: 2;
+    color: #14532d;
+  }
+  .sample-note {
+    font-size: 0.82rem;
+    color: #166534;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #bbf7d0;
+  }
+
+  /* CHALLENGE ITEM */
+  .challenge {
+    background: var(--rose-bg);
+    border: 1px solid #fce7f3;
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin: 10px 0;
+  }
+  .challenge-q {
+    font-weight: 500;
+    font-size: 0.88rem;
+    color: var(--rose);
+    margin-bottom: 6px;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .challenge-q::before { content: '⚠'; flex-shrink: 0; }
+  .challenge-a {
+    font-size: 0.85rem;
+    color: #831843;
+    padding-left: 22px;
+    line-height: 1.7;
+  }
+  .challenge-a strong { font-weight: 500; }
+
+  /* HIGHLIGHTS */
+  .hl-orange { color: var(--t1); font-weight: 500; }
+  .hl-green { color: var(--t2); font-weight: 500; }
+  .hl-blue { color: var(--desc); font-weight: 500; }
+
+  /* DIVIDER */
+  .divider {
+    border: none;
+    border-top: 2px dashed var(--rule);
+    margin: 60px 0;
+  }
+
+  /* BULLET LIST */
+  .b-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .b-list li { display: flex; gap: 10px; font-size: 0.88rem; line-height: 1.7; }
+  .b-list li::before { content: '→'; color: var(--muted); flex-shrink: 0; }
+
+  /* PURPOSE LIST */
+  .purp-list { display: flex; flex-direction: column; gap: 8px; }
+  .purp-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 0.88rem;
+    line-height: 1.7;
+  }
+  .purp-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    padding: 3px 9px;
+    border-radius: 20px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 3px;
+    letter-spacing: 0.05em;
+  }
+  .purp-tag-1 { background: rgba(200,75,15,0.1); color: var(--t1); border: 1px solid rgba(200,75,15,0.2); }
+  .purp-tag-2 { background: rgba(26,107,74,0.1); color: var(--t2); border: 1px solid rgba(26,107,74,0.2); }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 30px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    border-top: 1px solid var(--rule);
+  }
+
+  @media (max-width: 580px) {
+    .header { padding: 36px 20px 32px; }
+    main { padding: 36px 16px 60px; }
+    .card-body { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="breadcrumb">Mathematics for Data Analytics → Pre-Algebra & Algebra</div>
+  <h1>GCF & LCM <em>and</em><br>Exponents & Roots</h1>
+  <p class="header-sub">Two foundational subtopics explained with full criteria: description, purpose, how it works, sample, and challenges.</p>
+  <div class="topic-pills">
+    <span class="pill pill-1">01 · GCF and LCM</span>
+    <span class="pill pill-2">02 · Exponents and Roots</span>
+  </div>
+</div>
+
+<main>
+
+<!-- ═══════════════════════════ TOPIC 1: GCF & LCM ═══════════════════════════ -->
+<div class="topic topic-1">
+  <div class="topic-titlebar">
+    <div class="topic-num">01</div>
+    <div class="topic-title-text">
+      <div class="topic-label">Pre-Algebra · Subtopic 1 of 2</div>
+      <h2>Greatest Common Factor & Least Common Multiple</h2>
+    </div>
+  </div>
+
+  <div class="criteria">
+
+    <!-- 1. DESCRIPTION -->
+    <div class="card c-desc">
+      <div class="card-head">
+        <div class="card-icon">📋</div>
+        <div class="card-head-text">
+          <div class="card-num">Criterion 01</div>
+          <div class="card-title">Description</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <p>The <span class="hl-orange">Greatest Common Factor (GCF)</span> — also called the Greatest Common Divisor (GCD) — is the <strong>largest whole number that divides evenly into two or more numbers</strong> without leaving a remainder.</p>
+        <p>The <span class="hl-orange">Least Common Multiple (LCM)</span> is the <strong>smallest positive whole number that is a multiple of two or more numbers</strong> — meaning all the given numbers divide into it evenly.</p>
+        <p>These two concepts are inverses of each other in spirit: GCF asks "what's the biggest shared divisor?" while LCM asks "what's the smallest shared multiple?" They are deeply related through the formula:</p>
+        <div class="math-block">GCF(a, b) × LCM(a, b) = a × b</div>
+        <p>Both rely on understanding <strong>factors</strong> (numbers that divide into a value) and <strong>multiples</strong> (numbers a value divides into).</p>
+      </div>
+    </div>
+
+    <!-- 2. PURPOSE -->
+    <div class="card c-purp">
+      <div class="card-head">
+        <div class="card-icon">🎯</div>
+        <div class="card-head-text">
+          <div class="card-num">Criterion 02</div>
+          <div class="card-title">Purpose</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="purp-list">
+          <div class="purp-item"><span class="purp-tag purp-tag-1">Fractions</span><span>GCF is used to <strong>simplify fractions</strong> to their lowest terms — dividing numerator and denominator by their GCF.</span></div>
+          <div class="purp-item"><span class="purp-tag purp-tag-1">Fractions</span><span>LCM is used to <strong>find common denominators</strong> when adding or subtracting fractions.</span></div>
+          <div class="purp-item"><span class="purp-tag purp-tag-1">Algebra</span><span>GCF is the first step in <strong>factoring polynomials</strong> — you always factor out the GCF before anything else.</span></div>
+          <div class="purp-item"><span class="purp-tag purp-tag-1">Data</span><span>In data analytics, GCF and LCM underlie <strong>data normalization, frequency alignment</strong>, and <strong>interval matching</strong> (e.g., aligning time series sampled at different rates).</span></div>
+          <div class="purp-item"><span class="purp-tag purp-tag-1">Logic</span><span>LCM is used in <strong>scheduling problems</strong> — finding when two repeating events will coincide again.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. HOW IT WORKS -->
+    <div class="card c-how">
+      <div class="card-head">
+        <div class="card-icon">⚙️</div>
+        <div class="card-head-text">
+          <div class="card-num">Criterion 03</div>
+          <div class="card-title">How This Works</div>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <p><strong>Method 1 — Listing Factors/Multiples (Simple, small numbers)</strong></p>
+        <div class="math-block">
+          GCF of 12 and 18:<br>
+          Factors of 12 → 1, 2, 3, 4, 6, 12<br>
+          Factors of 18 → 1, 2, 3, 6, 9, 18<br>
+          Common factors → 1, 2, 3, 6<br>
+          Greatest → <strong>GCF = 6</strong><br><br>
+          LCM of 4 and 6:<br>
+          Multiples of 4 → 4, 8, 12, 16, 20...<br>
+          Multiples of 6 → 6, 12, 18, 24...<br>
+          First common → <strong>LCM = 12</strong>
+        </div>
+
+        <p><strong>Method 2 — Prime Factorization (Reliable for any numbers)</strong></p>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-text">Break each number into its prime factors using a factor tree or repeated division.</div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-text">For <span class="hl-orange">GCF</span>: take only the prime factors that appear in <strong>both</strong> numbers, using the <strong>lower</strong> exponent.</div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-text">For <span class="hl-orange">LCM</span>: take all prime factors that appear in <strong>either</strong> number, using the <strong>higher</strong> exponent.</div></div>
+          <div class="step"><div class="step-num">4</div><div class="step-text">Multiply the selected prime factors together to get your answer.</div></div>
+        </div>
+
+        <p style="margin-top:14px;"><strong>Method 3 — Euclidean Algorithm (GCF only, fastest for large numbers)</strong></p>
+        <div class="math-block">
+          GCF(a, b): divide a by b, replace a with b, b with remainder.<br>
+          Repeat until remainder = 0. The last non-zero remainder is the GCF.<br><br>
+          GCF(48, 18):<br>
+          48 ÷ 18 = 2 remainder 12 → GCF(18, 12)<br>
+          18 ÷ 12 = 1 remainder 6  → GCF(12, 6)<br>
+          12 ÷ 6  = 2 remainder 0  → <strong>GCF = 6</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. SAMPLE -->
+    <div class="card c-sample">
+      <div class="card-head">
+        <div class="card-icon">🧪</div>
+        <div class="card-head-text">
+          <div class="card-num">Criterion 04</div>
+          <div class="card-title">Sample Problems</div>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <div class="sample-box">
+          <div class="sample-label">Sample A — GCF via Prime Factorization</div>
+          <div class="sample-math">
+            Find GCF(36, 60)<br><br>
+            36 = 2² × 3²<br>
+            60 = 2² × 3 × 5<br><br>
+            Common primes: 2² and 3¹  (take lower exponents)<br>
+            GCF = 2² × 3 = 4 × 3 = <strong>12</strong>
+          </div>
+          <div class="sample-note">✔ Check: 36 ÷ 12 = 3 ✓  and  60 ÷ 12 = 5 ✓  — both divide evenly.</div>
+        </div>
+
+        <div class="sample-box">
+          <div class="sample-label">Sample B — LCM via Prime Factorization</div>
+          <div class="sample-math">
+            Find LCM(8, 14)<br><br>
+            8  = 2³<br>
+            14 = 2 × 7<br><br>
+            All primes: 2³ and 7¹  (take higher exponents)<br>
+            LCM = 2³ × 7 = 8 × 7 = <strong>56</strong>
+          </div>
+          <div class="sample-note">✔ Check: 56 ÷ 8 = 7 ✓  and  56 ÷ 14 = 4 ✓  — both divide evenly.</div>
+        </div>
+
+        <div class="sample-box">
+          <div class="sample-label">Sample C — Simplify a Fraction Using GCF</div>
+          <div class="sample-math">
+            Simplify: 48/72<br><br>
+            GCF(48, 72) = ?<br>
+            48 = 2⁴ × 3<br>
+            72 = 2³ × 3²<br>
+            GCF = 2³ × 3 = 24<br><br>
+            48 ÷ 24 = 2<br>
+            72 ÷ 24 = 3<br>
+            Result: <strong>2/3</strong>
+          </div>
+          <div class="sample-note">✔ 2/3 is fully simplified — GCF(2,3) = 1, no further reduction possible.</div>
+        </div>
+
+        <div class="sample-box">
+          <div class="sample-label">Sample D — Real-World LCM (Scheduling)</div>
+          <div class="sample-math">
+            Event A repeats every 6 days.<br>
+            Event B repeats every 8 days.<br>
+            When do they happen on the same day again?<br><br>
+            LCM(6, 8):<br>
+            6 = 2 × 3<br>
+            8 = 2³<br>
+            LCM = 2³ × 3 = <strong>24 days</strong>
+          </div>
+          <div class="sample-note">✔ Both events coincide every 24 days from the start.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 5. CHALLENGES -->
+    <div class="card c-chall">
+      <div class="card-head">
+        <div class="card-icon">⚠️</div>
+        <div class="card-head-text">
+          <div class="card-num">Criterion 05</div>
+          <div class="card-title">Common Challenges & How to Solve Them</div>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <div class="challenge">
+          <div class="challenge-q">Confusing GCF and LCM — using one where the other is needed.</div>
+          <div class="challenge-a"><strong>Fix:</strong> Remember the purpose. Simplifying a fraction? → GCF (make smaller). Finding a common denominator? → LCM (make bigger). When in doubt: GCF ≤ smallest number; LCM ≥ largest number.</div>
+        </div>
+
+        <div class="challenge">
+          <div class="challenge-q">Incomplete prime factorization — missing a prime factor, especially for larger numbers.</div>
+          <div class="challenge-a"><strong>Fix:</strong> Always divide until you can't divide further. Use a factor tree systematically. Verify by multiplying your prime factors back: 2² × 3² × 5 = 4 × 9 × 5 = 180 ✓</div>
+        </div>
+
+        <div class="challenge">
+          <div class="challenge-q">Forgetting to use the correct exponent rule for GCF vs LCM.</div>
+          <div class="challenge-a"><strong>Fix:</strong> Use this memory rule — GCF = "minimum" (take the lower power), LCM = "maximum" (take the higher power). Write out all prime factors with exponents side by side to compare visually.</div>
+        </div>
+
+        <div class="challenge">
+          <div class="challenge-q">Applying GCF/LCM to three or more numbers at once.</div>
+          <div class="challenge-a"><strong>Fix:</strong> The method is the same. For GCF: take primes common to ALL numbers at the lowest exponent. For LCM: take all primes from ANY number at the highest exponent. Example — GCF(12, 18, 30): 12=2²×3, 18=2×3², 30=2×3×5 → GCF = 2¹×3¹ = 6.</div>
+        </div>
+
+        <div class="challenge">
+          <div class="challenge-q">Assuming GCF of two consecutive integers is always 1.</div>
+          <div class="challenge-a"><strong>Fix:</strong> This is actually always true (consecutive integers share no common factor > 1), but it's worth knowing <em>why</em>: if n and n+1 shared a factor d > 1, then d would divide their difference (n+1) − n = 1, which is impossible.</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════ TOPIC 2: EXPONENTS & ROOTS ═══════════════════════════ -->
+<div class="topic topic-2">
+  <div class="topic-titlebar">
+    <div class="topic-num">02</div>
+    <div class="topic-title-text">
+      <div class="topic-label">Pre-Algebra · Subtopic 2 of 2</div>
+      <h2>Exponents & Roots (Including Fractional Exponents)</h2>
+    </div>
+  </div>
+
+  <div class="criteria">
+
+    <!-- 1. DESCRIPTION -->
+    <div class="card c-desc">
+      <div class="card-head">
+        <div class="card-icon">📋</div>
+        <div class="card-head-text">
+          <div class="card-num">Criterion 01</div>
+          <div class="card-title">Description</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <p>An <span class="hl-green">exponent</span> tells you how many times a number (the <em>base</em>) is multiplied by itself. Written as <strong>bⁿ</strong>, where <em>b</em> is the base and <em>n</em> is the exponent (also called the power or index).</p>
+        <div class="math-block">
+          2³ = 2 × 2 × 2 = 8 &nbsp;&nbsp;&nbsp; (base = 2, exponent = 3)<br>
+          5² = 5 × 5 = 25 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (base = 5, exponent = 2, read: "5 squared")
+        </div>
+        <p>A <span class="hl-green">root</span> is the <strong>inverse operation</strong> of an exponent. The nth root of a number x asks: "what value, raised to the power n, equals x?"</p>
+        <div class="math-block">
+          √9 = 3 &nbsp;&nbsp;&nbsp; because 3² = 9 &nbsp;&nbsp;&nbsp; (square root)<br>
+          ∛8 = 2 &nbsp;&nbsp;&nbsp; because 2³ = 8 &nbsp;&nbsp;&nbsp; (cube root)
+        </div>
+        <p>A <span class="hl-green">fractional exponent</span> unifies both concepts: <strong>b^(m/n) = (ⁿ√b)^m</strong>. The denominator is the root, the numerator is the power. This is one of the most important bridges in algebra.</p>
+        <div class="math-block">
+          8^(1/3) = ∛8 = 2<br>
+          27^(2/3) = (∛27)² = 3² = 9
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. PURPOSE -->
+    <div class="card c-purp">
+      <div class="card-head">
+        <div class="card-icon">🎯</div>
+        <div class="card-head-text">
+          <div class="card-num">Criterion 02</div>
+          <div class="card-title">Purpose</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="purp-list">
+          <div class="purp-item"><span class="purp-tag purp-tag-2">Algebra</span><span>Exponents express <strong>repeated multiplication compactly</strong> and are fundamental to polynomials, scientific notation, and growth models.</span></div>
+          <div class="purp-item"><span class="purp-tag purp-tag-2">Data</span><span>Exponential functions model <strong>growth and decay</strong> — population growth, compound interest, radioactive decay, viral spread.</span></div>
+          <div class="purp-item"><span class="purp-tag purp-tag-2">Stats</span><span>Standard deviation uses a square root: σ = √(variance). <strong>Root operations appear in nearly every statistical formula.</strong></span></div>
+          <div class="purp-item"><span class="purp-tag purp-tag-2">ML</span><span>Fractional exponents are used in <strong>normalization, scaling, and activation functions</strong>. The gradient of x^n = n·x^(n−1) directly powers all calculus in ML.</span></div>
+          <div class="purp-item"><span class="purp-tag purp-tag-2">Calc</span><span>Understanding bⁿ with all exponent rules is a <strong>prerequisite for logarithms, calculus derivatives, and exponential models</strong>.</span></div>
+          <div class="purp-item"><span class="purp-tag purp-tag-2">Norms</span><span>Vector norms in linear algebra use exponents: L2 norm = √(x₁² + x₂² + ... xₙ²) — the <strong>Euclidean distance formula</strong>.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. HOW IT WORKS -->
+    <div class="card c-how">
+      <div class="card-head">
+        <div class="card-icon">⚙️</div>
+        <div class="card-head-text">
+          <div class="card-num">Criterion 03</div>
+          <div class="card-title">How This Works</div>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <p><strong>The 7 Core Exponent Laws</strong></p>
+        <div class="math-block">
+          1. Product Rule: &nbsp;&nbsp;&nbsp;bᵐ × bⁿ = b^(m+n)<br>
+          &nbsp;&nbsp;&nbsp;Example: 2³ × 2⁴ = 2⁷ = 128<br><br>
+          2. Quotient Rule: &nbsp;&nbsp;bᵐ ÷ bⁿ = b^(m−n)<br>
+          &nbsp;&nbsp;&nbsp;Example: 5⁶ ÷ 5² = 5⁴ = 625<br><br>
+          3. Power Rule: &nbsp;&nbsp;&nbsp;&nbsp;(bᵐ)ⁿ = b^(m×n)<br>
+          &nbsp;&nbsp;&nbsp;Example: (3²)⁴ = 3⁸ = 6561<br><br>
+          4. Zero Exponent: &nbsp;&nbsp;b⁰ = 1 &nbsp;(for any b ≠ 0)<br>
+          &nbsp;&nbsp;&nbsp;Example: 7⁰ = 1,  (−5)⁰ = 1<br><br>
+          5. Negative Exponent: b^(−n) = 1/bⁿ<br>
+          &nbsp;&nbsp;&nbsp;Example: 2^(−3) = 1/8<br><br>
+          6. Fractional Exponent: b^(1/n) = ⁿ√b<br>
+          &nbsp;&nbsp;&nbsp;Example: 16^(1/4) = ⁴√16 = 2<br><br>
+          7. General Fraction: b^(m/n) = (ⁿ√b)^m = ⁿ√(bᵐ)<br>
+          &nbsp;&nbsp;&nbsp;Example: 8^(2/3) = (∛8)² = 2² = 4
+        </div>
+
+        <p><strong>Root Rules</strong></p>
+        <div class="math-block">
+          Product Rule: &nbsp;&nbsp;√(a×b) = √a × √b<br>
+          &nbsp;&nbsp;Example: √(4×9) = √4 × √9 = 2 × 3 = 6 ✓ (√36 = 6)<br><br>
+          Quotient Rule: &nbsp;√(a/b) = √a / √b<br>
+          &nbsp;&nbsp;Example: √(25/4) = 5/2 = 2.5<br><br>
+          Simplifying Roots: pull out perfect square factors<br>
+          &nbsp;&nbsp;Example: √72 = √(36×2) = √36 × √2 = 6√2
+        </div>
+
+        <p><strong>Order of evaluation with fractional exponents:</strong> Always compute the root first, then the power — it keeps numbers smaller and avoids overflow.</p>
+        <div class="math-block">
+          64^(5/6): &nbsp;root first → ⁶√64 = 2 → then power → 2⁵ = 32  ✓<br>
+          (vs. power first → 64⁵ = 1,073,741,824 → ⁶√ of that = 32 ✓ but harder)
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 4. SAMPLE -->
+    <div class="card c-sample">
+      <div class="card-head">
+        <div class="card-icon">🧪</div>
+        <div class="card-head-text">
+          <div class="card-num">Criterion 04</div>
+          <div class="card-title">Sample Problems</div>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <div class="sample-box">
+          <div class="sample-label">Sample A — Applying Exponent Laws</div>
+          <div class="sample-math">
+            Simplify: (2³ × 2⁵) ÷ 2⁴<br><br>
+            Step 1 — Product Rule: 2³ × 2⁵ = 2^(3+5) = 2⁸<br>
+            Step 2 — Quotient Rule: 2⁸ ÷ 2⁴ = 2^(8−4) = 2⁴<br>
+            Step 3 — Evaluate: 2⁴ = <strong>16</strong>
+          </div>
+          <div class="sample-note">✔ Always combine using laws before evaluating — avoids large intermediate numbers.</div>
+        </div>
+
+        <div class="sample-box">
+          <div class="sample-label">Sample B — Negative Exponent</div>
+          <div class="sample-math">
+            Simplify: 3^(−2) + 4^(−1)<br><br>
+            3^(−2) = 1/3² = 1/9<br>
+            4^(−1) = 1/4<br><br>
+            1/9 + 1/4 → LCD = 36<br>
+            = 4/36 + 9/36 = <strong>13/36</strong>
+          </div>
+          <div class="sample-note">✔ Negative exponents become fractions — then apply regular fraction rules.</div>
+        </div>
+
+        <div class="sample-box">
+          <div class="sample-label">Sample C — Fractional Exponent</div>
+          <div class="sample-math">
+            Evaluate: 125^(2/3)<br><br>
+            Step 1 — Identify: denominator = 3 (cube root), numerator = 2 (power)<br>
+            Step 2 — Root first: ∛125 = 5 &nbsp;&nbsp;(because 5³ = 125)<br>
+            Step 3 — Power: 5² = <strong>25</strong>
+          </div>
+          <div class="sample-note">✔ b^(m/n) → root first (denominator), then power (numerator).</div>
+        </div>
+
+        <div class="sample-box">
+          <div class="sample-label">Sample D — Simplify a Radical (Root)</div>
+          <div class="sample-math">
+            Simplify: √180<br><br>
+            180 = 36 × 5 &nbsp;&nbsp;(36 is a perfect square)<br>
+            √180 = √(36 × 5) = √36 × √5 = <strong>6√5</strong>
+          </div>
+          <div class="sample-note">✔ Always look for the largest perfect square factor inside the radical.</div>
+        </div>
+
+        <div class="sample-box">
+          <div class="sample-label">Sample E — Data Analytics Application</div>
+          <div class="sample-math">
+            A dataset has variance = 144.<br>
+            What is the standard deviation?<br><br>
+            σ = √variance = √144 = <strong>12</strong><br><br>
+            If another dataset has variance = 50:<br>
+            σ = √50 = √(25×2) = 5√2 ≈ <strong>7.07</strong>
+          </div>
+          <div class="sample-note">✔ Standard deviation is literally the square root of variance — one of the most used formulas in statistics.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 5. CHALLENGES -->
+    <div class="card c-chall">
+      <div class="card-head">
+        <div class="card-icon">⚠️</div>
+        <div class="card-head-text">
+          <div class="card-num">Criterion 05</div>
+          <div class="card-title">Common Challenges & How to Solve Them</div>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <div class="challenge">
+          <div class="challenge-q">Misreading negative exponents — thinking b^(−n) = −bⁿ (negative value) instead of 1/bⁿ (fraction).</div>
+          <div class="challenge-a"><strong>Fix:</strong> A negative exponent means reciprocal, NOT negative result. 2^(−3) = 1/8, not −8. A negative base with even exponent gives a positive result: (−3)² = 9. Only an odd exponent keeps the negative: (−3)³ = −27.</div>
+        </div>
+
+        <div class="challenge">
+          <div class="challenge-q">Adding or subtracting terms with exponents directly — e.g. treating 2³ + 2⁴ = 2⁷ (wrong!).</div>
+          <div class="challenge-a"><strong>Fix:</strong> Exponent laws only apply to multiplication and division, NOT addition or subtraction. 2³ + 2⁴ = 8 + 16 = 24. You can factor: 2³(1 + 2) = 8 × 3 = 24, but you cannot add the exponents.</div>
+        </div>
+
+        <div class="challenge">
+          <div class="challenge-q">Confusing (ab)^n with ab^n — the parentheses matter critically.</div>
+          <div class="challenge-a"><strong>Fix:</strong> (2×3)² = 6² = 36, but 2×3² = 2×9 = 18. When an exponent is outside parentheses, it applies to everything inside. Without parentheses, it applies only to the immediately preceding base.</div>
+        </div>
+
+        <div class="challenge">
+          <div class="challenge-q">Not simplifying before evaluating fractional exponents — resulting in massive numbers that are hard to root.</div>
+          <div class="challenge-a"><strong>Fix:</strong> Always apply the root (denominator) first. For 32^(3/5): compute ⁵√32 = 2 first, then 2³ = 8. Much easier than 32³ = 32768 then ⁵√32768.</div>
+        </div>
+
+        <div class="challenge">
+          <div class="challenge-q">Assuming √(a + b) = √a + √b — one of the most common algebra errors.</div>
+          <div class="challenge-a"><strong>Fix:</strong> This is FALSE. √(9 + 16) = √25 = 5, but √9 + √16 = 3 + 4 = 7 ≠ 5. The product rule (√ab = √a·√b) works for multiplication ONLY, never for addition or subtraction inside a radical.</div>
+        </div>
+
+        <div class="challenge">
+          <div class="challenge-q">Zero and one as bases or exponents — edge cases that trip people up.</div>
+          <div class="challenge-a"><strong>Fix:</strong> Remember these: 0⁰ is undefined (or 1 by convention in some contexts). 0^n = 0 for any n &gt; 0. 1^n = 1 always. b⁰ = 1 for b ≠ 0. b¹ = b always.</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</main>
+
+<footer>PRE-ALGEBRA & ALGEBRA · GCF & LCM · EXPONENTS & ROOTS · MATHEMATICS FOR DATA ANALYTICS</footer>
+
+</body>
+</html>

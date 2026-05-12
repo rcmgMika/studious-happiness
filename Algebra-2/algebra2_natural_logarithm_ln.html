@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Natural Logarithm — ln and base-e</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #060910;
+    --s1: #0c1018;
+    --s2: #111620;
+    --s3: #161c28;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --text: #d8e0f0;
+    --muted: #6a778f;
+    --faint: #222c3c;
+
+    /* e — emerald green theme */
+    --e: #22c97e;
+    --e-dim: rgba(34,201,126,0.1);
+    --e-border: rgba(34,201,126,0.22);
+    --e-mid: #18a864;
+    --e-dark: #0e6e40;
+
+    /* accent colors per criterion */
+    --desc:  #5b9cf6;
+    --desc-d: rgba(91,156,246,0.09);
+    --purp:  #b48afc;
+    --purp-d: rgba(180,138,252,0.09);
+    --how:   #2dd4a0;
+    --how-d: rgba(45,212,160,0.09);
+    --samp:  #ffa94d;
+    --samp-d: rgba(255,169,77,0.09);
+    --chal:  #ff7eb3;
+    --chal-d: rgba(255,126,179,0.09);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 300;
+    line-height: 1.8;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--s1);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* animated glowing orb */
+  .hero-orb {
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(34,201,126,0.08) 0%, transparent 65%);
+    right: -100px; top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    animation: breathe 6s ease-in-out infinite;
+  }
+  @keyframes breathe {
+    0%,100% { opacity: 0.6; transform: translateY(-50%) scale(1); }
+    50%      { opacity: 1;   transform: translateY(-50%) scale(1.08); }
+  }
+
+  /* background formula watermark */
+  .hero-wm {
+    position: absolute;
+    left: 50%; bottom: -20px;
+    transform: translateX(-50%);
+    font-family: 'Libre Baskerville', serif;
+    font-size: 11rem;
+    font-style: italic;
+    color: rgba(255,255,255,0.025);
+    pointer-events: none;
+    white-space: nowrap;
+    user-select: none;
+    line-height: 1;
+  }
+
+  .hero-inner {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 68px 40px 60px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .crumb {
+    font-family: 'Fira Code', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+  .crumb .hi { color: var(--e); }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Fira Code', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--e);
+    margin-bottom: 16px;
+  }
+  .eyebrow-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--e);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.4; transform: scale(0.7); }
+  }
+
+  h1 {
+    font-family: 'Libre Baskerville', serif;
+    font-size: clamp(2.4rem, 5.5vw, 4rem);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    color: #fff;
+    margin-bottom: 18px;
+  }
+  h1 .em { font-style: italic; color: var(--e); }
+
+  .hero-sub {
+    color: var(--muted);
+    font-size: 0.95rem;
+    max-width: 540px;
+    line-height: 1.75;
+    margin-bottom: 30px;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .hm-item {
+    font-family: 'Fira Code', monospace;
+  }
+  .hm-val { font-size: 1.4rem; color: var(--e); font-weight: 500; }
+  .hm-lbl { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+
+  /* ── EULER BOX ── */
+  .euler-box {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 0 24px;
+    margin-top: -1px;
+  }
+  .euler-inner {
+    background: linear-gradient(135deg, var(--e-dim) 0%, rgba(34,201,126,0.04) 100%);
+    border: 1px solid var(--e-border);
+    border-radius: 12px;
+    padding: 24px 30px;
+    margin-top: 32px;
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .euler-formula {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.8rem;
+    font-style: italic;
+    color: var(--e);
+    white-space: nowrap;
+    padding-top: 4px;
+  }
+  .euler-desc { flex: 1; min-width: 200px; }
+  .euler-title {
+    font-family: 'Fira Code', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--e);
+    margin-bottom: 6px;
+  }
+  .euler-text {
+    font-size: 0.87rem;
+    color: var(--muted);
+    line-height: 1.75;
+  }
+  .euler-text strong { color: var(--text); font-weight: 500; }
+
+  /* ── MAIN ── */
+  main { max-width: 920px; margin: 0 auto; padding: 56px 24px 80px; }
+
+  /* ── SECTION HEADER ── */
+  .sec-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 34px;
+  }
+  .sec-bar {
+    width: 4px;
+    height: 52px;
+    background: linear-gradient(180deg, var(--e) 0%, var(--e-mid) 100%);
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+  .sec-meta {}
+  .sec-tag {
+    font-family: 'Fira Code', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--e);
+    margin-bottom: 3px;
+  }
+  h2 {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+  .sec-sub { color: var(--muted); font-size: 0.87rem; margin-top: 4px; }
+
+  /* ── CRITERIA CARDS ── */
+  .criteria { display: flex; flex-direction: column; gap: 16px; }
+
+  .card {
+    background: var(--s1);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .card-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 13px 22px;
+    border-bottom: 1px solid var(--border);
+  }
+  .c-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+  .c-num {
+    font-family: 'Fira Code', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1px;
+  }
+  .c-name { font-size: 0.97rem; font-weight: 600; }
+
+  .c-desc .c-icon { background: var(--desc-d); color: var(--desc); }
+  .c-desc .c-name { color: var(--desc); }
+  .c-purp .c-icon { background: var(--purp-d); color: var(--purp); }
+  .c-purp .c-name { color: var(--purp); }
+  .c-how  .c-icon { background: var(--how-d);  color: var(--how);  }
+  .c-how  .c-name { color: var(--how); }
+  .c-samp .c-icon { background: var(--samp-d); color: var(--samp); }
+  .c-samp .c-name { color: var(--samp); }
+  .c-chal .c-icon { background: var(--chal-d); color: var(--chal); }
+  .c-chal .c-name { color: var(--chal); }
+
+  .card-body { padding: 22px 24px; font-size: 0.9rem; }
+  .card-body p { margin-bottom: 12px; color: var(--text); }
+  .card-body p:last-child { margin-bottom: 0; }
+
+  /* ── MATH ── */
+  .math {
+    background: var(--s2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--e);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 12px 0;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.84rem;
+    line-height: 2.1;
+    color: #b8d4f8;
+  }
+  .math .dim { color: var(--muted); font-size: 0.78rem; }
+  .math .hi  { color: var(--e);  font-weight: 500; }
+  .math .hio { color: var(--samp); font-weight: 500; }
+
+  /* ── PROPERTY CARDS ── */
+  .props { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin: 14px 0; }
+  .prop {
+    background: var(--s2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    transition: border-color 0.2s;
+  }
+  .prop:hover { border-color: var(--e-border); }
+  .prop-name {
+    font-family: 'Fira Code', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--e);
+    margin-bottom: 7px;
+  }
+  .prop-formula {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.87rem;
+    color: #d0e8ff;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  .prop-note { font-size: 0.8rem; color: var(--muted); line-height: 1.65; }
+
+  /* ── PURPOSE ROWS ── */
+  .purp-rows { display: flex; flex-direction: column; gap: 12px; }
+  .purp-row { display: flex; gap: 12px; align-items: flex-start; font-size: 0.88rem; line-height: 1.75; }
+  .ptag {
+    font-family: 'Fira Code', monospace;
+    font-size: 9px;
+    padding: 3px 10px;
+    border-radius: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 4px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--e-dim);
+    color: var(--e);
+    border: 1px solid var(--e-border);
+  }
+
+  /* ── STEPS ── */
+  .steps { display: flex; flex-direction: column; gap: 10px; margin: 12px 0; }
+  .step { display: flex; gap: 14px; align-items: flex-start; }
+  .sn {
+    min-width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--e-dim);
+    border: 1.5px solid var(--e-border);
+    color: var(--e);
+    font-family: 'Fira Code', monospace;
+    font-size: 11px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 2px;
+  }
+  .st { font-size: 0.87rem; line-height: 1.75; }
+
+  /* ── WORKED EXAMPLE BLOCK ── */
+  .worked {
+    background: var(--s2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 14px 0;
+  }
+  .worked-head {
+    background: var(--s3);
+    padding: 10px 18px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .worked-tag {
+    font-family: 'Fira Code', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .worked-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text);
+    font-family: 'Libre Baskerville', serif;
+    font-style: italic;
+  }
+  .worked-body { padding: 16px 18px; }
+  .worked-formula {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.85rem;
+    line-height: 2.1;
+    color: var(--e);
+    font-weight: 500;
+    background: var(--e-dim);
+    border: 1px solid var(--e-border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    display: block;
+  }
+  .worked-explain { font-size: 0.86rem; color: var(--muted); line-height: 1.75; margin-bottom: 8px; }
+  .worked-example {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.82rem;
+    color: #c0d8f4;
+    background: var(--s1);
+    border: 1px solid var(--border);
+    padding: 12px 14px;
+    border-radius: 6px;
+    line-height: 2;
+  }
+
+  /* ── SAMPLE BOX ── */
+  .sample {
+    background: var(--s2);
+    border: 1px solid rgba(255,169,77,0.18);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin: 12px 0;
+  }
+  .s-lbl {
+    font-family: 'Fira Code', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--samp);
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+  .s-math {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.84rem;
+    line-height: 2.1;
+    color: #ffe4b8;
+  }
+  .s-note {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255,169,77,0.12);
+  }
+
+  /* ── CHALLENGE ── */
+  .challenge {
+    background: rgba(255,126,179,0.05);
+    border: 1px solid rgba(255,126,179,0.15);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin: 10px 0;
+  }
+  .chq {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--chal);
+    margin-bottom: 8px;
+    display: flex;
+    gap: 9px;
+    line-height: 1.5;
+  }
+  .chq::before { content: '!'; font-family: 'Fira Code', monospace; flex-shrink: 0; opacity: 0.7; }
+  .cha { font-size: 0.85rem; color: var(--muted); padding-left: 18px; line-height: 1.8; }
+  .cha strong { color: var(--text); font-weight: 500; }
+
+  /* ── COMPARISON TABLE ── */
+  .tbl { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 0.84rem; }
+  .tbl th {
+    font-family: 'Fira Code', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 9px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border2);
+    background: var(--s2);
+  }
+  .tbl td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    color: var(--text);
+    line-height: 1.65;
+  }
+  .tbl td:first-child {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.82rem;
+    color: var(--e);
+    white-space: nowrap;
+  }
+  .tbl tr:last-child td { border-bottom: none; }
+  .tbl tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* ── HIGHLIGHT ── */
+  .hle { color: var(--e); font-weight: 500; }
+  .hlw { color: #fff; font-weight: 500; }
+  .hlo { color: var(--samp); font-weight: 500; }
+
+  /* ── INLINE CODE ── */
+  code {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.82rem;
+    background: var(--s3);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: var(--e);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 28px;
+    font-family: 'Fira Code', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+  }
+
+  @media (max-width: 600px) {
+    .hero-inner { padding: 48px 20px 44px; }
+    main { padding: 40px 16px 60px; }
+    .card-body { padding: 16px; }
+    .euler-inner { gap: 14px; }
+    .euler-formula { font-size: 1.4rem; }
+    .hero-wm { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-orb"></div>
+  <div class="hero-wm">e ≈ 2.71828</div>
+  <div class="hero-inner">
+    <div class="crumb">Mathematics for Data Analytics → Pre-Algebra & Algebra → Algebra II → <span class="hi">Natural Logarithm</span></div>
+    <div class="eyebrow"><span class="eyebrow-dot"></span>Single Subtopic · Deep Dive</div>
+    <h1>Natural Logarithm<br><span class="em">ln</span> and base&#8209;<span class="em">e</span></h1>
+    <p class="hero-sub">A complete treatment of the natural logarithm and Euler's number — where they come from, what they mean, all their properties, and why they appear in almost every formula in data science and machine learning.</p>
+    <div class="hero-meta">
+      <div class="hm-item"><div class="hm-val">5</div><div class="hm-lbl">Criteria</div></div>
+      <div class="hm-item"><div class="hm-val">8</div><div class="hm-lbl">Properties</div></div>
+      <div class="hm-item"><div class="hm-val">6</div><div class="hm-lbl">Samples</div></div>
+      <div class="hm-item"><div class="hm-val">7</div><div class="hm-lbl">Challenges</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- EULER IDENTITY CALLOUT -->
+<div class="euler-box">
+  <div class="euler-inner">
+    <div class="euler-formula">e<sup>iπ</sup> + 1 = 0</div>
+    <div class="euler-desc">
+      <div class="euler-title">Euler's Identity — "The Most Beautiful Equation in Mathematics"</div>
+      <div class="euler-text">This single equation unites the five most important constants in mathematics: <strong>e</strong> (natural growth), <strong>i</strong> (imaginary unit), <strong>π</strong> (circle ratio), <strong>1</strong> (multiplicative identity), and <strong>0</strong> (additive identity). It is shown here not to intimidate, but to illustrate the deep importance of <em>e</em> — a number that appears everywhere in nature, mathematics, and computing.</div>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <!-- SECTION HEADER -->
+  <div class="sec-header" style="margin-top: 8px;">
+    <div class="sec-bar"></div>
+    <div class="sec-meta">
+      <div class="sec-tag">Algebra II · Pre-Algebra & Algebra</div>
+      <h2>Natural Logarithm — ln and base-e</h2>
+      <div class="sec-sub">Prerequisite: Exponents & Roots, Laws of Logarithms</div>
+    </div>
+  </div>
+
+  <div class="criteria">
+
+    <!-- ══════════════ CRITERION 1: DESCRIPTION ══════════════ -->
+    <div class="card c-desc">
+      <div class="card-head">
+        <div class="c-icon">📋</div>
+        <div>
+          <div class="c-num">Criterion 01</div>
+          <div class="c-name">Description</div>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <p><span class="hlw">Euler's number e</span> is a special mathematical constant, approximately equal to 2.71828182845…. It is <span class="hle">irrational</span> (never-ending, non-repeating decimal) and <span class="hle">transcendental</span> (not the root of any polynomial with rational coefficients). It is defined as:</p>
+
+        <div class="math">
+<span class="hi">e = lim(n→∞) (1 + 1/n)ⁿ</span>   <span class="dim">← limit definition</span>
+
+e = 1 + 1/1! + 1/2! + 1/3! + 1/4! + ...   <span class="dim">← series definition</span>
+  = 1 + 1 + 0.5 + 0.1667 + 0.0417 + ...
+  ≈ 2.71828182845904523536...
+
+<span class="dim">-- e is irrational: it never terminates or repeats</span>
+<span class="dim">-- e appears naturally wherever continuous growth or decay exists</span>
+        </div>
+
+        <p>The <span class="hle">natural logarithm</span>, written <span class="hlw">ln(x)</span>, is the logarithm with base <em>e</em>. It is the inverse of the exponential function eˣ:</p>
+
+        <div class="math">
+<span class="hi">ln(x) = log_e(x) = n   means   eⁿ = x</span>
+
+Examples:
+  ln(e)   = 1        because  e¹ = e
+  ln(e³)  = 3        because  e³ = e³
+  ln(1)   = 0        because  e⁰ = 1
+  ln(e⁻²) = −2       because  e⁻² = e⁻²
+  ln(7.389) ≈ 2      because  e² ≈ 7.389
+
+Inverse relationship:
+  e^(ln x) = x   and   ln(eˣ) = x   <span class="dim">← they perfectly undo each other</span>
+        </div>
+
+        <p><span class="hle">Why is e the "natural" base?</span> Unlike base 10 (chosen for human convenience of counting), <em>e</em> arises naturally from the mathematics of continuous change. It is the unique number where the function eˣ is its own derivative — meaning its rate of change at every point equals its own value. No other base has this property.</p>
+
+        <div class="math">
+d/dx [eˣ] = eˣ   <span class="dim">← the exponential function is its own derivative</span>
+d/dx [ln x] = 1/x <span class="dim">← the derivative of the natural log</span>
+
+<span class="dim">-- These two facts make e and ln indispensable in calculus and optimization</span>
+        </div>
+
+        <p>All logarithm laws from the previous subtopic apply fully to ln, just with base e implicit:</p>
+        <div class="math">
+ln(xy)  = ln(x) + ln(y)    <span class="dim">← product law</span>
+ln(x/y) = ln(x) − ln(y)    <span class="dim">← quotient law</span>
+ln(xⁿ)  = n · ln(x)        <span class="dim">← power law (most used in ML)</span>
+ln(e)   = 1                 <span class="dim">← identity</span>
+ln(1)   = 0                 <span class="dim">← identity</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══════════════ CRITERION 2: PURPOSE ══════════════ -->
+    <div class="card c-purp">
+      <div class="card-head">
+        <div class="c-icon">🎯</div>
+        <div>
+          <div class="c-num">Criterion 02</div>
+          <div class="c-name">Purpose</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="purp-rows">
+          <div class="purp-row"><span class="ptag">Calculus</span><span>The derivative of ln(x) = 1/x and the derivative of eˣ = eˣ are the two most frequently used results in calculus. Every optimization problem in machine learning ultimately uses these. <strong>Without ln and e, calculus-based optimization cannot be done.</strong></span></div>
+          <div class="purp-row"><span class="ptag">ML Loss</span><span><strong>Cross-entropy loss</strong> — the backbone loss function for all classification problems — is defined using ln: L = −Σ yᵢ · ln(ŷᵢ). The power law of ln is what makes this function differentiable and optimizable via gradient descent.</span></div>
+          <div class="purp-row"><span class="ptag">Logistic</span><span>The <strong>sigmoid activation function</strong> σ(x) = 1/(1 + e⁻ˣ) uses e directly. Logistic regression — the fundamental classification model — is built entirely on eˣ and ln. Log-odds = ln(p / (1−p)).</span></div>
+          <div class="purp-row"><span class="ptag">Statistics</span><span><strong>Log-likelihood maximization</strong> (MLE) converts the product of many probabilities into a sum using ln: ln(∏ P(xᵢ)) = Σ ln(P(xᵢ)). This is computationally essential — multiplying many small probabilities causes numerical underflow; summing their logs does not.</span></div>
+          <div class="purp-row"><span class="ptag">Growth</span><span>Continuous exponential growth and decay models use e: P(t) = P₀·eᵏᵗ. This models <strong>population growth, compound interest (continuously compounded), viral spread, and radioactive decay</strong>. Solving for t requires ln.</span></div>
+          <div class="purp-row"><span class="ptag">Data</span><span><strong>Log transformation</strong> using ln is the standard way to handle right-skewed distributions (income, prices, counts). It normalizes data and stabilizes variance. ln(x+1) is used when data includes zeros (log1p transform).</span></div>
+          <div class="purp-row"><span class="ptag">Info Theory</span><span>When using natural log in the entropy formula, H(X) = −Σ p(x) · ln(p(x)), the result is measured in <strong>nats</strong> (natural units of information) rather than bits. This is the preferred form in ML theory.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════ CRITERION 3: HOW IT WORKS ══════════════ -->
+    <div class="card c-how">
+      <div class="card-head">
+        <div class="c-icon">⚙️</div>
+        <div>
+          <div class="c-num">Criterion 03</div>
+          <div class="c-name">How This Works</div>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <p><strong>Part 1 — Understanding e through continuous growth</strong></p>
+        <p>Imagine a bank account earning 100% interest per year. If interest compounds once a year: you end with (1 + 1)¹ = $2. If it compounds monthly: (1 + 1/12)¹² ≈ $2.613. Daily: (1 + 1/365)³⁶⁵ ≈ $2.714. As compounding becomes continuous, the limit approaches exactly <span class="hle">e ≈ 2.71828</span>. This is where e comes from — it is the result of perfectly continuous growth.</p>
+
+        <div class="math">
+Compounding formula:  A = P·(1 + r/n)^(nt)
+
+As n → ∞ (continuous compounding):
+  A = P · <span class="hi">eʳᵗ</span>
+
+e is the natural base of continuous growth.
+        </div>
+
+        <p><strong>Part 2 — All 8 Essential Properties of ln</strong></p>
+        <div class="props">
+          <div class="prop">
+            <div class="prop-name">Domain & Range</div>
+            <div class="prop-formula">Domain: x > 0 only<br>Range: (−∞, +∞)</div>
+            <div class="prop-note">ln is undefined for x ≤ 0. As x → 0⁺, ln(x) → −∞. As x → ∞, ln(x) → +∞ (slowly).</div>
+          </div>
+          <div class="prop">
+            <div class="prop-name">Identity Values</div>
+            <div class="prop-formula">ln(1) = 0<br>ln(e) = 1<br>ln(eⁿ) = n</div>
+            <div class="prop-note">These three are the most used in simplification. Memorize them cold.</div>
+          </div>
+          <div class="prop">
+            <div class="prop-name">Inverse Relationship</div>
+            <div class="prop-formula">e^(ln x) = x<br>ln(eˣ) = x</div>
+            <div class="prop-note">ln and eˣ cancel each other — they are perfect inverses. Used constantly in solving equations.</div>
+          </div>
+          <div class="prop">
+            <div class="prop-name">Product Law</div>
+            <div class="prop-formula">ln(ab) = ln(a) + ln(b)</div>
+            <div class="prop-note">Turns multiplication into addition. Foundation of log-likelihood in statistics.</div>
+          </div>
+          <div class="prop">
+            <div class="prop-name">Quotient Law</div>
+            <div class="prop-formula">ln(a/b) = ln(a) − ln(b)</div>
+            <div class="prop-note">Turns division into subtraction. Used in log-odds and KL divergence.</div>
+          </div>
+          <div class="prop">
+            <div class="prop-name">Power Law</div>
+            <div class="prop-formula">ln(xⁿ) = n · ln(x)</div>
+            <div class="prop-note">Pulls exponent out as a multiplier. Critical for differentiating and simplifying ML loss functions.</div>
+          </div>
+          <div class="prop">
+            <div class="prop-name">Derivative</div>
+            <div class="prop-formula">d/dx [ln(x)] = 1/x<br>d/dx [eˣ] = eˣ</div>
+            <div class="prop-note">These are among the most important derivatives in all of calculus. eˣ is the only function that is its own derivative.</div>
+          </div>
+          <div class="prop">
+            <div class="prop-name">Change of Base</div>
+            <div class="prop-formula">log_b(x) = ln(x) / ln(b)</div>
+            <div class="prop-note">Any log in any base can be computed using ln. Python's math.log(x, b) uses this internally.</div>
+          </div>
+        </div>
+
+        <p><strong>Part 3 — Solving equations with ln and e</strong></p>
+        <p>Two main types of equations appear in analytics:</p>
+        <div class="steps">
+          <div class="step"><div class="sn">A</div><div class="st"><strong>Exponential equation</strong> (unknown in exponent) → take ln of both sides to bring the exponent down using the Power Law, then solve.</div></div>
+          <div class="step"><div class="sn">B</div><div class="st"><strong>Logarithmic equation</strong> (unknown inside ln) → isolate the ln, then raise e to both sides to remove the ln using the inverse law.</div></div>
+        </div>
+
+        <div class="math">
+Type A — Exponential equation:
+  e^(3x) = 45
+  ln(e^(3x)) = ln(45)   <span class="dim">← take ln of both sides</span>
+  3x = ln(45)           <span class="dim">← ln and e cancel (inverse law)</span>
+  x = ln(45)/3 ≈ 3.807/3 ≈ <span class="hi">1.269</span>
+
+Type B — Logarithmic equation:
+  ln(2x − 1) = 4
+  e^(ln(2x−1)) = e⁴     <span class="dim">← raise e to both sides</span>
+  2x − 1 = e⁴           <span class="dim">← e and ln cancel (inverse law)</span>
+  2x = e⁴ + 1
+  x = (e⁴ + 1)/2 ≈ (54.598 + 1)/2 ≈ <span class="hi">27.799</span>
+        </div>
+
+        <p><strong>Part 4 — ln vs log₁₀ vs log₂ — when to use which</strong></p>
+        <table class="tbl">
+          <tr><th>Notation</th><th>Base</th><th>Use in data analytics</th></tr>
+          <tr><td>ln(x)</td><td>e ≈ 2.718</td><td>Calculus, ML loss functions, MLE, logistic regression, continuous growth models</td></tr>
+          <tr><td>log(x) or log₁₀(x)</td><td>10</td><td>Data preprocessing / transformation, decibels, pH, scientific measurement</td></tr>
+          <tr><td>log₂(x)</td><td>2</td><td>Information theory, entropy (bits), decision trees, compression</td></tr>
+          <tr><td>math.log(x)</td><td>e (Python)</td><td>In Python/NumPy, the default log is natural log (ln)</td></tr>
+          <tr><td>math.log10(x)</td><td>10 (Python)</td><td>Explicit base-10 log in Python</td></tr>
+          <tr><td>math.log2(x)</td><td>2 (Python)</td><td>Explicit base-2 log in Python</td></tr>
+        </table>
+
+      </div>
+    </div>
+
+    <!-- ══════════════ CRITERION 4: SAMPLE ══════════════ -->
+    <div class="card c-samp">
+      <div class="card-head">
+        <div class="c-icon">🧪</div>
+        <div>
+          <div class="c-num">Criterion 04</div>
+          <div class="c-name">Sample Problems</div>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <div class="sample">
+          <div class="s-lbl">Sample A — Evaluating ln expressions</div>
+          <div class="s-math">
+Evaluate each using properties of ln:
+
+a)  ln(e⁷)     = 7              ← Power Law: ln(eⁿ) = n
+b)  e^(ln 15)  = 15             ← Inverse Law: e^(ln x) = x
+c)  ln(1)      = 0              ← Identity: ln(1) = 0
+d)  ln(e⁻⁴)    = −4             ← Power Law
+e)  ln(√e)     = ln(e^(1/2))
+               = 1/2 · ln(e)
+               = 1/2 · 1 = 0.5  ← Power Law + Identity
+          </div>
+          <div class="s-note">✔ These evaluate without a calculator — they use only the fundamental properties. Recognizing these on sight is an essential fluency skill.</div>
+        </div>
+
+        <div class="sample">
+          <div class="s-lbl">Sample B — Simplifying with ln Laws</div>
+          <div class="s-math">
+Simplify:  ln(x²y) − ln(√x) + 3·ln(z)
+
+Step 1 — Expand each term:
+  ln(x²y)  = ln(x²) + ln(y) = 2·ln(x) + ln(y)   ← Product + Power
+  ln(√x)   = ln(x^(1/2)) = (1/2)·ln(x)           ← Power Law
+  3·ln(z)  = ln(z³)                               ← Power Law (reverse)
+
+Step 2 — Combine:
+  [2·ln(x) + ln(y)] − (1/2)·ln(x) + 3·ln(z)
+  = (2 − 1/2)·ln(x) + ln(y) + 3·ln(z)
+  = (3/2)·ln(x) + ln(y) + 3·ln(z)
+
+Step 3 — Condense (optional):
+  = ln(x^(3/2)) + ln(y) + ln(z³)
+  = ln( x^(3/2) · y · z³ )
+          </div>
+          <div class="s-note">✔ Expand fully first, collect like-ln terms, then condense if needed. Treat ln(x), ln(y), ln(z) as different "variables" when combining.</div>
+        </div>
+
+        <div class="sample">
+          <div class="s-lbl">Sample C — Solving an Exponential Equation</div>
+          <div class="s-math">
+A model's accuracy grows continuously: A(t) = 0.5 · e^(0.3t)
+Find t when accuracy reaches 0.95.
+
+0.95 = 0.5 · e^(0.3t)
+
+Step 1 — Isolate eˣ:   e^(0.3t) = 0.95 / 0.5 = 1.9
+Step 2 — Take ln:      ln(e^(0.3t)) = ln(1.9)
+Step 3 — Simplify:     0.3t = ln(1.9)
+Step 4 — Solve:        t = ln(1.9) / 0.3
+                         = 0.6418 / 0.3
+                         t ≈ 2.14 time units
+
+Verify: 0.5 · e^(0.3 × 2.14) = 0.5 · e^0.642 ≈ 0.5 × 1.9 = 0.95  ✓
+          </div>
+          <div class="s-note">✔ Standard structure: isolate eˣ → take ln → use inverse law to remove e → solve linearly.</div>
+        </div>
+
+        <div class="sample">
+          <div class="s-lbl">Sample D — Log-Likelihood Using ln (Statistics)</div>
+          <div class="s-math">
+Observed data: x₁=2, x₂=3, x₃=5  from a Poisson distribution P(x;λ)
+P(x;λ) = e^(−λ) · λˣ / x!
+
+Likelihood L(λ) = P(2)·P(3)·P(5)  ← product of three probabilities
+
+Log-likelihood ℓ(λ) = ln(L) = ln(P(2)) + ln(P(3)) + ln(P(5))
+
+For each term:
+  ln(P(x;λ)) = ln(e^(−λ) · λˣ / x!)
+             = ln(e^(−λ)) + ln(λˣ) − ln(x!)    ← Product + Quotient
+             = −λ + x·ln(λ) − ln(x!)            ← Power + Inverse Law
+
+Summing all three:
+  ℓ(λ) = −3λ + (2+3+5)·ln(λ) − [ln(2!) + ln(3!) + ln(5!)]
+        = −3λ + 10·ln(λ) − constant
+
+To find best λ: take derivative, set to 0 → λ̂ = 10/3 ≈ 3.33
+          </div>
+          <div class="s-note">✔ Every step of log-likelihood uses ln laws. The power law (x·ln(λ)) is the key transform that makes the derivative tractable.</div>
+        </div>
+
+        <div class="sample">
+          <div class="s-lbl">Sample E — Sigmoid Function and Log-Odds (Logistic Regression)</div>
+          <div class="s-math">
+Sigmoid function:  σ(z) = 1 / (1 + e^(−z))
+
+The log-odds (logit) is the inverse of sigmoid:
+  If p = σ(z), then:
+  logit(p) = ln( p / (1−p) ) = z
+
+Worked example — compute sigmoid and log-odds:
+  z = 1.5
+  σ(1.5) = 1 / (1 + e^(−1.5))
+          = 1 / (1 + 0.2231)
+          = 1 / 1.2231
+          ≈ 0.8176  (81.76% predicted probability of class 1)
+
+  logit(0.8176) = ln(0.8176 / 0.1824)
+               = ln(4.482)
+               ≈ 1.5  ✓  (recovers original z)
+          </div>
+          <div class="s-note">✔ Logistic regression is entirely built on e and ln. The sigmoid uses eˣ; the log-odds uses ln. They are inverse functions — this is why logistic regression is called a "log" model.</div>
+        </div>
+
+        <div class="sample">
+          <div class="s-lbl">Sample F — Continuous Compound Interest (Real World)</div>
+          <div class="s-math">
+You invest $5,000 at 6% annual interest, continuously compounded.
+How long until it doubles?
+
+A = P · eʳᵗ
+10,000 = 5,000 · e^(0.06t)    ← A = 10,000 (double), P = 5,000
+
+Step 1: 2 = e^(0.06t)
+Step 2: ln(2) = 0.06t
+Step 3: t = ln(2) / 0.06
+            = 0.6931 / 0.06
+            t ≈ 11.55 years
+
+Rule of 70 shortcut: ≈ 70 / interest rate% = 70/6 ≈ 11.67 years  ✓
+          </div>
+          <div class="s-note">✔ ln(2) ≈ 0.693 is a value worth memorizing — it appears in doubling-time problems, half-life problems, and learning rate tuning.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══════════════ CRITERION 5: CHALLENGES ══════════════ -->
+    <div class="card c-chal">
+      <div class="card-head">
+        <div class="c-icon">⚠️</div>
+        <div>
+          <div class="c-num">Criterion 05</div>
+          <div class="c-name">Common Challenges & How to Solve Them</div>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <div class="challenge">
+          <div class="chq">Confusing ln(eˣ) = x with e^(ln x) = x — not recognizing that both apply, or mixing up which direction cancels what.</div>
+          <div class="cha"><strong>Fix:</strong> Both inverse laws are true and work in both directions: ln(eˣ) = x (ln undoes e), and e^(ln x) = x (e undoes ln). Think of them as a lock and key — each opens the other. When you see e inside an ln, or ln inside an e exponent, they cancel completely. Example: ln(e^(x+3)) = x+3. Example: e^(ln(2x)) = 2x. Practice recognizing these on sight before solving anything else.</div>
+        </div>
+
+        <div class="challenge">
+          <div class="chq">Thinking ln(x + y) = ln(x) + ln(y) — the same critical error as with general logs, but even more common with ln.</div>
+          <div class="cha"><strong>Fix:</strong> Repeating from log laws because it is the most common error: the Product Law applies to multiplication ONLY — ln(x · y) = ln(x) + ln(y). Addition inside the ln cannot be split. ln(3 + 5) = ln(8) ≈ 2.08, NOT ln(3) + ln(5) = 1.099 + 1.609 = 2.708. These are different numbers. There is no ln law for addition or subtraction inside the argument.</div>
+        </div>
+
+        <div class="challenge">
+          <div class="chq">Trying to evaluate ln of zero or a negative number — causes undefined errors in code and wrong answers on paper.</div>
+          <div class="cha"><strong>Fix:</strong> ln(x) is defined only for x &gt; 0. ln(0) = −∞ (approaches, never equals). ln(negative) = undefined in real numbers. In data analytics: if your feature column has zeros, use <strong>np.log1p(x)</strong> which computes ln(x+1) — this is defined for x ≥ 0. If it has negatives, you need a different transform (e.g., signed log: sign(x)·ln(|x|+1)). Always check for zeros/negatives before applying log transforms.</div>
+        </div>
+
+        <div class="challenge">
+          <div class="chq">Forgetting that Python's math.log(x) is the natural log (ln), not log base 10.</div>
+          <div class="cha"><strong>Fix:</strong> In Python, <code>math.log(x)</code> and <code>np.log(x)</code> both compute <strong>ln(x)</strong> — the natural log. For base-10, use <code>math.log10(x)</code> or <code>np.log10(x)</code>. For base-2, use <code>math.log2(x)</code>. For any custom base b: <code>math.log(x, b)</code>. This trips up people coming from Excel, where LOG(x) defaults to base 10 and LN(x) is the natural log.</div>
+        </div>
+
+        <div class="challenge">
+          <div class="chq">Misapplying the Power Law — writing n · ln(x) = ln(n · x) instead of ln(xⁿ).</div>
+          <div class="cha"><strong>Fix:</strong> The Power Law is: ln(xⁿ) = n · ln(x). The n becomes a multiplier OUTSIDE, and x stays as the argument with its exponent removed. It does NOT become ln(n·x). The difference: ln(x³) = 3·ln(x), but 3·ln(x) ≠ ln(3x). Example: ln(8) = ln(2³) = 3·ln(2) ≈ 3×0.693 = 2.079. But ln(3·2) = ln(6) ≈ 1.792. Completely different.</div>
+        </div>
+
+        <div class="challenge">
+          <div class="chq">Not isolating the exponential term before taking ln — applying ln too early and creating a messier expression.</div>
+          <div class="cha"><strong>Fix:</strong> When solving e^(something) = value, always isolate the exponential part on one side FIRST, then take ln of both sides. If you have 3·e^(2x) + 5 = 20, first subtract 5 to get 3·e^(2x) = 15, then divide by 3 to get e^(2x) = 5, THEN take ln: 2x = ln(5). Taking ln before isolating gives ln(3·e^(2x)) which requires extra steps to simplify.</div>
+        </div>
+
+        <div class="challenge">
+          <div class="chq">Numerical underflow — multiplying many small probabilities together instead of summing their logs.</div>
+          <div class="cha"><strong>Fix:</strong> In statistics and ML, probabilities are often very small numbers like 0.001, 0.003, etc. Multiplying 1,000 such values together produces a number so tiny the computer rounds it to zero (underflow). The solution is exactly what log-likelihood does: take ln of each probability and sum them. ln(0.001) = −6.9, and summing −6.9 × 1000 = −6900 is perfectly representable. This is not just a math trick — it is a <strong>numerical stability requirement</strong> in real implementations.</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer>ALGEBRA II · NATURAL LOGARITHM — ln AND BASE-e · MATHEMATICS FOR DATA ANALYTICS</footer>
+</body>
+</html>

@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laws of Logarithms</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f9f6ef;
+    --paper: #ffffff;
+    --ink: #1c1608;
+    --muted: #6b6045;
+    --faint: #ded8c8;
+    --rule: #e8e2d4;
+
+    --gold: #9a6c00;
+    --gold-light: #c49a2a;
+    --gold-bg: #fffbee;
+    --gold-border: #f0d88a;
+
+    --c-desc: #1e5fa8;
+    --c-desc-bg: #eef4fd;
+    --c-desc-border: #bdd3f5;
+
+    --c-purp: #5c2d8a;
+    --c-purp-bg: #f5effe;
+    --c-purp-border: #d4b8f5;
+
+    --c-how: #1a7a4a;
+    --c-how-bg: #edfaf3;
+    --c-how-border: #9de0c0;
+
+    --c-samp: #c05c00;
+    --c-samp-bg: #fff4ea;
+    --c-samp-border: #fac89a;
+
+    --c-chall: #a0184a;
+    --c-chall-bg: #fdf0f5;
+    --c-chall-border: #f5b8d0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    line-height: 1.8;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--ink);
+    color: #f5f0e4;
+    padding: 0;
+    overflow: hidden;
+    position: relative;
+  }
+  .hero-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 64px 40px 56px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* decorative large log symbol */
+  .hero-deco {
+    position: absolute;
+    right: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22rem;
+    font-weight: 700;
+    font-style: italic;
+    color: rgba(255,255,255,0.03);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .breadcrumb {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #8a7d5e;
+    margin-bottom: 22px;
+  }
+  .breadcrumb .accent { color: var(--gold-light); }
+
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 28px;
+    height: 1px;
+    background: var(--gold-light);
+  }
+
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.8rem, 6vw, 4.8rem);
+    font-weight: 700;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+    color: #fff;
+  }
+  h1 em {
+    font-style: italic;
+    color: var(--gold-light);
+    font-weight: 400;
+  }
+
+  .hero-desc {
+    color: #9a9080;
+    font-size: 0.95rem;
+    max-width: 520px;
+    line-height: 1.75;
+    margin-bottom: 30px;
+  }
+
+  .hero-tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .hero-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 5px 14px;
+    border-radius: 2px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .tag-gold { background: rgba(196,154,42,0.15); color: var(--gold-light); border: 1px solid rgba(196,154,42,0.3); }
+  .tag-gray { background: rgba(255,255,255,0.06); color: #7a7060; border: 1px solid rgba(255,255,255,0.1); }
+
+  /* ── MAIN ── */
+  main { max-width: 900px; margin: 0 auto; padding: 60px 24px 80px; }
+
+  /* ── TOPIC TITLE ── */
+  .topic-title-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding-bottom: 24px;
+    border-bottom: 2px solid var(--rule);
+    margin-bottom: 36px;
+  }
+  .topic-num-badge {
+    background: var(--ink);
+    color: var(--gold-light);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    font-style: italic;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .topic-title-text {}
+  .topic-sup {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+  h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+  .topic-sub { color: var(--muted); font-size: 0.88rem; margin-top: 4px; }
+
+  /* ── REFERENCE BOX (laws summary) ── */
+  .ref-box {
+    background: var(--gold-bg);
+    border: 1.5px solid var(--gold-border);
+    border-radius: 10px;
+    padding: 22px 26px;
+    margin-bottom: 28px;
+  }
+  .ref-box-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .ref-box-title::before { content: '◆'; font-size: 7px; }
+  .ref-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 10px;
+  }
+  .ref-item {
+    background: rgba(255,255,255,0.6);
+    border: 1px solid var(--gold-border);
+    border-radius: 6px;
+    padding: 12px 14px;
+  }
+  .ref-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 5px;
+  }
+  .ref-formula {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--ink);
+    font-weight: 500;
+    line-height: 1.7;
+  }
+
+  /* ── CRITERIA CARDS ── */
+  .criteria { display: flex; flex-direction: column; gap: 18px; }
+
+  .card {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  }
+  .card-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 24px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .card-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.05rem;
+    flex-shrink: 0;
+  }
+  .c-lbl {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1px;
+  }
+  .c-title { font-size: 0.97rem; font-weight: 600; }
+  .card-body { padding: 22px 26px; font-size: 0.9rem; }
+  .card-body p { margin-bottom: 12px; }
+  .card-body p:last-child { margin-bottom: 0; }
+
+  /* criterion color themes */
+  .c-desc .card-icon { background: var(--c-desc-bg); color: var(--c-desc); }
+  .c-desc .c-title { color: var(--c-desc); }
+  .c-purp .card-icon { background: var(--c-purp-bg); color: var(--c-purp); }
+  .c-purp .c-title { color: var(--c-purp); }
+  .c-how .card-icon { background: var(--c-how-bg); color: var(--c-how); }
+  .c-how .c-title { color: var(--c-how); }
+  .c-samp .card-icon { background: var(--c-samp-bg); color: var(--c-samp); }
+  .c-samp .c-title { color: var(--c-samp); }
+  .c-chall .card-icon { background: var(--c-chall-bg); color: var(--c-chall); }
+  .c-chall .c-title { color: var(--c-chall); }
+
+  /* ── MATH BLOCK ── */
+  .math {
+    background: #f4f0e6;
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--gold-light);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 12px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.84rem;
+    line-height: 2.1;
+    color: #2a200a;
+  }
+  .math .comment {
+    color: var(--muted);
+    font-size: 0.78rem;
+  }
+  .math .result { color: var(--gold); font-weight: 500; }
+
+  /* ── LAW BREAKDOWN ── */
+  .law-block {
+    background: var(--paper);
+    border: 1px solid var(--faint);
+    border-radius: 10px;
+    margin: 14px 0;
+    overflow: hidden;
+  }
+  .law-header {
+    background: var(--ink);
+    padding: 10px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .law-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+  }
+  .law-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #fff;
+    font-style: italic;
+  }
+  .law-body { padding: 16px 18px; }
+  .law-formula {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--gold);
+    font-weight: 500;
+    background: var(--gold-bg);
+    border: 1px solid var(--gold-border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin-bottom: 10px;
+    display: block;
+  }
+  .law-explain { font-size: 0.87rem; color: var(--muted); line-height: 1.75; margin-bottom: 8px; }
+  .law-example { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: var(--ink); background: #f8f5ee; padding: 10px 14px; border-radius: 6px; line-height: 2; }
+
+  /* ── STEPS ── */
+  .steps { display: flex; flex-direction: column; gap: 10px; margin: 12px 0; }
+  .step { display: flex; gap: 14px; align-items: flex-start; }
+  .sn {
+    min-width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--gold-bg);
+    border: 1.5px solid var(--gold-border);
+    color: var(--gold);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .st { font-size: 0.87rem; line-height: 1.75; }
+
+  /* ── SAMPLE BOX ── */
+  .sample {
+    background: var(--c-samp-bg);
+    border: 1px solid var(--c-samp-border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin: 12px 0;
+  }
+  .s-lbl {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--c-samp);
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+  .s-math {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.84rem;
+    line-height: 2.1;
+    color: #3a1800;
+  }
+  .s-note {
+    font-size: 0.82rem;
+    color: var(--c-samp);
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--c-samp-border);
+  }
+
+  /* ── PURPOSE ROWS ── */
+  .purp-rows { display: flex; flex-direction: column; gap: 10px; }
+  .purp-row { display: flex; gap: 12px; align-items: flex-start; font-size: 0.88rem; line-height: 1.75; }
+  .ptag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    padding: 3px 10px;
+    border-radius: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 4px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--gold-bg);
+    color: var(--gold);
+    border: 1px solid var(--gold-border);
+  }
+
+  /* ── CHALLENGE ── */
+  .challenge {
+    background: var(--c-chall-bg);
+    border: 1px solid var(--c-chall-border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin: 10px 0;
+  }
+  .chall-q {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--c-chall);
+    margin-bottom: 8px;
+    display: flex;
+    gap: 9px;
+  }
+  .chall-q::before { content: '⚠'; flex-shrink: 0; font-size: 0.85rem; }
+  .chall-a { font-size: 0.85rem; color: #5a0a28; padding-left: 22px; line-height: 1.75; }
+  .chall-a strong { font-weight: 600; color: var(--c-chall); }
+
+  /* ── HIGHLIGHT ── */
+  .hlg { color: var(--gold); font-weight: 500; }
+  .hlb { color: var(--c-desc); font-weight: 500; }
+  .hlk { color: var(--ink); font-weight: 600; }
+
+  /* ── COMPARISON TABLE ── */
+  .comp-table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 0.85rem; }
+  .comp-table th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 8px 14px;
+    text-align: left;
+    border-bottom: 2px solid var(--rule);
+    background: #f8f5ee;
+  }
+  .comp-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+    color: var(--ink);
+    line-height: 1.6;
+  }
+  .comp-table td:first-child {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    color: var(--gold);
+    white-space: nowrap;
+    font-weight: 500;
+  }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table tr:hover td { background: #fdfaf4; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 28px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    border-top: 2px solid var(--rule);
+    background: var(--bg);
+  }
+
+  @media (max-width: 580px) {
+    .hero-inner { padding: 44px 20px 40px; }
+    main { padding: 40px 16px 60px; }
+    .card-body { padding: 16px 18px; }
+    .ref-grid { grid-template-columns: 1fr; }
+    .hero-deco { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-deco">log</div>
+  <div class="hero-inner">
+    <div class="breadcrumb">Mathematics for Data Analytics → Pre-Algebra & Algebra → <span class="accent">Algebra II</span></div>
+    <div class="hero-eyebrow">Single Subtopic · Deep Dive</div>
+    <h1>Laws of<br><em>Logarithms</em></h1>
+    <p class="hero-desc">A complete treatment of logarithm laws — what they are, why they exist, how to apply them, and the challenges that come with them. Includes direct connections to data analytics and machine learning.</p>
+    <div class="hero-tags">
+      <span class="hero-tag tag-gold">Algebra II</span>
+      <span class="hero-tag tag-gray">Pre-requisite: Exponents & Roots</span>
+      <span class="hero-tag tag-gray">5 Criteria · 5 Laws · 6 Samples</span>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <!-- QUICK REFERENCE -->
+  <div class="ref-box">
+    <div class="ref-box-title">Quick Reference — All 5 Laws at a Glance</div>
+    <div class="ref-grid">
+      <div class="ref-item">
+        <div class="ref-name">Product Law</div>
+        <div class="ref-formula">log_b(xy) = log_b(x) + log_b(y)</div>
+      </div>
+      <div class="ref-item">
+        <div class="ref-name">Quotient Law</div>
+        <div class="ref-formula">log_b(x/y) = log_b(x) − log_b(y)</div>
+      </div>
+      <div class="ref-item">
+        <div class="ref-name">Power Law</div>
+        <div class="ref-formula">log_b(xⁿ) = n · log_b(x)</div>
+      </div>
+      <div class="ref-item">
+        <div class="ref-name">Change of Base</div>
+        <div class="ref-formula">log_b(x) = log_c(x) / log_c(b)</div>
+      </div>
+      <div class="ref-item">
+        <div class="ref-name">Identity Laws</div>
+        <div class="ref-formula">log_b(b) = 1 &nbsp;&nbsp; log_b(1) = 0</div>
+      </div>
+      <div class="ref-item">
+        <div class="ref-name">Inverse Laws</div>
+        <div class="ref-formula">b^(log_b(x)) = x &nbsp;&nbsp; log_b(bˣ) = x</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOPIC TITLE -->
+  <div class="topic-title-row">
+    <div class="topic-num-badge">01</div>
+    <div class="topic-title-text">
+      <div class="topic-sup">Algebra II · Subtopic</div>
+      <h2>Laws of Logarithms</h2>
+      <div class="topic-sub">The rules that govern how logarithms behave — enabling simplification, solving, and computation of expressions involving log.</div>
+    </div>
+  </div>
+
+  <div class="criteria">
+
+    <!-- ── CRITERION 1: DESCRIPTION ── -->
+    <div class="card c-desc">
+      <div class="card-head">
+        <div class="card-icon">📋</div>
+        <div class="card-head-text">
+          <div class="c-lbl">Criterion 01</div>
+          <div class="c-title">Description</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <p>A <span class="hlg">logarithm</span> answers the question: <em>"To what power must we raise the base b to get the number x?"</em></p>
+        <div class="math">
+log_b(x) = n   means   bⁿ = x
+
+<span class="comment">-- Read as: "log base b of x equals n"</span>
+Examples:
+  log_2(8)  = 3    because  2³ = 8
+  log_10(100) = 2  because  10² = 100
+  log_e(e²) = 2    because  e² = e²   <span class="comment">(natural log, written ln)</span>
+        </div>
+
+        <p>Logarithm is the <span class="hlk">inverse of exponentiation</span>. Just as subtraction undoes addition and division undoes multiplication, the logarithm undoes the exponential.</p>
+
+        <p>The <span class="hlg">Laws of Logarithms</span> are a set of rules that allow you to manipulate, simplify, expand, and combine logarithmic expressions. They are derived entirely from the laws of exponents — every log law has a direct exponent law counterpart.</p>
+
+        <p>There are three special bases used constantly in data analytics:</p>
+        <div class="math">
+Base 10  →  log_10(x) or log(x)   Common logarithm
+                                   <span class="comment">used in: pH, decibels, Richter scale, some ML metrics</span>
+
+Base e   →  log_e(x)  or ln(x)    Natural logarithm  (e ≈ 2.71828)
+                                   <span class="comment">used in: calculus, exponential models, ML loss functions</span>
+
+Base 2   →  log_2(x)               Binary logarithm
+                                   <span class="comment">used in: information theory, entropy, decision trees</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── CRITERION 2: PURPOSE ── -->
+    <div class="card c-purp">
+      <div class="card-head">
+        <div class="card-icon">🎯</div>
+        <div class="card-head-text">
+          <div class="c-lbl">Criterion 02</div>
+          <div class="c-title">Purpose</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="purp-rows">
+          <div class="purp-row"><span class="ptag">Computation</span><span>Logarithm laws <strong>transform multiplication into addition</strong> and division into subtraction — historically making computation of large numbers feasible (before calculators). This property still matters in computing where floating-point multiplication overflows.</span></div>
+          <div class="purp-row"><span class="ptag">ML / Loss</span><span>Cross-entropy loss — the most used loss function in classification — is defined using <strong>natural logarithm (ln)</strong>: L = −Σ yᵢ · ln(ŷᵢ). Log laws are needed to simplify, differentiate, and optimize this expression.</span></div>
+          <div class="purp-row"><span class="ptag">Info Theory</span><span>Shannon entropy — the measure of information/uncertainty in a dataset — uses log base 2: H(X) = −Σ p(x) · log₂(p(x)). <strong>Decision trees use this formula to determine the best split</strong> (information gain).</span></div>
+          <div class="purp-row"><span class="ptag">Statistics</span><span><strong>Log-likelihood</strong> is used in maximum likelihood estimation (MLE). Taking the log converts the product of probabilities into a sum — making optimization tractable: ln∏P(xᵢ) = Σ ln P(xᵢ).</span></div>
+          <div class="purp-row"><span class="ptag">Scaling</span><span><strong>Log transformation</strong> of skewed data is one of the most common preprocessing steps in analytics. It compresses large ranges, reduces skewness, and makes multiplicative relationships additive.</span></div>
+          <div class="purp-row"><span class="ptag">Calculus</span><span>The derivative of ln(x) = 1/x is one of the most used results in calculus. Log laws are prerequisites to differentiating complex expressions using <strong>logarithmic differentiation</strong>.</span></div>
+          <div class="purp-row"><span class="ptag">Solving</span><span>Logarithms are used to <strong>solve exponential equations</strong> where the unknown is in the exponent — for example, finding when a model's loss crosses a threshold, or solving compound interest for time.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── CRITERION 3: HOW IT WORKS ── -->
+    <div class="card c-how">
+      <div class="card-head">
+        <div class="card-icon">⚙️</div>
+        <div class="card-head-text">
+          <div class="c-lbl">Criterion 03</div>
+          <div class="c-title">How This Works</div>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <p>Each law is explained with its formula, the intuition behind it (derived from exponent laws), and a worked numerical example.</p>
+
+        <!-- LAW 1 -->
+        <div class="law-block">
+          <div class="law-header">
+            <span class="law-num">Law 01</span>
+            <span class="law-name">Product Law</span>
+          </div>
+          <div class="law-body">
+            <span class="law-formula">log_b(x · y) = log_b(x) + log_b(y)</span>
+            <div class="law-explain">The log of a product equals the sum of the logs. This comes directly from the exponent rule bᵐ × bⁿ = b^(m+n). Logarithm turns multiplication into addition.</div>
+            <div class="law-example">
+log_2(4 × 8) = log_2(4) + log_2(8)
+             = 2 + 3
+             = 5
+Verify: log_2(32) = 5  because  2⁵ = 32  ✓
+            </div>
+          </div>
+        </div>
+
+        <!-- LAW 2 -->
+        <div class="law-block">
+          <div class="law-header">
+            <span class="law-num">Law 02</span>
+            <span class="law-name">Quotient Law</span>
+          </div>
+          <div class="law-body">
+            <span class="law-formula">log_b(x / y) = log_b(x) − log_b(y)</span>
+            <div class="law-explain">The log of a quotient equals the difference of the logs. Derived from bᵐ ÷ bⁿ = b^(m−n). Logarithm turns division into subtraction.</div>
+            <div class="law-example">
+log_3(81 / 9) = log_3(81) − log_3(9)
+              = 4 − 2
+              = 2
+Verify: log_3(9) = 2  because  3² = 9  ✓
+            </div>
+          </div>
+        </div>
+
+        <!-- LAW 3 -->
+        <div class="law-block">
+          <div class="law-header">
+            <span class="law-num">Law 03</span>
+            <span class="law-name">Power Law</span>
+          </div>
+          <div class="law-body">
+            <span class="law-formula">log_b(xⁿ) = n · log_b(x)</span>
+            <div class="law-explain">The log of a power brings the exponent down as a multiplier. Derived from (bᵐ)ⁿ = b^(mn). This is the most used law in calculus and ML — it linearizes exponential relationships.</div>
+            <div class="law-example">
+log_10(1000²) = 2 · log_10(1000)
+              = 2 · 3
+              = 6
+Verify: log_10(1,000,000) = 6  because  10⁶ = 1,000,000  ✓
+
+Also works with fractions and roots:
+  log_5(√25) = log_5(25^(1/2)) = (1/2)·log_5(25) = (1/2)·2 = 1
+  Verify: √25 = 5 = 5¹  →  log_5(5) = 1  ✓
+            </div>
+          </div>
+        </div>
+
+        <!-- LAW 4 -->
+        <div class="law-block">
+          <div class="law-header">
+            <span class="law-num">Law 04</span>
+            <span class="law-name">Change of Base Law</span>
+          </div>
+          <div class="law-body">
+            <span class="law-formula">log_b(x) = log_c(x) / log_c(b)</span>
+            <div class="law-explain">Converts a logarithm in any base to one using a convenient base (usually base 10 or base e). Essential because calculators and computers only compute log (base 10) and ln (base e) natively. This lets you evaluate any log_b(x) using those tools.</div>
+            <div class="law-example">
+Calculate log_5(200):
+  log_5(200) = log_10(200) / log_10(5)
+             = 2.3010 / 0.6990
+             ≈ 3.292
+
+Verify: 5^3.292 ≈ 200  ✓
+
+In Python:  import math
+            math.log(200, 5)  →  3.292...
+            math.log(200) / math.log(5)  →  same result
+            </div>
+          </div>
+        </div>
+
+        <!-- LAW 5 -->
+        <div class="law-block">
+          <div class="law-header">
+            <span class="law-num">Law 05</span>
+            <span class="law-name">Identity & Inverse Laws</span>
+          </div>
+          <div class="law-body">
+            <span class="law-formula">log_b(b) = 1 &nbsp;&nbsp;&nbsp; log_b(1) = 0 &nbsp;&nbsp;&nbsp; b^(log_b(x)) = x &nbsp;&nbsp;&nbsp; log_b(bˣ) = x</span>
+            <div class="law-explain">These special values and inverse relationships appear constantly when simplifying. log_b(b) = 1 because b¹ = b. log_b(1) = 0 because b⁰ = 1 for any base. The inverse laws show that log and exponent are perfect inverses — they undo each other completely.</div>
+            <div class="law-example">
+log_7(7)   = 1       because  7¹ = 7
+log_7(1)   = 0       because  7⁰ = 1
+log_7(7³)  = 3       (log undoes the exponent)
+7^(log_7(50)) = 50   (exponent undoes the log)
+
+ln(e⁵)    = 5        (natural log undoes eˣ)
+e^(ln 12) = 12       (eˣ undoes natural log)
+            </div>
+          </div>
+        </div>
+
+        <p style="margin-top: 16px;"><strong>The Exponent ↔ Log connection — master table:</strong></p>
+        <table class="comp-table">
+          <tr><th>Exponent Law</th><th>Logarithm Equivalent</th><th>Operation transformed</th></tr>
+          <tr><td>bᵐ · bⁿ = b^(m+n)</td><td>log(xy) = log(x) + log(y)</td><td>× → +</td></tr>
+          <tr><td>bᵐ ÷ bⁿ = b^(m−n)</td><td>log(x/y) = log(x) − log(y)</td><td>÷ → −</td></tr>
+          <tr><td>(bᵐ)ⁿ = b^(mn)</td><td>log(xⁿ) = n·log(x)</td><td>power → ×</td></tr>
+          <tr><td>b⁰ = 1</td><td>log_b(1) = 0</td><td>identity</td></tr>
+          <tr><td>b¹ = b</td><td>log_b(b) = 1</td><td>identity</td></tr>
+        </table>
+
+      </div>
+    </div>
+
+    <!-- ── CRITERION 4: SAMPLE ── -->
+    <div class="card c-samp">
+      <div class="card-head">
+        <div class="card-icon">🧪</div>
+        <div class="card-head-text">
+          <div class="c-lbl">Criterion 04</div>
+          <div class="c-title">Sample Problems</div>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <div class="sample">
+          <div class="s-lbl">Sample A — Expanding a Logarithmic Expression</div>
+          <div class="s-math">
+Expand:  log_2( (8x³) / y )
+
+Step 1 — Quotient Law:   log_2(8x³) − log_2(y)
+Step 2 — Product Law:    log_2(8) + log_2(x³) − log_2(y)
+Step 3 — Power Law:      log_2(8) + 3·log_2(x) − log_2(y)
+Step 4 — Evaluate known: log_2(8) = 3  (because 2³ = 8)
+
+Result:  3 + 3·log_2(x) − log_2(y)
+          </div>
+          <div class="s-note">✔ Expand order: Quotient Law first → Product Law → Power Law → evaluate constants.</div>
+        </div>
+
+        <div class="sample">
+          <div class="s-lbl">Sample B — Condensing (Combining) Log Expressions</div>
+          <div class="s-math">
+Condense:  2·ln(x) + ln(x+1) − ln(3)
+
+Step 1 — Power Law:    ln(x²) + ln(x+1) − ln(3)
+Step 2 — Product Law:  ln(x²(x+1)) − ln(3)
+Step 3 — Quotient Law: ln( x²(x+1) / 3 )
+
+Result:  ln( x²(x+1) / 3 )
+          </div>
+          <div class="s-note">✔ Condense order: Power Law first → combine additions (Product) → combine subtractions (Quotient).</div>
+        </div>
+
+        <div class="sample">
+          <div class="s-lbl">Sample C — Solving an Exponential Equation Using Logs</div>
+          <div class="s-math">
+Solve:  5^(2x) = 300
+
+Step 1 — Take ln of both sides:  ln(5^(2x)) = ln(300)
+Step 2 — Power Law:              2x · ln(5) = ln(300)
+Step 3 — Divide:                 x = ln(300) / (2 · ln(5))
+Step 4 — Evaluate:               x = 5.7038 / (2 × 1.6094)
+                                   = 5.7038 / 3.2189
+                                   x ≈ 1.773
+
+Verify: 5^(2×1.773) = 5^3.546 ≈ 300  ✓
+          </div>
+          <div class="s-note">✔ Taking log of both sides is the standard technique for solving any equation where the unknown is in the exponent.</div>
+        </div>
+
+        <div class="sample">
+          <div class="s-lbl">Sample D — Change of Base (Calculator Use)</div>
+          <div class="s-math">
+Evaluate:  log_6(500)
+
+Using Change of Base (base 10):
+  log_6(500) = log_10(500) / log_10(6)
+             = 2.6990 / 0.7782
+             ≈ 3.468
+
+Using Change of Base (base e / ln):
+  log_6(500) = ln(500) / ln(6)
+             = 6.2146 / 1.7918
+             ≈ 3.468  ✓  (same answer regardless of conversion base)
+          </div>
+          <div class="s-note">✔ You can use any base for the conversion — the answer is always the same. Use ln or log₁₀, whichever is available.</div>
+        </div>
+
+        <div class="sample">
+          <div class="s-lbl">Sample E — Log Transformation in Data Analytics</div>
+          <div class="s-math">
+A dataset of house prices (in $):
+  [80,000 · 120,000 · 450,000 · 2,500,000 · 9,800,000]
+
+Range is enormous → apply log₁₀ transformation:
+  log(80,000)    = 4.903
+  log(120,000)   = 5.079
+  log(450,000)   = 5.653
+  log(2,500,000) = 6.398
+  log(9,800,000) = 6.991
+
+New range: [4.9, 7.0]  ←  compressed from millions to a 2-unit range.
+          </div>
+          <div class="s-note">✔ Log transformation is one of the first data preprocessing steps for skewed distributions — directly using the log function and its properties.</div>
+        </div>
+
+        <div class="sample">
+          <div class="s-lbl">Sample F — Cross-Entropy Loss (ML Connection)</div>
+          <div class="s-math">
+Binary cross-entropy loss for one prediction:
+  L = −[y·ln(ŷ) + (1−y)·ln(1−ŷ)]
+
+Given: y = 1 (true label), ŷ = 0.85 (model's predicted probability)
+
+  L = −[1·ln(0.85) + (1−1)·ln(1−0.85)]
+  L = −[ln(0.85) + 0]
+  L = −ln(0.85)
+  L = −(−0.1625)
+  L = 0.1625
+
+Using the Inverse Law:  e^(−L) = e^(ln(0.85)) = 0.85
+→ the loss traces directly back to the predicted probability.
+          </div>
+          <div class="s-note">✔ Cross-entropy loss is a direct application of natural log. Without log laws, you cannot derive, understand, or optimize it.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── CRITERION 5: CHALLENGES ── -->
+    <div class="card c-chall">
+      <div class="card-head">
+        <div class="card-icon">⚠️</div>
+        <div class="card-head-text">
+          <div class="c-lbl">Criterion 05</div>
+          <div class="c-title">Common Challenges & How to Solve Them</div>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <div class="challenge">
+          <div class="chall-q">Thinking log(x + y) = log(x) + log(y) — one of the most common and dangerous errors in all of algebra.</div>
+          <div class="chall-a"><strong>Fix:</strong> The Product Law says log(x · y) = log(x) + log(y). It applies to <em>multiplication inside</em> the log, NOT addition. log(x + y) has NO simplification — it cannot be split. Example of the error: log(3 + 7) ≠ log(3) + log(7). Correct: log(10) = 1, but log(3) + log(7) = log(21) ≠ 1. Test yourself: always ask "is there multiplication inside the log?" before applying the Product Law.</div>
+        </div>
+
+        <div class="challenge">
+          <div class="chall-q">Applying the Power Law incorrectly — writing log(x)ⁿ = n·log(x) instead of the correct log(xⁿ) = n·log(x).</div>
+          <div class="chall-a"><strong>Fix:</strong> The Power Law only works when the exponent is <em>inside</em> the log argument: log(xⁿ). If the entire log expression is raised to a power — [log(x)]ⁿ — the law does NOT apply and it cannot be simplified with this rule. [log(x)]² ≠ 2·log(x). The position of the exponent matters completely.</div>
+        </div>
+
+        <div class="challenge">
+          <div class="chall-q">Forgetting the domain restrictions — taking the log of a negative number or zero.</div>
+          <div class="chall-a"><strong>Fix:</strong> log_b(x) is only defined when x &gt; 0 and b &gt; 0 and b ≠ 1. log(0) and log(−5) do not exist in real numbers. In data analytics, this appears when log-transforming data that contains zeros or negatives. The fix is to use log(x + 1) — called log1p — which shifts values so zero becomes log(1) = 0 instead of undefined. Python: np.log1p(x).</div>
+        </div>
+
+        <div class="challenge">
+          <div class="chall-q">Confusing log (base 10), ln (base e), and log₂ — using the wrong base in a formula.</div>
+          <div class="chall-a"><strong>Fix:</strong> Each has its domain: ln is used in calculus, ML loss functions, and natural growth models. log₂ is used in information theory (entropy, decision trees). log₁₀ is used in chemistry, acoustics, and general scientific measurement. In Python: math.log(x) = ln(x). math.log10(x) = log₁₀(x). math.log2(x) = log₂(x). Always check which base a formula requires before computing.</div>
+        </div>
+
+        <div class="challenge">
+          <div class="chall-q">Misapplying the Quotient Law — writing log(x) − log(y) = log(x − y).</div>
+          <div class="chall-a"><strong>Fix:</strong> log(x) − log(y) = log(x/y), not log(x−y). The Quotient Law converts the subtraction of logs into division <em>inside</em> the log. The subtraction stays outside and becomes division inside. Example: ln(10) − ln(2) = ln(10/2) = ln(5) ≈ 1.609. NOT ln(10−2) = ln(8) ≈ 2.079 — completely different values.</div>
+        </div>
+
+        <div class="challenge">
+          <div class="chall-q">Not recognizing when to condense vs. expand — applying the wrong direction of a law.</div>
+          <div class="chall-a"><strong>Fix:</strong> Laws work in both directions. Expanding breaks one log into many (useful for simplification and differentiation). Condensing combines many logs into one (useful for solving equations and computing values). When solving an equation with multiple log terms on one side, always condense first into a single log, then remove the log by converting to exponential form: if log_b(expr) = c, then expr = bᶜ.</div>
+        </div>
+
+        <div class="challenge">
+          <div class="chall-q">Trying to evaluate log without knowing the base — e.g., writing log(x) without specifying what base is meant.</div>
+          <div class="chall-a"><strong>Fix:</strong> In pure mathematics, "log" without a base written explicitly usually means base 10. In higher mathematics and ML literature, "log" often means the natural log (ln). In computer science and information theory, "log" often means base 2. Always clarify from context — when in doubt, write the base explicitly: log_b(x). In code, always use the specific function (math.log, math.log10, math.log2) to be unambiguous.</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer>PRE-ALGEBRA & ALGEBRA — ALGEBRA II · LAWS OF LOGARITHMS · MATHEMATICS FOR DATA ANALYTICS</footer>
+</body>
+</html>

@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fractions, Decimals, Percentages & Ratios — Full Deep Dive</title>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,700&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@400;500;600;700;800&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream:  #f8f4ed;
+    --paper:  #fdfaf5;
+    --white:  #ffffff;
+    --ink:    #1a1510;
+    --ink2:   #2e2820;
+    --muted:  #7a7060;
+    --rule:   #ddd5c4;
+    --faint:  #ede7d8;
+
+    /* T1 — ochre/gold — Fractions */
+    --t1:     #9a6b00;
+    --t1m:    #c48a00;
+    --t1l:    #fffaeb;
+    --t1b:    #f0d070;
+    --t1bg:   #fef8e6;
+
+    /* T2 — slate blue — Ratios */
+    --t2:     #1e4d7a;
+    --t2m:    #2563a8;
+    --t2l:    #eef5ff;
+    --t2b:    #a8c8f0;
+    --t2bg:   #f0f6ff;
+
+    /* criteria */
+    --c1:#1d5fa8; --c2:#7c3aed; --c3:#0d7a50; --c4:#b86800; --c5:#be1c3c;
+
+    --easy: #16a34a; --easyd:rgba(22,163,74,.1);  --easyb:rgba(22,163,74,.3);
+    --med:  #ca8a04; --medd: rgba(202,138,4,.1);   --medb: rgba(202,138,4,.3);
+    --hard: #dc2626; --hardd:rgba(220,38,38,.1);   --hardb:rgba(220,38,38,.3);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--cream);color:var(--ink);font-family:'Barlow',sans-serif;font-weight:300;line-height:1.8;}
+
+  /* ── MASTHEAD ── */
+  .masthead{
+    background:var(--ink);
+    padding:0 40px;
+    border-bottom:4px solid var(--t1m);
+  }
+  .mh-inner{
+    max-width:1000px;margin:0 auto;
+    display:flex;align-items:stretch;gap:0;
+  }
+  .mh-left{
+    flex:1;padding:48px 40px 40px 0;
+    border-right:1px solid rgba(255,255,255,.1);
+  }
+  .mh-right{
+    width:220px;padding:48px 0 40px 40px;
+    display:flex;flex-direction:column;gap:16px;
+  }
+  .mh-kicker{
+    font-family:'Barlow Condensed',sans-serif;
+    font-size:11px;letter-spacing:.25em;text-transform:uppercase;
+    color:#7a7060;margin-bottom:14px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .mh-kicker::before{content:'';width:24px;height:1px;background:#7a7060;}
+  h1{
+    font-family:'Spectral',serif;
+    font-size:clamp(2.6rem,5vw,4rem);
+    font-weight:800;line-height:1.04;letter-spacing:-.03em;
+    color:#fff;margin-bottom:12px;
+  }
+  h1 .em1{font-style:italic;color:var(--t1m);}
+  h1 .em2{font-style:italic;color:var(--t2b);}
+  .mh-deck{color:#7a7060;font-size:.93rem;line-height:1.7;max-width:520px;}
+  .mh-meta{margin-top:24px;display:flex;gap:20px;flex-wrap:wrap;}
+  .meta-item{font-family:'Courier Prime',monospace;font-size:10px;color:#4a4030;letter-spacing:.1em;text-transform:uppercase;}
+  .meta-item span{color:#a89070;}
+
+  .mh-pills{display:flex;flex-direction:column;gap:8px;}
+  .mh-pill{
+    font-family:'Barlow Condensed',sans-serif;
+    font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+    padding:7px 12px;border-radius:2px;font-weight:600;
+  }
+  .mp1{background:rgba(196,138,0,.15);color:var(--t1m);border:1px solid rgba(196,138,0,.3);}
+  .mp2{background:rgba(37,99,168,.15);color:var(--t2b);border:1px solid rgba(37,99,168,.3);}
+  .mpn{background:rgba(255,255,255,.05);color:#5a5040;border:1px solid rgba(255,255,255,.1);}
+
+  /* ── STICKY NAV ── */
+  .snav{background:var(--faint);border-bottom:1px solid var(--rule);position:sticky;top:0;z-index:100;overflow-x:auto;}
+  .snav::-webkit-scrollbar{display:none;}
+  .snav-in{max-width:1000px;margin:0 auto;display:flex;white-space:nowrap;}
+  .ni{
+    font-family:'Barlow Condensed',sans-serif;
+    font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;
+    padding:12px 16px;color:var(--muted);text-decoration:none;
+    border-bottom:2px solid transparent;transition:all .2s;flex-shrink:0;
+  }
+  .ni.n1:hover{color:var(--t1);border-color:var(--t1);}
+  .ni.n2:hover{color:var(--t2);border-color:var(--t2);}
+  .n-sep{width:1px;background:var(--rule);margin:8px 4px;}
+
+  /* ── MAIN ── */
+  main{max-width:1000px;margin:0 auto;padding:60px 24px 100px;}
+
+  /* ── TOPIC HEADER ── */
+  .topic-hdr{
+    padding:28px 0 24px;margin-bottom:40px;
+    border-bottom:2px solid var(--rule);
+    display:flex;align-items:flex-start;gap:20px;
+  }
+  .th-num{
+    font-family:'Spectral',serif;font-size:5rem;font-weight:800;
+    font-style:italic;line-height:.9;opacity:.12;flex-shrink:0;
+    margin-top:4px;
+  }
+  .th1 .th-num{color:var(--t1);}
+  .th2 .th-num{color:var(--t2);}
+  .th-text{}
+  .th-tag{
+    font-family:'Barlow Condensed',sans-serif;font-size:10px;
+    letter-spacing:.22em;text-transform:uppercase;font-weight:600;margin-bottom:5px;
+  }
+  .th1 .th-tag{color:var(--t1);}
+  .th2 .th-tag{color:var(--t2);}
+  h2{
+    font-family:'Spectral',serif;font-size:2rem;font-weight:700;
+    line-height:1.15;letter-spacing:-.02em;
+  }
+  .th1 h2{color:var(--t1);}
+  .th2 h2{color:var(--t2);}
+  .th-sub{font-size:.88rem;color:var(--muted);margin-top:4px;}
+
+  /* ── CRITERION BLOCK ── */
+  .cb{margin-bottom:54px;}
+  .chdr{
+    display:flex;align-items:center;gap:14px;
+    margin-bottom:22px;padding-bottom:12px;
+    border-bottom:1px solid var(--rule);
+  }
+  .cbdg{
+    width:40px;height:40px;border-radius:8px;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Spectral',serif;font-size:1.2rem;font-style:italic;font-weight:700;
+    color:#fff;flex-shrink:0;
+  }
+  .cb1{background:var(--c1);} .cb2{background:var(--c2);}
+  .cb3{background:var(--c3);} .cb4{background:var(--c4);} .cb5{background:var(--c5);}
+  .ctag{
+    font-family:'Barlow Condensed',sans-serif;font-size:9px;
+    letter-spacing:.2em;text-transform:uppercase;font-weight:600;margin-bottom:2px;
+  }
+  .ct1{color:var(--c1);}.ct2{color:var(--c2);}.ct3{color:var(--c3);}
+  .ct4{color:var(--c4);}.ct5{color:var(--c5);}
+  h3{font-family:'Spectral',serif;font-size:1.35rem;font-weight:700;color:var(--ink);line-height:1.2;}
+  .csub{font-size:.84rem;color:var(--muted);margin-top:2px;}
+
+  /* ── PROSE ── */
+  .prose p{font-size:.9rem;color:var(--ink);margin-bottom:12px;line-height:1.8;}
+  .prose p:last-child{margin-bottom:0;}
+  .h1k{color:var(--t1);font-weight:600;}
+  .h2k{color:var(--t2);font-weight:600;}
+  .hkw{color:var(--ink);font-weight:600;}
+
+  /* ── MATH BLOCK ── */
+  .math{
+    background:var(--faint);border:1px solid var(--rule);border-radius:6px;
+    padding:14px 20px;margin:12px 0;
+    font-family:'Courier Prime',monospace;font-size:.82rem;line-height:2.15;color:#1a1200;
+  }
+  .math.m1{border-left:3px solid var(--t1m);}
+  .math.m2{border-left:3px solid var(--t2m);}
+  .math .dim{color:var(--muted);font-size:.76rem;}
+  .math .ht1{color:var(--t1);font-weight:700;}
+  .math .ht2{color:var(--t2);font-weight:700;}
+  .math .hg{color:var(--c3);font-weight:700;}
+  .math .hr{color:var(--c5);font-weight:700;}
+  .math .hy{color:var(--c4);font-weight:700;}
+
+  /* ── RULE CARDS (key rules in a grid) ── */
+  .rule-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin:14px 0;}
+  .rcard{background:var(--white);border:1px solid var(--rule);border-radius:8px;padding:15px 17px;transition:transform .2s,border-color .2s;}
+  .rcard:hover{transform:translateY(-2px);border-color:rgba(0,0,0,.18);}
+  .rc-name{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;margin-bottom:6px;}
+  .rc-form{font-family:'Courier Prime',monospace;font-size:.84rem;font-weight:700;margin-bottom:7px;}
+  .rc-note{font-size:.81rem;color:var(--muted);line-height:1.6;}
+  .r1 .rc-name{color:var(--t1);} .r1 .rc-form{color:var(--t1);}
+  .r2 .rc-name{color:var(--t2);} .r2 .rc-form{color:var(--t2);}
+
+  /* ── TABLE ── */
+  .tbl{width:100%;border-collapse:collapse;margin:12px 0;font-size:.83rem;}
+  .tbl th{
+    font-family:'Barlow Condensed',monospace;font-size:9px;letter-spacing:.12em;
+    text-transform:uppercase;font-weight:700;color:var(--muted);
+    padding:9px 14px;text-align:left;border-bottom:2px solid var(--rule);background:var(--faint);
+  }
+  .tbl td{padding:10px 14px;border-bottom:1px solid var(--rule);vertical-align:top;line-height:1.65;}
+  .tbl td:first-child{font-family:'Courier Prime',monospace;font-size:.8rem;white-space:nowrap;}
+  .tbl.tb1 td:first-child{color:var(--t1);}
+  .tbl.tb2 td:first-child{color:var(--t2);}
+  .tbl tr:last-child td{border-bottom:none;}
+  .tbl tr:hover td{background:#fdfaf0;}
+
+  /* ── METHOD BLOCK ── */
+  .mblock{background:var(--white);border:1px solid var(--rule);border-radius:10px;overflow:hidden;margin:14px 0;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+  .mb-hd{padding:11px 20px;border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:12px;background:var(--faint);}
+  .mb-ltr{width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Spectral',serif;font-size:1rem;font-weight:700;font-style:italic;color:#fff;flex-shrink:0;}
+  .mb-title{font-size:.9rem;font-weight:600;color:var(--ink);}
+  .mb-when{font-size:.78rem;color:var(--muted);}
+  .mb-bd{padding:16px 20px;}
+
+  /* ── STEPS ── */
+  .steps{display:flex;flex-direction:column;gap:8px;margin:10px 0;}
+  .step{display:flex;gap:12px;align-items:flex-start;}
+  .sn{min-width:23px;height:23px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Courier Prime',monospace;font-size:10px;font-weight:700;flex-shrink:0;margin-top:2px;}
+  .sn1{background:var(--t1l);color:var(--t1);border:1px solid var(--t1b);}
+  .sn2{background:var(--t2l);color:var(--t2);border:1px solid var(--t2b);}
+  .st{font-size:.87rem;line-height:1.75;}
+
+  /* ── PURPOSE ROWS ── */
+  .purp-rows{display:flex;flex-direction:column;gap:10px;}
+  .purp-row{display:flex;gap:11px;align-items:flex-start;font-size:.88rem;line-height:1.75;}
+  .ptag{
+    font-family:'Barlow Condensed',sans-serif;font-size:9px;padding:3px 9px;border-radius:2px;
+    white-space:nowrap;flex-shrink:0;margin-top:4px;letter-spacing:.07em;text-transform:uppercase;font-weight:700;
+  }
+  .pt1{background:var(--t1bg);color:var(--t1);border:1px solid var(--t1b);}
+  .pt2{background:var(--t2bg);color:var(--t2);border:1px solid var(--t2b);}
+
+  /* ── CALLOUT ── */
+  .callout{border-radius:8px;padding:14px 18px;margin:13px 0;display:flex;gap:12px;align-items:flex-start;}
+  .ca1{background:var(--t1bg);border:1px solid var(--t1b);}
+  .ca2{background:var(--t2bg);border:1px solid var(--t2b);}
+  .call-ico{font-size:.95rem;flex-shrink:0;margin-top:2px;}
+  .call-txt{font-size:.87rem;line-height:1.75;}
+  .ca1 .call-txt strong{color:var(--t1);}
+  .ca2 .call-txt strong{color:var(--t2);}
+
+  /* ── CONVERSION TABLE (special) ── */
+  .conv-strip{
+    display:grid;grid-template-columns:repeat(3,1fr);
+    gap:0;margin:14px 0;background:var(--white);
+    border:1px solid var(--rule);border-radius:10px;overflow:hidden;
+  }
+  .cs-head{
+    font-family:'Barlow Condensed',sans-serif;font-size:10px;
+    letter-spacing:.16em;text-transform:uppercase;font-weight:700;
+    padding:10px 14px;background:var(--faint);border-bottom:1px solid var(--rule);
+    text-align:center;
+  }
+  .cs-head.h1{color:var(--t1);border-right:1px solid var(--rule);}
+  .cs-head.h2{color:var(--muted);border-right:1px solid var(--rule);}
+  .cs-head.h3{color:var(--t2);}
+  .cs-row{display:contents;}
+  .cs-cell{
+    padding:9px 14px;border-bottom:1px solid var(--rule);
+    font-family:'Courier Prime',monospace;font-size:.82rem;
+    text-align:center;line-height:1.6;
+  }
+  .cs-cell.c1{color:var(--t1);font-weight:700;border-right:1px solid var(--rule);}
+  .cs-cell.c2{color:var(--muted);border-right:1px solid var(--rule);}
+  .cs-cell.c3{color:var(--t2);}
+  .cs-row:last-child .cs-cell{border-bottom:none;}
+
+  /* ── SAMPLE CARD ── */
+  .sc{background:var(--white);border:1px solid var(--rule);border-radius:10px;overflow:hidden;margin:14px 0;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+  .sc-hd{padding:11px 20px;border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:11px;flex-wrap:wrap;background:var(--faint);}
+  .sc-n{font-family:'Spectral',serif;font-size:1.05rem;font-style:italic;font-weight:700;flex-shrink:0;color:var(--c4);}
+  .sc-title{font-size:.9rem;font-weight:600;color:var(--ink);flex:1;}
+  .sc-tag{font-family:'Barlow Condensed',sans-serif;font-size:8.5px;font-weight:700;padding:3px 9px;border-radius:20px;letter-spacing:.07em;text-transform:uppercase;flex-shrink:0;}
+  .st1{background:var(--t1bg);color:var(--t1);border:1px solid var(--t1b);}
+  .st2{background:var(--t2bg);color:var(--t2);border:1px solid var(--t2b);}
+  .stb{background:rgba(29,95,168,.08);color:var(--c1);border:1px solid rgba(29,95,168,.2);}
+  .sc-bd{padding:17px 20px;}
+  .sc-ctx{font-size:.86rem;color:var(--muted);margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--rule);line-height:1.75;}
+  .sc-ctx strong{color:var(--ink);font-weight:500;}
+  .sc-work{font-family:'Courier Prime',monospace;font-size:.8rem;line-height:2.1;background:var(--faint);border:1px solid var(--rule);border-radius:7px;padding:14px 16px;margin-bottom:10px;color:#1a1000;}
+  .sc-tw{font-size:.82rem;color:var(--muted);padding-top:8px;border-top:1px solid var(--rule);line-height:1.7;}
+  .sc-tw strong{color:var(--c3);font-weight:600;}
+
+  /* ── CHALLENGES ── */
+  .ch-intro{border-radius:8px;padding:17px 21px;margin-bottom:20px;}
+  .chi1{background:var(--t1bg);border:1px solid var(--t1b);}
+  .chi2{background:var(--t2bg);border:1px solid var(--t2b);}
+  .chi-tag{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;margin-bottom:8px;}
+  .chi1 .chi-tag{color:var(--t1);} .chi2 .chi-tag{color:var(--t2);}
+  .chi-txt{font-size:.88rem;line-height:1.75;}
+  .diff-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+  .dtag{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;padding:3px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.05em;}
+  .de{background:var(--easyd);color:var(--easy);border:1px solid var(--easyb);}
+  .dm{background:var(--medd);color:var(--med);border:1px solid var(--medb);}
+  .dh{background:var(--hardd);color:var(--hard);border:1px solid var(--hardb);}
+
+  .prob{background:var(--white);border:1px solid var(--rule);border-radius:10px;overflow:hidden;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+  .prob-hd{display:flex;align-items:center;gap:12px;padding:11px 20px;border-bottom:1px solid var(--rule);background:var(--faint);}
+  .pnum{width:33px;height:33px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'Spectral',serif;font-size:1rem;font-style:italic;font-weight:700;flex-shrink:0;}
+  .pn1{background:var(--t1bg);color:var(--t1);border:1px solid var(--t1b);}
+  .pn2{background:var(--t2bg);color:var(--t2);border:1px solid var(--t2b);}
+  .pmeta{flex:1;}
+  .ptitle{font-size:.9rem;font-weight:600;color:var(--ink);}
+  .psub{font-size:.77rem;color:var(--muted);}
+  .dbadge{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;padding:3px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.05em;flex-shrink:0;}
+  .prob-bd{padding:16px 20px;}
+  .pstmt{background:var(--faint);border:1px solid var(--rule);border-radius:7px;padding:13px 17px;margin-bottom:11px;}
+  .plbl{font-family:'Barlow Condensed',sans-serif;font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--muted);margin-bottom:6px;}
+  .ptxt{font-size:.88rem;color:var(--ink);line-height:1.75;}
+  .peq{font-family:'Courier Prime',monospace;font-size:.9rem;font-weight:700;display:block;margin:6px 0 2px;color:var(--ink);}
+  .pnote{font-size:.78rem;color:var(--muted);margin-top:5px;font-style:italic;}
+  .hint{background:#fffef3;border:1px solid #ddd040;border-radius:7px;padding:10px 14px;display:flex;gap:9px;align-items:flex-start;margin-bottom:11px;}
+  .h-ico{font-size:.88rem;flex-shrink:0;margin-top:1px;}
+  .h-txt{font-size:.82rem;color:#4a3c00;line-height:1.7;}
+  .h-txt strong{color:#2a1e00;}
+  .ans{background:var(--faint);border:1.5px dashed var(--rule);border-radius:7px;padding:12px 17px;min-height:55px;display:flex;align-items:center;gap:10px;}
+  .a-ico{font-size:.9rem;opacity:.3;}
+  .a-txt{font-size:.81rem;color:var(--muted);font-style:italic;}
+
+  /* ── DIVIDERS ── */
+  .bdiv{
+    display:flex;align-items:center;gap:0;margin:72px 0 56px;
+    position:relative;
+  }
+  .bdiv-line{flex:1;height:2px;background:var(--rule);}
+  .bdiv-label{
+    font-family:'Spectral',serif;font-style:italic;font-size:1.1rem;font-weight:400;
+    color:var(--muted);padding:0 20px;white-space:nowrap;
+  }
+  .sdiv{display:flex;align-items:center;gap:12px;margin:36px 0 24px;}
+  .sdiv::before,.sdiv::after{content:'';flex:1;height:1px;background:var(--rule);}
+  .sd-lbl{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:var(--muted);}
+
+  footer{text-align:center;padding:24px;font-family:'Courier Prime',monospace;font-size:10px;letter-spacing:.1em;color:var(--muted);border-top:2px solid var(--rule);}
+  code{font-family:'Courier Prime',monospace;font-size:.8rem;background:var(--faint);border:1px solid var(--rule);padding:1px 6px;border-radius:4px;}
+
+  @media(max-width:700px){
+    .masthead{padding:0 20px;}
+    .mh-inner{flex-direction:column;}
+    .mh-left{border-right:none;border-bottom:1px solid rgba(255,255,255,.1);padding:40px 0 28px;}
+    .mh-right{width:100%;padding:24px 0 36px;flex-direction:row;flex-wrap:wrap;}
+    main{padding:40px 14px 60px;}
+    h1{font-size:2.2rem;}
+    .sc-bd,.prob-bd,.mb-bd{padding:13px 14px;}
+    .conv-strip{grid-template-columns:1fr;}
+    .cs-head,.cs-cell{border-right:none !important;}
+    .mh-right{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════ MASTHEAD ══════════════════ -->
+<div class="masthead">
+  <div class="mh-inner">
+    <div class="mh-left">
+      <div class="mh-kicker">Mathematics for Data Analytics · Pre-Algebra</div>
+      <h1>
+        <span class="em1">Fractions,</span> Decimals<br>
+        &amp; Percentages<br>
+        <span style="font-size:.45em;font-weight:300;font-style:normal;opacity:.4;display:block;margin:8px 0 4px;letter-spacing:0">alongside</span>
+        <span class="em2">Ratios</span> &amp; Proportions
+      </h1>
+      <p class="mh-deck">Two foundational subtopics — the arithmetic of parts and wholes, and the mathematics of relative comparison. Both underpin every metric, rate, and scaling operation in data analytics.</p>
+      <div class="mh-meta">
+        <div class="meta-item">Subtopics <span>02</span></div>
+        <div class="meta-item">Criteria <span>5 each</span></div>
+        <div class="meta-item">Samples <span>5 each</span></div>
+        <div class="meta-item">Challenges <span>5 each</span></div>
+      </div>
+    </div>
+    <div class="mh-right">
+      <div class="mh-pills">
+        <div class="mh-pill mp1">01 · Fractions, Decimals & %</div>
+        <div class="mh-pill mp2">02 · Ratios & Proportions</div>
+        <div class="mh-pill mpn">Pre-Algebra & Algebra</div>
+        <div class="mh-pill mpn">All 5 Criteria Each</div>
+        <div class="mh-pill mpn">Real-World Analytics</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STICKY NAV -->
+<div class="snav">
+  <div class="snav-in">
+    <a href="#f1" class="ni n1">01 Description</a>
+    <a href="#f2" class="ni n1">02 Purpose</a>
+    <a href="#f3" class="ni n1">03 How It Works</a>
+    <a href="#f4" class="ni n1">04 Samples</a>
+    <a href="#f5" class="ni n1">05 Challenges</a>
+    <div class="n-sep"></div>
+    <a href="#r1" class="ni n2">R01 Description</a>
+    <a href="#r2" class="ni n2">R02 Purpose</a>
+    <a href="#r3" class="ni n2">R03 How It Works</a>
+    <a href="#r4" class="ni n2">R04 Samples</a>
+    <a href="#r5" class="ni n2">R05 Challenges</a>
+  </div>
+</div>
+
+<main>
+
+<!-- ████████████████████████████████████████
+     TOPIC 1 — FRACTIONS, DECIMALS & PERCENTAGES
+████████████████████████████████████████ -->
+<div class="topic-hdr th1">
+  <div class="th-num">01</div>
+  <div class="th-text">
+    <div class="th-tag">Pre-Algebra · Subtopic 01 of 02</div>
+    <h2>Fractions, Decimals & Percentages</h2>
+    <div class="th-sub">Three representations of the same mathematical idea — parts of a whole. Converting between them and operating on them precisely is the bedrock of all quantitative analysis.</div>
+  </div>
+</div>
+
+<!-- F1: DESCRIPTION -->
+<div class="cb" id="f1">
+  <div class="chdr">
+    <div class="cbdg cb1">1</div>
+    <div><div class="ctag ct1">Criterion 01</div><h3>Description</h3><div class="csub">What fractions, decimals, and percentages are, and how they relate to each other.</div></div>
+  </div>
+
+  <div class="prose">
+    <p>A <span class="h1k">fraction</span> is a way of expressing a part of a whole using two integers: the <span class="hkw">numerator</span> (top — how many parts you have) and the <span class="hkw">denominator</span> (bottom — how many equal parts the whole is divided into). The fraction a/b means: divide the whole into b equal parts and take a of them.</p>
+    <p>A <span class="h1k">decimal</span> is a number expressed in base-10 positional notation, where digits to the right of the decimal point represent tenths, hundredths, thousandths, etc. Decimals are just fractions written with denominators that are powers of 10.</p>
+    <p>A <span class="h1k">percentage</span> is a special fraction with denominator 100 — "per cent" literally means "per hundred." It expresses a number as parts out of 100, making comparisons intuitive across different-sized quantities.</p>
+  </div>
+
+  <div class="math m1">
+<span class="dim">-- The three are the same number, different notation:</span>
+  3/4  =  0.75  =  75%      ← all represent "three-quarters"
+  1/3  ≈  0.333...  ≈  33.3%
+  7/5  =  1.4   =  140%     ← fractions and % can exceed 1
+
+<span class="dim">-- Anatomy of a fraction:</span>
+  Proper fraction:    a/b where |a| < |b|   → value between −1 and 1
+                      example: 3/7, 5/8
+  Improper fraction:  a/b where |a| ≥ |b|  → |value| ≥ 1
+                      example: 9/4, 13/5
+  Mixed number:       whole part + fraction → 2 and 1/4 = 9/4
+
+<span class="dim">-- Types of decimals:</span>
+  Terminating:   0.25, 0.5, 1.375   ← fraction with denominator 2ⁿ·5ᵐ
+  Repeating:     0.333..., 0.142857142857...  ← all other fractions
+  Irrational:    √2 = 1.41421356...  ← cannot be expressed as a fraction
+  </div>
+
+  <div class="conv-strip">
+    <div class="cs-head h1">Fraction</div>
+    <div class="cs-head h2">Decimal</div>
+    <div class="cs-head h3">Percentage</div>
+    <div class="cs-row">
+      <div class="cs-cell c1">1/2</div><div class="cs-cell c2">0.5</div><div class="cs-cell c3">50%</div>
+    </div>
+    <div class="cs-row">
+      <div class="cs-cell c1">1/4</div><div class="cs-cell c2">0.25</div><div class="cs-cell c3">25%</div>
+    </div>
+    <div class="cs-row">
+      <div class="cs-cell c1">3/4</div><div class="cs-cell c2">0.75</div><div class="cs-cell c3">75%</div>
+    </div>
+    <div class="cs-row">
+      <div class="cs-cell c1">1/3</div><div class="cs-cell c2">0.3333...</div><div class="cs-cell c3">33.33%</div>
+    </div>
+    <div class="cs-row">
+      <div class="cs-cell c1">2/3</div><div class="cs-cell c2">0.6666...</div><div class="cs-cell c3">66.67%</div>
+    </div>
+    <div class="cs-row">
+      <div class="cs-cell c1">1/5</div><div class="cs-cell c2">0.2</div><div class="cs-cell c3">20%</div>
+    </div>
+    <div class="cs-row">
+      <div class="cs-cell c1">1/8</div><div class="cs-cell c2">0.125</div><div class="cs-cell c3">12.5%</div>
+    </div>
+    <div class="cs-row">
+      <div class="cs-cell c1">5/4</div><div class="cs-cell c2">1.25</div><div class="cs-cell c3">125%</div>
+    </div>
+  </div>
+
+  <div class="callout ca1">
+    <div class="call-ico">⚡</div>
+    <div class="call-txt"><strong>Core insight:</strong> Fractions, decimals, and percentages are not different types of numbers — they are different notations for the same quantity. 3/4, 0.75, and 75% are all the exact same mathematical object. Fluency means knowing how to move between them instantly and recognizing when one form is clearer than another in a given context.</div>
+  </div>
+</div>
+
+<div class="sdiv"><span class="sd-lbl">Purpose</span></div>
+
+<!-- F2: PURPOSE -->
+<div class="cb" id="f2">
+  <div class="chdr">
+    <div class="cbdg cb2">2</div>
+    <div><div class="ctag ct2">Criterion 02</div><h3>Purpose</h3><div class="csub">Why fractions, decimals, and percentages are foundational to all data work.</div></div>
+  </div>
+
+  <div class="purp-rows">
+    <div class="purp-row"><span class="ptag pt1">Metrics</span><span>Every data metric involves fractions: accuracy = correct/total, precision = TP/(TP+FP), click-through rate = clicks/impressions, conversion rate = conversions/visitors. These are fractions expressed as decimals or percentages depending on context. You cannot interpret or report any metric without understanding all three forms.</span></div>
+    <div class="purp-row"><span class="ptag pt1">Probabilities</span><span>Probabilities are fractions between 0 and 1. P(A) = favorable outcomes / total outcomes. Expressing probability as 0.35, 35%, or 7/20 are all equivalent — a data scientist must move fluidly between these representations. The choice of notation affects how formulas are written and computed.</span></div>
+    <div class="purp-row"><span class="ptag pt1">Growth Rates</span><span>Percentage change = (new − old) / old × 100 is the universal language of growth reporting in business analytics. Revenue grew 12.5%. Churn decreased by 8%. Model accuracy improved from 84% to 91% — a 7 percentage point increase, which is an 8.33% relative improvement (different from the absolute increase).</span></div>
+    <div class="purp-row"><span class="ptag pt1">Normalization</span><span>Normalizing data — scaling features to [0,1] or [−1,1] — is fundamentally dividing by a reference quantity to express everything as fractions. Min-max normalization gives a fraction: (x−min)/(max−min). Understanding that this produces a value between 0 and 1 comes from fraction arithmetic.</span></div>
+    <div class="purp-row"><span class="ptag pt1">Weighted Avg</span><span>Weighted averages combine values using fractional weights that must sum to 1 (i.e., 100%). Model ensembles, portfolio returns, student grade calculations — all use weighted fractions. Understanding that weights are fractions summing to 1 is the conceptual basis for all weighted combination operations.</span></div>
+    <div class="purp-row"><span class="ptag pt1">Precision</span><span>Floating-point numbers in computers are fractions in binary. Rounding errors, truncation, and precision loss are all fraction/decimal concepts. A data engineer who understands that 0.1 cannot be represented exactly in binary (it's a repeating fraction in base 2) knows why floating-point arithmetic can produce surprising results.</span></div>
+  </div>
+</div>
+
+<div class="sdiv"><span class="sd-lbl">How It Works</span></div>
+
+<!-- F3: HOW IT WORKS -->
+<div class="cb" id="f3">
+  <div class="chdr">
+    <div class="cbdg cb3">3</div>
+    <div><div class="ctag ct3">Criterion 03</div><h3>How This Works</h3><div class="csub">Conversions, operations on fractions, and percentage calculations — all with worked examples.</div></div>
+  </div>
+
+  <!-- CONVERSIONS -->
+  <div class="mblock">
+    <div class="mb-hd">
+      <div class="mb-ltr" style="background:var(--t1)">A</div>
+      <div><div class="mb-title">Converting Between Forms</div><div class="mb-when">The most fundamental skill — moving fluently between all three representations.</div></div>
+    </div>
+    <div class="mb-bd">
+      <div class="math m1">
+<span class="dim">-- Fraction → Decimal: divide numerator by denominator</span>
+  3/8 = 3 ÷ 8 = 0.375
+  5/6 = 5 ÷ 6 = 0.8333...
+
+<span class="dim">-- Decimal → Fraction: use place value, then simplify</span>
+  0.6  = 6/10  = 3/5          ← tenths place
+  0.35 = 35/100 = 7/20        ← hundredths place
+  0.125 = 125/1000 = 1/8      ← thousandths place
+  0.333... = 1/3               ← repeating: let x = 0.333..., then 10x = 3.333...,
+                                 10x − x = 3, 9x = 3, x = 3/9 = 1/3
+
+<span class="dim">-- Decimal → Percentage: multiply by 100</span>
+  0.75 × 100 = 75%
+  0.035 × 100 = 3.5%
+  1.4 × 100 = 140%
+
+<span class="dim">-- Percentage → Decimal: divide by 100</span>
+  68% ÷ 100 = 0.68
+  0.5% ÷ 100 = 0.005
+  250% ÷ 100 = 2.5
+
+<span class="dim">-- Fraction → Percentage: (fraction) × 100</span>
+  3/4 × 100 = 75%
+  7/8 × 100 = 87.5%
+      </div>
+    </div>
+  </div>
+
+  <!-- FRACTION OPERATIONS -->
+  <div class="mblock">
+    <div class="mb-hd">
+      <div class="mb-ltr" style="background:var(--t1)">B</div>
+      <div><div class="mb-title">Fraction Arithmetic — All Four Operations</div><div class="mb-when">Add/subtract need common denominators. Multiply/divide work directly.</div></div>
+    </div>
+    <div class="mb-bd">
+      <div class="math m1">
+<span class="dim">-- Addition & Subtraction: find LCD, make equivalent fractions, add/subtract numerators</span>
+  2/3 + 1/4:  LCD = 12
+    = 8/12 + 3/12 = <span class="ht1">11/12</span>
+
+  5/6 − 3/8:  LCD = 24
+    = 20/24 − 9/24 = <span class="ht1">11/24</span>
+
+<span class="dim">-- Multiplication: multiply numerators, multiply denominators, simplify</span>
+  3/5 × 4/7 = (3×4)/(5×7) = <span class="ht1">12/35</span>
+  (Cancel before multiplying when possible: 3/4 × 8/9 = 3/4 × 8/9 = (3×8)/(4×9) = 24/36 = 2/3
+   OR cancel first: 3/4 × 8/9 = (3÷3)/(9÷3) × (8÷4)/(4÷4) = 1/1 × 2/3 = 2/3  ← faster)
+
+<span class="dim">-- Division: multiply by the reciprocal of the second fraction (Keep-Change-Flip)</span>
+  3/4 ÷ 2/5 = 3/4 × 5/2 = 15/8 = <span class="ht1">1 and 7/8</span>
+  5/6 ÷ 5   = 5/6 × 1/5 = 5/30 = <span class="ht1">1/6</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PERCENTAGE CALCULATIONS -->
+  <div class="mblock">
+    <div class="mb-hd">
+      <div class="mb-ltr" style="background:var(--t1)">C</div>
+      <div><div class="mb-title">Percentage Calculations — The Six Standard Types</div><div class="mb-when">Every percentage problem in data analytics fits one of these six templates.</div></div>
+    </div>
+    <div class="mb-bd">
+      <div class="math m1">
+<span class="dim">-- Type 1: Find % of a value   "What is 35% of 240?"</span>
+  240 × 0.35 = <span class="ht1">84</span>
+
+<span class="dim">-- Type 2: Find what % one number is of another   "18 is what % of 72?"</span>
+  18/72 × 100 = 0.25 × 100 = <span class="ht1">25%</span>
+
+<span class="dim">-- Type 3: Find the original value   "65 is 40% of what?"</span>
+  65 / 0.40 = <span class="ht1">162.5</span>
+
+<span class="dim">-- Type 4: Percentage increase</span>
+  % increase = (new − old) / old × 100
+  Old = 80, New = 92:  (92−80)/80 × 100 = 12/80 × 100 = <span class="ht1">15%</span>
+
+<span class="dim">-- Type 5: Percentage decrease</span>
+  % decrease = (old − new) / old × 100
+  Old = 150, New = 120:  (150−120)/150 × 100 = 30/150 × 100 = <span class="ht1">20%</span>
+
+<span class="dim">-- Type 6: Find value after % change</span>
+  Original × (1 + rate)  for increase
+  Original × (1 − rate)  for decrease
+  $400 after 15% increase: 400 × 1.15 = <span class="ht1">$460</span>
+  $400 after 15% decrease: 400 × 0.85 = <span class="ht1">$340</span>
+      </div>
+
+      <div class="callout ca1" style="margin-top:14px;">
+        <div class="call-ico">⚠️</div>
+        <div class="call-txt"><strong>Critical distinction — Percentage points vs Percentage change:</strong> If accuracy goes from 80% to 88%, it increased by <em>8 percentage points</em> (absolute difference). But the percentage change is (88−80)/80 × 100 = 10% (relative). These are different numbers and both matter in reporting. Using one when you mean the other is a common and consequential error in data presentations.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rule-grid">
+    <div class="rcard r1">
+      <div class="rc-name">Simplify a Fraction</div>
+      <div class="rc-form">a/b → (a÷GCF)/(b÷GCF)</div>
+      <div class="rc-note">Divide both by GCF. 12/18: GCF=6 → 2/3.</div>
+    </div>
+    <div class="rcard r1">
+      <div class="rc-name">Repeating Decimal → Fraction</div>
+      <div class="rc-form">x = 0.d̄, 10x−x=d → x=d/9</div>
+      <div class="rc-note">0.7̄: 9x=7, x=7/9. For 0.12̄: 9x=1.2-0.1=1.1, etc.</div>
+    </div>
+    <div class="rcard r1">
+      <div class="rc-name">Mixed Number ↔ Improper</div>
+      <div class="rc-form">a b/c = (ac+b)/c</div>
+      <div class="rc-note">2 3/4 = (2×4+3)/4 = 11/4. Reverse: divide to get quotient & remainder.</div>
+    </div>
+    <div class="rcard r1">
+      <div class="rc-name">% of a Number</div>
+      <div class="rc-form">P% of N = N × (P/100)</div>
+      <div class="rc-note">35% of 80 = 80 × 0.35 = 28.</div>
+    </div>
+  </div>
+</div>
+
+<div class="sdiv"><span class="sd-lbl">Samples</span></div>
+
+<!-- F4: SAMPLES -->
+<div class="cb" id="f4">
+  <div class="chdr">
+    <div class="cbdg cb4">4</div>
+    <div><div class="ctag ct4">Criterion 04</div><h3>Samples</h3><div class="csub">Five worked examples spanning pure arithmetic to ML and business analytics.</div></div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-hd"><span class="sc-n">S1</span><span class="sc-title">Convert between all three forms and verify</span><span class="sc-tag st1">Pure Arithmetic</span></div>
+    <div class="sc-bd">
+      <div class="sc-ctx">Convert each to all three forms. Include repeating decimal notation where applicable.</div>
+      <div class="sc-work">
+(a) 5/8  →  5 ÷ 8 = 0.625  →  0.625 × 100 = 62.5%
+
+(b) 0.0625  →  0.0625 = 625/10000 = 1/16  →  6.25%
+
+(c) 0.6̄ (0.666...)  →  let x = 0.666..., 10x = 6.666..., 9x = 6, x = 2/3  →  66.67%
+
+(d) 175%  →  175/100 = 7/4  →  1.75
+
+(e) 7/12  →  7 ÷ 12 = 0.58333... = 0.583̄  →  58.33%
+
+Check (b): 1/16 = 0.0625  ← 1÷16 = 0.0625 ✓
+Check (d): 7/4 = 1.75  ← 7÷4 = 1.75 ✓
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> Converting between forms is a mechanical skill that should become automatic. The most common conversions (1/4=25%, 1/3=33.3%, 3/4=75%, etc.) should be memorized. For unfamiliar fractions, just divide numerator by denominator to get the decimal, then multiply by 100 for the percentage.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-hd"><span class="sc-n">S2</span><span class="sc-title">Fraction arithmetic applied to data blending</span><span class="sc-tag st1">Data Analytics</span></div>
+    <div class="sc-bd">
+      <div class="sc-ctx">A model ensemble combines three classifiers: Model A has weight <strong>1/2</strong>, Model B has weight <strong>1/3</strong>, and Model C has weight <strong>1/6</strong>. Verify weights sum to 1, then compute the weighted prediction when A predicts 0.9, B predicts 0.6, and C predicts 0.75.</div>
+      <div class="sc-work">
+Verify weights sum to 1:
+  1/2 + 1/3 + 1/6
+  LCD = 6
+  = 3/6 + 2/6 + 1/6 = 6/6 = 1  ✓
+
+Weighted prediction:
+  P = (1/2)×0.9 + (1/3)×0.6 + (1/6)×0.75
+    = 0.45 + 0.2 + 0.125
+    = 0.775
+
+Alternatively using fractions throughout:
+  P = (1/2)(9/10) + (1/3)(3/5) + (1/6)(3/4)
+    = 9/20 + 3/15 + 3/24
+    = 9/20 + 1/5 + 1/8
+  LCD = 40:
+    = 18/40 + 8/40 + 5/40 = 31/40 = 0.775  ✓
+
+Interpretation:
+  Weighted probability prediction = 0.775 = 77.5%
+  (higher than B's 60%, pulled up by A's 90% with biggest weight)
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> Ensemble weights in ML are fractions that must sum to 1 (they form a probability distribution over models). Fraction arithmetic verifies the constraint and computes the blended prediction. This is fraction addition and multiplication applied directly to model evaluation.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-hd"><span class="sc-n">S3</span><span class="sc-title">Percentage change, absolute vs relative</span><span class="sc-tag st1">Business Analytics</span></div>
+    <div class="sc-bd">
+      <div class="sc-ctx">A product's sales were <strong>$240,000</strong> last quarter and <strong>$276,000</strong> this quarter. A model's F1 score improved from <strong>0.72 to 0.79</strong>. Compute and distinguish absolute change, percentage change, and — for the model — the percentage point change.</div>
+      <div class="sc-work">
+SALES:
+  Absolute change:    276,000 − 240,000 = $36,000
+  Percentage change:  36,000 / 240,000 × 100 = 15%
+  New as % of old:    276,000 / 240,000 × 100 = 115%
+
+MODEL F1 SCORE:
+  Absolute change (percentage points): 0.79 − 0.72 = 0.07
+  In "percentage point" language: improved by 7 percentage points
+  Relative % change: (0.79 − 0.72) / 0.72 × 100 = 0.07/0.72 × 100 ≈ 9.72%
+
+CRITICAL DISTINCTION:
+  "F1 improved by 7 percentage points" — absolute, 0.72→0.79
+  "F1 improved by 9.72%"              — relative, how much of 0.72
+  Both are true. They measure different things.
+  In reporting, state which you mean — they differ by nearly 3×!
+
+If a competitor said "our model improved by 10%":
+  That could mean 0.80 → 0.88 (8 pp absolute, 10% relative)
+  OR 0.72 → 0.79 (7 pp absolute, 9.72% relative) — very different!
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> Percentage points and percentage change are different measurements. Absolute percentage-point change is straightforward subtraction. Relative percentage change is (new−old)/old × 100. Always specify which one you are reporting — the difference can make results appear 3× better or worse than they are.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-hd"><span class="sc-n">S4</span><span class="sc-title">Weighted average GPA and grade calculation</span><span class="sc-tag stb">Applied Math</span></div>
+    <div class="sc-bd">
+      <div class="sc-ctx">A student takes 4 courses with the following grades and credit hours: Math (4 credits, A = 4.0), Statistics (3 credits, B+ = 3.3), Programming (3 credits, A− = 3.7), Writing (2 credits, B = 3.0). Compute the weighted GPA.</div>
+      <div class="sc-work">
+Weights are credit hours expressed as fractions of total credits:
+  Total credits = 4 + 3 + 3 + 2 = 12
+
+Weighted GPA = Σ (credits × grade) / total credits
+
+Numerator:
+  4 × 4.0  = 16.0
+  3 × 3.3  = 9.9
+  3 × 3.7  = 11.1
+  2 × 3.0  = 6.0
+  Total    = 43.0
+
+GPA = 43.0 / 12 = 3.583...
+
+As a fraction: 43/12 ≈ 3.58  (rounded to 2 decimal places)
+As percentage of max (4.0): 3.583/4.0 × 100 = 89.6%
+
+Verify using fractional weights:
+  Weights: 4/12, 3/12, 3/12, 2/12 = 1/3, 1/4, 1/4, 1/6
+  GPA = (1/3)(4.0) + (1/4)(3.3) + (1/4)(3.7) + (1/6)(3.0)
+      = 1.333 + 0.825 + 0.925 + 0.500 = 3.583  ✓
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> Weighted averages use fractional weights (credits/total credits) that sum to 1. This exact structure — Σ(wᵢ × xᵢ) where Σwᵢ=1 — appears in machine learning (attention mechanisms, ensemble weights, expected values). GPA is the simplest, most relatable instance of a weighted expectation.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-hd"><span class="sc-n">S5</span><span class="sc-title">Floating-point fraction precision — data engineering context</span><span class="sc-tag stb">Data Engineering</span></div>
+    <div class="sc-bd">
+      <div class="sc-ctx">A data engineer notices that <code>0.1 + 0.2</code> in Python returns <code>0.30000000000000004</code> instead of <code>0.3</code>. Explain why, using the concept of repeating fractions in base 2.</div>
+      <div class="sc-work">
+In base 10: 0.1 = 1/10 — terminating decimal
+In base 2:  1/10 = ?
+
+Convert 0.1 to binary:
+  0.1 × 2 = 0.2 → 0
+  0.2 × 2 = 0.4 → 0
+  0.4 × 2 = 0.8 → 0
+  0.8 × 2 = 1.6 → 1
+  0.6 × 2 = 1.2 → 1
+  0.2 × 2 = 0.4 → 0  ← repeats!
+
+0.1 in base 2 = 0.0001100110011... (repeating)
+
+Just like 1/3 = 0.333... in base 10, 1/10 is a repeating fraction in base 2.
+Computers store a finite approximation → rounding error.
+
+Result: 0.1 (stored) ≈ 0.1000000000000000055511151...
+        0.2 (stored) ≈ 0.2000000000000000111022302...
+        Sum          ≈ 0.3000000000000000444089210...
+        Displayed as: 0.30000000000000004
+
+Fix in Python:
+  from decimal import Decimal
+  Decimal('0.1') + Decimal('0.2')  →  Decimal('0.3')  ← exact!
+  # or: round(0.1 + 0.2, 10)  →  0.3
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> Floating-point precision errors are repeating-fraction problems in base 2. A number that terminates in base 10 may repeat in base 2 — just as 1/3 repeats in base 10. Understanding fractions and decimal representations is why this happens and how to fix it — critical for financial calculations where exact decimal arithmetic is required.</div>
+    </div>
+  </div>
+</div>
+
+<div class="sdiv"><span class="sd-lbl">Challenges</span></div>
+
+<!-- F5: CHALLENGES -->
+<div class="cb" id="f5">
+  <div class="chdr">
+    <div class="cbdg cb5">5</div>
+    <div><div class="ctag ct5">Criterion 05</div><h3>Challenges</h3><div class="csub">Five problems — fractions, decimals, and percentage calculations to solve in full.</div></div>
+  </div>
+
+  <div class="ch-intro chi1">
+    <div class="chi-tag">Instructions</div>
+    <div class="chi-txt">Show all working steps. For conversion problems, show the intermediate step. For percentage problems, state which type of percentage calculation you are applying. For word problems, write the mathematical expression before computing. Interpret results in context.</div>
+    <div class="diff-row"><span class="dtag de">Easy</span><span class="dtag dm">Medium</span><span class="dtag dh">Hard</span></div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-hd"><div class="pnum pn1">1</div><div class="pmeta"><div class="ptitle">Convert between all three forms</div><div class="psub">Conversions · Fraction to decimal to percentage</div></div><span class="dbadge de">Easy</span></div>
+    <div class="prob-bd">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptxt">For each value, write all three equivalent forms: fraction (in lowest terms), decimal, and percentage. Show your working for each conversion step.</div><span class="peq">(a) 0.875 &nbsp;&nbsp; (b) 5/12 &nbsp;&nbsp; (c) 37.5% &nbsp;&nbsp; (d) 2.4</span><div class="pnote">For (b): divide 5 by 12 — you will get a repeating decimal. For (d): the fraction will be improper (greater than 1), and the percentage will exceed 100%.</div></div>
+      <div class="hint"><div class="h-ico">💡</div><div class="h-txt"><strong>Hint (a):</strong> 0.875 = 875/1000. Simplify by GCF. <strong>Hint (c):</strong> 37.5% = 37.5/100 = 375/1000. Simplify. Decimal = divide by 100.</div></div>
+      <div class="ans"><div class="a-ico">✏️</div><div class="a-txt">Write all three forms for each value with conversion steps, then share for review.</div></div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-hd"><div class="pnum pn1">2</div><div class="pmeta"><div class="ptitle">Fraction arithmetic — all four operations</div><div class="psub">Add · Subtract · Multiply · Divide</div></div><span class="dbadge de">Easy</span></div>
+    <div class="prob-bd">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptxt">Compute each, simplify fully, and convert the final answer to a decimal and percentage.</div><span class="peq">(a) 3/4 + 5/6</span><span class="peq">(b) 7/8 − 2/3</span><span class="peq">(c) 4/9 × 3/8</span><span class="peq">(d) 5/6 ÷ 2/9</span><div class="pnote">For (a) and (b): find the LCD first. For (c): cancel common factors before multiplying. For (d): multiply by the reciprocal.</div></div>
+      <div class="hint"><div class="h-ico">💡</div><div class="h-txt"><strong>Hint (a):</strong> LCD(4,6)=12. <strong>Hint (c):</strong> 4/9 × 3/8 — notice 3 and 9 share GCF=3, and 4 and 8 share GCF=4. Cancel before multiplying: (1/3) × (1/2) = 1/6. <strong>Hint (d):</strong> Keep-Change-Flip: 5/6 × 9/2.</div></div>
+      <div class="ans"><div class="a-ico">✏️</div><div class="a-txt">Show full working for all four, include fraction + decimal + percentage form for the answer. Then share.</div></div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-hd"><div class="pnum pn1">3</div><div class="pmeta"><div class="ptitle">Percentage calculations — all types</div><div class="psub">Six percentage types · Context interpretation</div></div><span class="dbadge dm">Medium</span></div>
+    <div class="prob-bd">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptxt">Solve each and identify which type of percentage calculation it is (Type 1–6 from the lesson).</div><span class="peq">(a) What is 18% of 350?</span><span class="peq">(b) 45 is what percent of 180?</span><span class="peq">(c) 84 is 60% of what number?</span><span class="peq">(d) A stock was $80 and is now $92. What is the % change?</span><span class="peq">(e) A $650 item has a 15% discount. What is the final price?</span><div class="pnote">For each, write the formula you are applying before plugging in numbers. For (e), the answer involves a percentage decrease — use Original × (1 − rate).</div></div>
+      <div class="hint"><div class="h-ico">💡</div><div class="h-txt"><strong>Hint (c):</strong> 84 = 0.60 × N → N = 84/0.60. <strong>Hint (d):</strong> % change = (92−80)/80 × 100. <strong>Hint (e):</strong> 650 × (1−0.15) = 650 × 0.85.</div></div>
+      <div class="ans"><div class="a-ico">✏️</div><div class="a-txt">State the type, show the formula and computation, and give a context sentence for each. Then share.</div></div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-hd"><div class="pnum pn1">4</div><div class="pmeta"><div class="ptitle">Percentage points vs percentage change</div><div class="psub">Absolute vs relative change · Reporting precision</div></div><span class="dbadge dm">Medium</span></div>
+    <div class="prob-bd">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptxt">A machine learning model's accuracy improved from <strong>74%</strong> to <strong>82%</strong> after retraining.<br><br>(a) What is the absolute change in percentage points?<br>(b) What is the relative percentage change?<br>(c) A colleague says "our model improved by 10.8%." Are they right? Is this the same as part (a) or (b)?<br>(d) If you had to write one headline for a business stakeholder, which number would you use and why?</div><div class="pnote">(c) Check if 10.8% matches either (a) or (b). Only one of them could equal 10.8% — work out which. For (d), think about what the stakeholder already knows and what would be most interpretable.</div></div>
+      <div class="hint"><div class="h-ico">💡</div><div class="h-txt"><strong>Hint (b):</strong> (82−74)/74 × 100. The result is NOT 8%. <strong>Hint (c):</strong> (82−74)/74 = 8/74 ≈ 0.1081 = 10.81% ≈ 10.8%. So the colleague used relative change, not percentage points.</div></div>
+      <div class="ans"><div class="a-ico">✏️</div><div class="a-txt">Answer all four parts. Write a full sentence for (d) justifying your choice. Then share.</div></div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-hd"><div class="pnum pn1">5</div><div class="pmeta"><div class="ptitle">Weighted prediction pipeline — full fractions problem</div><div class="psub">Word Problem · Weighted average · Analytics context</div></div><span class="dbadge dh">Hard</span></div>
+    <div class="prob-bd">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptxt">A recommendation system blends three scoring signals:<br><br>• <strong>Collaborative filtering score:</strong> 0.82 (weight = 5/12)<br>• <strong>Content-based score:</strong> 0.68 (weight = 1/3)<br>• <strong>Popularity score:</strong> 0.90 (weight = W₃)<br><br>(a) Find weight W₃ so all weights sum to 1. Express as a fraction in lowest terms and as a decimal.<br>(b) Compute the weighted blended score. Express as a fraction and decimal.<br>(c) If the blended score threshold for a recommendation is 0.75, will this item be recommended?<br>(d) The team wants to increase the blended score to at least 0.78 by adjusting only the collaborative filtering weight. If the CF score stays at 0.82, what is the minimum CF weight needed? (Keep the ratio of the other two weights the same.)<br>(e) What would the CF weight need to be if the content-based weight were increased to 1/2 instead (and popularity weight adjusts to maintain sum = 1)?</div><div class="pnote">For (d) and (e): set up an equation with the unknown weight and solve. This is fraction arithmetic combined with linear equation solving.</div></div>
+      <div class="hint"><div class="h-ico">💡</div><div class="h-txt"><strong>Hint (a):</strong> 5/12 + 1/3 + W₃ = 1 → 5/12 + 4/12 + W₃ = 1 → W₃ = 3/12 = 1/4. <strong>Hint (d):</strong> Let wCF = new CF weight. The other two weights scale: wCB = (1/3)·(1−wCF)/... Actually, simplest: if keeping their ratio, wCB/wP = (1/3)/(1/4) = 4/3. Let wCB=4t, wP=3t, wCF=w. Then w+4t+3t=1 and 0.82w+0.68(4t)+0.90(3t)≥0.78. Two equations → solve for w.</div></div>
+      <div class="ans"><div class="a-ico">✏️</div><div class="a-txt">Answer all five parts with full working. State the recommendation outcome as a sentence. Then share for full review.</div></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ████████████████████████████████████████
+     TOPIC DIVIDER
+████████████████████████████████████████ -->
+<div class="bdiv">
+  <div class="bdiv-line"></div>
+  <span class="bdiv-label">End of Subtopic 01 · Beginning of Subtopic 02</span>
+  <div class="bdiv-line"></div>
+</div>
+
+
+<!-- ████████████████████████████████████████
+     TOPIC 2 — RATIOS AND PROPORTIONS
+████████████████████████████████████████ -->
+<div class="topic-hdr th2">
+  <div class="th-num">02</div>
+  <div class="th-text">
+    <div class="th-tag">Pre-Algebra · Subtopic 02 of 02</div>
+    <h2>Ratios and Proportions</h2>
+    <div class="th-sub">The mathematics of relative comparison and scaled equality — the language of rates, scaling, and every model that relates two measurable quantities.</div>
+  </div>
+</div>
+
+<!-- R1: DESCRIPTION -->
+<div class="cb" id="r1">
+  <div class="chdr">
+    <div class="cbdg cb1">1</div>
+    <div><div class="ctag ct1">Criterion 01</div><h3>Description</h3><div class="csub">What ratios and proportions are, how to write them, and what they express.</div></div>
+  </div>
+
+  <div class="prose">
+    <p>A <span class="h2k">ratio</span> is a comparison of two (or more) quantities by division. It tells you the relative size of one quantity compared to another. Unlike a fraction, which expresses a part-of-whole relationship, a ratio can compare any two quantities — even ones with different units (making it a <span class="hkw">rate</span>).</p>
+    <p>A <span class="h2k">proportion</span> is a statement that two ratios are equal. It is the mathematical way of saying "these two fractions represent the same relationship," and it is the basis for all scaling, similarity, and cross-multiplication reasoning.</p>
+  </div>
+
+  <div class="math m2">
+<span class="dim">-- Ratio notation (three equivalent ways to write the same ratio):</span>
+  a to b   =   a : b   =   a/b
+
+  Ratio of 15 to 20:  15 to 20  =  15:20  =  15/20  =  3/4  (simplified)
+  Always simplify by dividing both parts by their GCF.
+
+<span class="dim">-- Types of ratios:</span>
+  Part-to-Part:   boys to girls = 3:4  (neither is the total)
+  Part-to-Whole:  boys to students = 3:7  (one is the total — this is a fraction)
+  Rate:           60 miles per hour = 60 miles : 1 hour  (different units)
+
+<span class="dim">-- Proportion: two equal ratios</span>
+  a/b = c/d   ← "a is to b as c is to d"
+  Cross-multiplication property: if a/b = c/d, then a·d = b·c
+
+  Example: 3/4 = 12/16  check: 3×16 = 48, 4×12 = 48  ✓
+  </div>
+
+  <div class="callout ca2">
+    <div class="call-ico">⚡</div>
+    <div class="call-txt"><strong>Rate vs ratio:</strong> A <em>rate</em> is a ratio with different units — miles per hour, cost per unit, clicks per impression, errors per thousand lines of code. All rates are ratios, but not all ratios are rates. In data analytics, most KPIs are rates: revenue per customer, conversion rate, cost per acquisition. Understanding them as ratios makes their arithmetic transparent.</div>
+  </div>
+
+  <div class="prose" style="margin-top:14px;">
+    <p>A <span class="h2k">unit rate</span> is a ratio with a denominator of 1 — it expresses "per one unit." It is the most interpretable form: $3.50 per kg, 45 conversions per day, 95.2% accuracy per epoch. Converting any rate to a unit rate is the act of dividing to make the denominator exactly 1.</p>
+  </div>
+
+  <div class="math m2">
+<span class="dim">-- Direct vs Inverse proportion:</span>
+  Direct proportion:  y = kx  →  as x increases, y increases proportionally
+                      y₁/x₁ = y₂/x₂ = k (constant)
+                      Example: cost = $5 × quantity (more items → more cost)
+
+  Inverse proportion: y = k/x  →  as x increases, y decreases
+                      x₁y₁ = x₂y₂ = k (constant)
+                      Example: speed × time = distance (faster → less time)
+  </div>
+</div>
+
+<div class="sdiv"><span class="sd-lbl">Purpose</span></div>
+
+<!-- R2: PURPOSE -->
+<div class="cb" id="r2">
+  <div class="chdr">
+    <div class="cbdg cb2">2</div>
+    <div><div class="ctag ct2">Criterion 02</div><h3>Purpose</h3><div class="csub">Why ratios and proportions appear throughout analytics, modeling, and data engineering.</div></div>
+  </div>
+
+  <div class="purp-rows">
+    <div class="purp-row"><span class="ptag pt2">KPIs & Rates</span><span>Every key performance indicator in business analytics is a rate: conversion rate, click-through rate, churn rate, retention rate, error rate. All are ratios expressed as fractions or percentages. <strong>Being able to manipulate, compare, and scale ratios is the daily work of a data analyst.</strong></span></div>
+    <div class="purp-row"><span class="ptag pt2">Scaling</span><span>Proportions are the mathematics of scaling. When you resize an image, scale a feature, normalize data, or resize a dataset — you are maintaining a proportion. A model trained on a 70/30 train/test split uses a proportional allocation. Map scales, model scales, and data sampling all rely on proportional reasoning.</span></div>
+    <div class="purp-row"><span class="ptag pt2">Cross-Validation</span><span>Stratified sampling in cross-validation maintains the ratio of class labels across all folds. If the dataset is 80% class A and 20% class B, each fold should reflect that 4:1 ratio. This is proportional reasoning applied to data partitioning to prevent sampling bias.</span></div>
+    <div class="purp-row"><span class="ptag pt2">Similarity</span><span>Cosine similarity — one of the most used similarity measures in NLP and recommendation systems — computes the ratio of the dot product to the product of vector magnitudes. It is a normalized ratio that equals 1 for identical vectors and 0 for orthogonal ones. Understanding it as a ratio explains why it is bounded.</span></div>
+    <div class="purp-row"><span class="ptag pt2">Unit Analysis</span><span>Dimensional analysis — tracking units through calculations — is ratio arithmetic. Converting km/h to m/s, dollars per share to total portfolio value, or bytes to gigabytes all require multiplying and dividing ratios. <strong>Unit analysis prevents order-of-magnitude errors</strong> that can silently corrupt data pipelines.</span></div>
+    <div class="purp-row"><span class="ptag pt2">Bayesian</span><span>Bayes' theorem works with ratios of probabilities. The <strong>likelihood ratio</strong> P(evidence|H₁) / P(evidence|H₀) measures how much more likely evidence is under one hypothesis than another. The posterior odds = prior odds × likelihood ratio. This is proportion and ratio applied to probabilistic reasoning.</span></div>
+  </div>
+</div>
+
+<div class="sdiv"><span class="sd-lbl">How It Works</span></div>
+
+<!-- R3: HOW IT WORKS -->
+<div class="cb" id="r3">
+  <div class="chdr">
+    <div class="cbdg cb3">3</div>
+    <div><div class="ctag ct3">Criterion 03</div><h3>How This Works</h3><div class="csub">Simplifying ratios, solving proportions, scaling, unit rates, and direct vs inverse proportion.</div></div>
+  </div>
+
+  <div class="mblock">
+    <div class="mb-hd">
+      <div class="mb-ltr" style="background:var(--t2)">A</div>
+      <div><div class="mb-title">Simplifying Ratios & Computing Unit Rates</div><div class="mb-when">Express as simplest form and as a per-one-unit rate.</div></div>
+    </div>
+    <div class="mb-bd">
+      <div class="math m2">
+<span class="dim">-- Simplify by dividing both parts by their GCF:</span>
+  24:36  →  GCF=12  →  2:3
+  150:200:250  →  GCF=50  →  3:4:5
+
+<span class="dim">-- Three-part ratio splitting a whole:</span>
+  Share $3,600 in ratio 3:4:5
+  Total parts = 3+4+5 = 12
+  Part value = 3600/12 = $300 per part
+  Shares: 3×300=$900, 4×300=$1200, 5×300=$1500
+  Check: 900+1200+1500 = 3600  ✓
+
+<span class="dim">-- Unit rate (make denominator = 1):</span>
+  Travel 270 km in 3 hours  →  270/3 = 90 km/h
+  Earn $480 in 6 days        →  480/6 = $80/day
+  15 defects in 500 units    →  15/500 = 0.03 defects/unit = 3%
+      </div>
+    </div>
+  </div>
+
+  <div class="mblock">
+    <div class="mb-hd">
+      <div class="mb-ltr" style="background:var(--t2)">B</div>
+      <div><div class="mb-title">Solving Proportions — Cross-Multiplication Method</div><div class="mb-when">Find the missing value when two ratios are set equal.</div></div>
+    </div>
+    <div class="mb-bd">
+      <div class="steps">
+        <div class="step"><div class="sn sn2">1</div><div class="st">Write the proportion as two equal fractions: a/b = c/d.</div></div>
+        <div class="step"><div class="sn sn2">2</div><div class="st">Cross-multiply: a × d = b × c.</div></div>
+        <div class="step"><div class="sn sn2">3</div><div class="st">Solve the resulting linear equation for the unknown.</div></div>
+        <div class="step"><div class="sn sn2">4</div><div class="st">Verify: substitute back and check both fractions are equal.</div></div>
+      </div>
+      <div class="math m2">
+<span class="dim">-- Basic proportion:</span>
+  3/4 = x/20
+  Cross-multiply: 3×20 = 4×x → 60 = 4x → <span class="ht2">x = 15</span>
+  Check: 3/4 = 15/20 = 3/4  ✓
+
+<span class="dim">-- Real-world proportion (scaling a recipe):</span>
+  A recipe for 6 servings uses 2.5 cups of flour.
+  How much flour for 10 servings?
+  6/2.5 = 10/x  →  6x = 25  →  <span class="ht2">x = 25/6 ≈ 4.17 cups</span>
+
+<span class="dim">-- Map scale proportion:</span>
+  Map scale 1:50,000. A distance is 3.4 cm on the map.
+  What is the actual distance?
+  1/50000 = 3.4/d  →  d = 3.4 × 50000 = 170,000 cm = <span class="ht2">1.7 km</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="mblock">
+    <div class="mb-hd">
+      <div class="mb-ltr" style="background:var(--t2)">C</div>
+      <div><div class="mb-title">Direct & Inverse Proportion — Identifying and Solving</div><div class="mb-when">Understand which type of proportional relationship a problem describes before solving.</div></div>
+    </div>
+    <div class="mb-bd">
+      <div class="two-col">
+        <div class="col-card">
+          <div class="col-tag a">Direct Proportion</div>
+          <div class="col-formula a">y = kx &nbsp; → &nbsp; y/x = k</div>
+          <div class="col-note">As x doubles, y doubles. Graph is a straight line through origin. k = constant of proportionality.</div>
+        </div>
+        <div class="col-card">
+          <div class="col-tag g" style="color:var(--t2)">Inverse Proportion</div>
+          <div class="col-formula g" style="color:var(--t2)">y = k/x &nbsp; → &nbsp; xy = k</div>
+          <div class="col-note">As x doubles, y halves. Graph is a hyperbola. Product is always constant.</div>
+        </div>
+      </div>
+      <div class="math m2">
+<span class="dim">-- Direct proportion example:</span>
+  A pump fills 120 liters in 4 minutes. How long for 300 liters?
+  Volume ∝ time → 120/4 = 300/t → t = 300×4/120 = <span class="ht2">10 minutes</span>
+  OR: unit rate = 30 liters/min → 300/30 = 10 min
+
+<span class="dim">-- Inverse proportion example:</span>
+  8 workers complete a job in 6 days. How long for 12 workers?
+  workers × days = constant → 8×6 = 12×d → 48 = 12d → <span class="ht2">d = 4 days</span>
+  (More workers → fewer days — classic inverse proportion)
+
+<span class="dim">-- How to identify the type:</span>
+  Direct:  "more of X → more of Y at the same rate"
+  Inverse: "more of X → less of Y to maintain the same total"
+      </div>
+    </div>
+  </div>
+
+  <div class="mblock">
+    <div class="mb-hd">
+      <div class="mb-ltr" style="background:var(--t2)">D</div>
+      <div><div class="mb-title">Ratio Splitting & Proportional Allocation</div><div class="mb-when">Distributing a total into parts that maintain a given ratio — used constantly in data partitioning.</div></div>
+    </div>
+    <div class="mb-bd">
+      <div class="steps">
+        <div class="step"><div class="sn sn2">1</div><div class="st"><strong>Sum the ratio parts</strong> to find the total number of shares.</div></div>
+        <div class="step"><div class="sn sn2">2</div><div class="st"><strong>Divide the total</strong> by the sum of ratio parts to find the value of one share.</div></div>
+        <div class="step"><div class="sn sn2">3</div><div class="st"><strong>Multiply</strong> each ratio part by one share's value.</div></div>
+        <div class="step"><div class="sn sn2">4</div><div class="st"><strong>Verify</strong>: all shares should sum to the original total.</div></div>
+      </div>
+      <div class="math m2">
+A dataset of 10,000 rows is split train:val:test = 7:1.5:1.5
+  Sum of parts = 7 + 1.5 + 1.5 = 10
+  One share = 10,000 / 10 = 1,000 rows
+
+  Train:  7 × 1,000 = 7,000 rows  (70%)
+  Val:    1.5 × 1,000 = 1,500 rows (15%)
+  Test:   1.5 × 1,000 = 1,500 rows (15%)
+
+  Check: 7,000 + 1,500 + 1,500 = 10,000  ✓
+
+Proportional fractions:
+  Train = 7/10 = 0.7,  Val = 1.5/10 = 0.15,  Test = 0.15
+  These are fractions of the total — fraction and ratio in one formula.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sdiv"><span class="sd-lbl">Samples</span></div>
+
+<!-- R4: SAMPLES -->
+<div class="cb" id="r4">
+  <div class="chdr">
+    <div class="cbdg cb4">4</div>
+    <div><div class="ctag ct4">Criterion 04</div><h3>Samples</h3><div class="csub">Five worked examples — from pure ratio problems to data analytics applications.</div></div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-hd"><span class="sc-n">S1</span><span class="sc-title">Simplify, split, and solve a proportion</span><span class="sc-tag st2">Pure Math</span></div>
+    <div class="sc-bd">
+      <div class="sc-ctx">A bag contains red, blue, and green marbles in the ratio <strong>5:3:2</strong>. There are 80 marbles total. How many of each color? If 10 more green marbles are added, what is the new simplified ratio?</div>
+      <div class="sc-work">
+Part 1 — Split 80 marbles in ratio 5:3:2:
+  Total parts = 5+3+2 = 10
+  One part = 80/10 = 8 marbles
+
+  Red:   5×8 = 40
+  Blue:  3×8 = 24
+  Green: 2×8 = 16
+  Check: 40+24+16 = 80  ✓
+
+Part 2 — Add 10 green marbles:
+  New totals: Red=40, Blue=24, Green=26
+  New ratio: 40:24:26
+  GCF(40,24,26) = 2
+  Simplified: 20:12:13
+
+  Check: 20+12+13=45 parts × (90/45)=2 per part
+  2×20=40, 2×12=24, 2×13=26 ✓
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> Ratio splitting is the core operation for allocating any fixed total into proportional parts. After modifying the quantities, always re-simplify by finding the new GCF. The simplified ratio (20:12:13) cannot be reduced further since GCF(20,12,13)=1.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-hd"><span class="sc-n">S2</span><span class="sc-title">Train/val/test split and class balance</span><span class="sc-tag st2">Data Analytics / ML</span></div>
+    <div class="sc-bd">
+      <div class="sc-ctx">A dataset has 12,500 rows: <strong>8,000 class 0</strong> and <strong>4,500 class 1</strong>. Split into train/val/test = <strong>60:20:20</strong>. Maintain the class ratio in each split (stratified sampling). Find the exact number of each class in each split.</div>
+      <div class="sc-work">
+Step 1 — Split sizes (ratio 60:20:20 = 3:1:1):
+  Total parts = 5.  One part = 12,500/5 = 2,500
+  Train: 3×2,500 = 7,500  |  Val: 1×2,500 = 2,500  |  Test: 2,500
+
+Step 2 — Class ratio in full dataset:
+  Class 0: 8,000/12,500 = 0.64 = 64%
+  Class 1: 4,500/12,500 = 0.36 = 36%
+  Ratio = 8:4.5 → simplify → 16:9
+
+Step 3 — Apply class ratio within each split:
+  Train (7,500 total):
+    Class 0: 7,500 × 0.64 = 4,800
+    Class 1: 7,500 × 0.36 = 2,700
+    Check: 4,800+2,700 = 7,500  ✓
+
+  Val (2,500 total):
+    Class 0: 2,500 × 0.64 = 1,600
+    Class 1: 2,500 × 0.36 = 900
+
+  Test (2,500 total):
+    Class 0: 2,500 × 0.64 = 1,600
+    Class 1: 2,500 × 0.36 = 900
+
+  Full check: (4,800+1,600+1,600)=8,000 Class 0 ✓
+              (2,700+900+900)=4,500 Class 1 ✓
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> Stratified sampling maintains the class ratio across all splits — this is proportional allocation applied to datasets. If you don't stratify, a split might end up with very different class distributions than the original, causing biased training and misleading evaluation. This is ratio reasoning in daily ML practice.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-hd"><span class="sc-n">S3</span><span class="sc-title">Unit rate analysis — cost per acquisition</span><span class="sc-tag st2">Business Analytics</span></div>
+    <div class="sc-bd">
+      <div class="sc-ctx">A marketing team runs three campaigns: Campaign A spent <strong>$12,000</strong> and acquired <strong>480 customers</strong>. Campaign B spent <strong>$8,500</strong> and acquired <strong>340 customers</strong>. Campaign C spent <strong>$15,600</strong> and acquired <strong>520 customers</strong>. Compute the CPA (cost per acquisition) for each, rank them, and determine how many customers Campaign A would acquire if given Campaign C's budget at its own CPA rate.</div>
+      <div class="sc-work">
+Cost Per Acquisition (unit rate: $/customer):
+  A: 12,000/480 = $25.00 per customer
+  B: 8,500/340  = $25.00 per customer
+  C: 15,600/520 = $30.00 per customer
+
+Ranking (best CPA first):  A = B ($25) > C ($30)
+Campaigns A and B are equally efficient.
+Campaign C costs 20% more per customer than A or B.
+
+If Campaign A gets Campaign C's budget ($15,600):
+  At CPA of $25: customers = 15,600/25 = 624
+
+Percentage more customers than C at same budget:
+  (624 − 520)/520 × 100 = 104/520 × 100 = 20%
+  Campaign A would acquire 20% more customers than C for the same spend.
+
+Alternative check (proportion):
+  A's budget:A's customers = C's budget:x
+  12,000/480 = 15,600/x
+  12,000x = 480×15,600 = 7,488,000
+  x = 624  ✓
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> CPA is a unit rate — cost divided to get cost per one customer. Comparing unit rates across campaigns is the standard efficiency comparison in marketing analytics. The proportion setup (12000/480 = 15600/x) shows how to scale from known efficiency to new budget — classic proportional reasoning in a real analytics context.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-hd"><span class="sc-n">S4</span><span class="sc-title">Bayesian likelihood ratio — proportion in probability</span><span class="sc-tag stb">Statistics / Probability</span></div>
+    <div class="sc-bd">
+      <div class="sc-ctx">A medical test for a disease has: <strong>sensitivity = 0.90</strong> (P(+|disease) = 0.90) and <strong>specificity = 0.85</strong> (P(−|no disease) = 0.85). Disease prevalence = <strong>1%</strong>. Compute the likelihood ratio and posterior probability of disease given a positive test using Bayes' theorem.</div>
+      <div class="sc-work">
+Given:
+  P(disease) = 0.01       P(no disease) = 0.99
+  P(+|disease) = 0.90     (sensitivity — true positive rate)
+  P(+|no disease) = 0.15  (1 − specificity — false positive rate)
+
+Likelihood Ratio (LR+):
+  LR+ = P(+|disease) / P(+|no disease)
+       = 0.90 / 0.15 = 6.0
+
+Interpretation: a positive test is 6× more likely if you have the disease
+than if you don't. This is a ratio of probabilities — pure ratio arithmetic.
+
+Bayes' Theorem (using odds form):
+  Prior odds = P(disease)/P(no disease) = 0.01/0.99 ≈ 0.0101
+  Posterior odds = Prior odds × LR+
+                 = 0.0101 × 6.0 = 0.0606
+
+  Posterior probability = 0.0606 / (1 + 0.0606) ≈ 0.0572 ≈ 5.72%
+
+Even with a positive test, probability of disease = only 5.72% (not 90%!)
+because the prior probability is very low (1%).
+
+This counterintuitive result — the base rate fallacy — is entirely a
+consequence of ratio and proportion arithmetic with probabilities.
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> The likelihood ratio is a direct ratio of two probabilities. Bayes' theorem updates beliefs by multiplying prior odds by this ratio. Understanding that a positive test doesn't mean 90% chance of disease requires ratio reasoning — the test's sensitivity is a ratio, the prevalence is a ratio, and the posterior is their proportional combination.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-hd"><span class="sc-n">S5</span><span class="sc-title">Feature scaling as proportional mapping</span><span class="sc-tag stb">Data Preprocessing / ML</span></div>
+    <div class="sc-bd">
+      <div class="sc-ctx">A feature column "age" has values ranging from <strong>22 to 65</strong>. Apply min-max normalization, viewing it as a proportion problem. For an age of 40: what is the normalized value, and what proportion of the range does it represent? Then verify that standardization (z-score) can also be viewed as a ratio.</div>
+      <div class="sc-work">
+Min-max normalization:
+  x' = (x − min) / (max − min)
+  For x = 40:
+  x' = (40 − 22) / (65 − 22) = 18/43 ≈ 0.4186
+
+Proportion interpretation:
+  "40 is what proportion of the way from 22 to 65?"
+  Distance from min: 40 − 22 = 18
+  Total range:       65 − 22 = 43
+  Proportion = 18/43 ≈ 41.9% of the way from min to max.
+
+This IS a proportion: (x−min)/(max−min) = x'/(1−0) = x'/1
+  i.e., the normalized value is proportional to its position in the range.
+
+Z-score standardization as a ratio:
+  z = (x − μ) / σ
+
+  z measures: "how many standard deviations is x from the mean?"
+  This is a ratio of two differences — measuring x's deviation
+  as a proportion of the typical (standard) deviation.
+
+  If x=50, μ=40, σ=8:  z = (50−40)/8 = 10/8 = 1.25
+  Meaning: x is 1.25 standard deviations above the mean.
+  = a ratio of "how far from mean" to "typical distance from mean"
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> Both normalization methods are ratio/proportion operations. Min-max normalization expresses x as a proportion of the range. Z-score expresses x's deviation as a ratio to the standard deviation. Viewing preprocessing through the lens of ratios makes the formulas interpretable rather than mechanical.</div>
+    </div>
+  </div>
+</div>
+
+<div class="sdiv"><span class="sd-lbl">Challenges</span></div>
+
+<!-- R5: CHALLENGES -->
+<div class="cb" id="r5">
+  <div class="chdr">
+    <div class="cbdg cb5">5</div>
+    <div><div class="ctag ct5">Criterion 05</div><h3>Challenges</h3><div class="csub">Five problems — from direct proportion solving to real-world analytics modeling.</div></div>
+  </div>
+
+  <div class="ch-intro chi2">
+    <div class="chi-tag">Instructions</div>
+    <div class="chi-txt">Identify whether each problem involves a ratio, rate, direct proportion, or inverse proportion before solving. For word problems, write the ratio/proportion equation first. Show all steps and verify. Interpret all numerical answers in words.</div>
+    <div class="diff-row"><span class="dtag de">Easy</span><span class="dtag dm">Medium</span><span class="dtag dh">Hard</span></div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-hd"><div class="pnum pn2">1</div><div class="pmeta"><div class="ptitle">Simplify ratios and compute unit rates</div><div class="psub">Ratio simplification · Unit rates · Part-to-whole</div></div><span class="dbadge de">Easy</span></div>
+    <div class="prob-bd">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptxt">Simplify each ratio and compute the unit rate where applicable.</div><span class="peq">(a) Simplify 48:72:120 to its lowest form.</span><span class="peq">(b) A car travels 312 km in 3.5 hours. What is the average speed in km/h?</span><span class="peq">(c) A dataset has 2,400 positive and 7,600 negative examples. Write the class ratio (positive:negative) in simplified form and as a percentage of total for each class.</span><div class="pnote">For (a): find GCF of all three numbers. For (c): the positive class proportion is 2,400/10,000 — express as a fraction, decimal, and percentage.</div></div>
+      <div class="hint"><div class="h-ico">💡</div><div class="h-txt"><strong>Hint (a):</strong> GCF(48,72,120) = 24. Divide each by 24. <strong>Hint (c):</strong> GCF(2400,7600) = 400 → 6:19. Then positive rate = 6/(6+19) = 6/25 = 24%.</div></div>
+      <div class="ans"><div class="a-ico">✏️</div><div class="a-txt">Show all simplification steps and interpret each result in a sentence. Then share.</div></div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-hd"><div class="pnum pn2">2</div><div class="pmeta"><div class="ptitle">Solve proportions using cross-multiplication</div><div class="psub">Missing value · Proportion equation · Verify</div></div><span class="dbadge de">Easy</span></div>
+    <div class="prob-bd">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptxt">Find the missing value in each proportion. Show the cross-multiplication step and verify.</div><span class="peq">(a) 5/8 = x/56</span><span class="peq">(b) (x+3)/12 = 5/4</span><span class="peq">(c) A model's precision is 0.72 on 500 predictions. At the same precision rate, how many true positives would it achieve on 1,250 predictions?</span><div class="pnote">For (c): precision = TP/total predictions. Set up 0.72/1 = TP/1250, or equivalently TP = 0.72 × 1250. But interpret it as a proportion to connect to the lesson.</div></div>
+      <div class="hint"><div class="h-ico">💡</div><div class="h-txt"><strong>Hint (b):</strong> Cross-multiply: 4(x+3) = 12×5 = 60. Solve for x. <strong>Hint (c):</strong> The proportion is: TPs/500 = TP_new/1250. TPs on original = 0.72 × 500 = 360. So 360/500 = TP_new/1250.</div></div>
+      <div class="ans"><div class="a-ico">✏️</div><div class="a-txt">Show cross-multiplication and solution for all three. Write a sentence interpreting (c). Then share.</div></div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-hd"><div class="pnum pn2">3</div><div class="pmeta"><div class="ptitle">Direct and inverse proportion problems</div><div class="psub">Identify type · Set up equation · Solve</div></div><span class="dbadge dm">Medium</span></div>
+    <div class="prob-bd">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptxt">For each: state whether it is direct or inverse proportion, write the proportionality equation, and solve.</div><span class="peq">(a) 6 servers process a job in 40 minutes. How long for 10 servers?</span><span class="peq">(b) A recipe for 8 people uses 600g of pasta. How much for 14 people?</span><span class="peq">(c) In a data pipeline, processing speed is inversely proportional to data volume. At 500MB it runs in 12 seconds. How long for 1,800MB?</span><div class="pnote">For each, first identify direct (more → more) or inverse (more → less), then apply the correct formula. For inverse: product is constant (x₁y₁ = x₂y₂).</div></div>
+      <div class="hint"><div class="h-ico">💡</div><div class="h-txt"><strong>Hint (a):</strong> More servers → less time → INVERSE. k = 6×40 = 240. 10×t = 240. <strong>Hint (b):</strong> More people → more pasta → DIRECT. 600/8 = x/14. <strong>Hint (c):</strong> Inverse. k = 500×12 = 6000. 1800×t = 6000.</div></div>
+      <div class="ans"><div class="a-ico">✏️</div><div class="a-txt">State type, show equation, solve, and verify for all three. Then share.</div></div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-hd"><div class="pnum pn2">4</div><div class="pmeta"><div class="ptitle">Dataset proportional allocation with class balance</div><div class="psub">Ratio splitting · Stratified sampling · Verify</div></div><span class="dbadge dm">Medium</span></div>
+    <div class="prob-bd">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptxt">A dataset has <strong>18,000 total examples</strong>: <strong>12,600 class A</strong>, <strong>3,600 class B</strong>, and <strong>1,800 class C</strong>.<br><br>(a) Write the class ratio A:B:C in simplified form.<br>(b) The dataset is split train:val:test = <strong>5:2:1</strong>. Find the number of examples in each split.<br>(c) Maintain the class ratio in every split (stratified). Find the number of each class in the training set only.<br>(d) After stratification, what percentage of each split is class C? Verify all splits have the same class C proportion.</div><div class="pnote">For (d): class C proportion = class C count / split total. If stratification is done correctly, this will be the same in all three splits.</div></div>
+      <div class="hint"><div class="h-ico">💡</div><div class="h-txt"><strong>Hint (a):</strong> GCF(12600,3600,1800) = 1800. Divide: 7:2:1. <strong>Hint (b):</strong> 5:2:1 = 8 total parts. 18000/8 = 2250 per part. Train=11250, Val=4500, Test=2250. <strong>Hint (c):</strong> Class A proportion = 12600/18000 = 7/10. Class A in train = 7/10 × 11250 = 7875.</div></div>
+      <div class="ans"><div class="a-ico">✏️</div><div class="a-txt">Answer all four parts with full working. For (d), compute class C % for all three splits and confirm they are equal. Then share.</div></div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-hd"><div class="pnum pn2">5</div><div class="pmeta"><div class="ptitle">Multi-campaign ROI analysis using ratios</div><div class="psub">Word Problem · Unit rates · Proportion · Business decision</div></div><span class="dbadge dh">Hard</span></div>
+    <div class="prob-bd">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptxt">A company runs four ad campaigns with the following data:<br><br>
+        Campaign A: $9,600 spend · 320 customers · $45 avg order value<br>
+        Campaign B: $6,400 spend · 200 customers · $60 avg order value<br>
+        Campaign C: $12,800 spend · 480 customers · $38 avg order value<br>
+        Campaign D: $8,000 spend · 250 customers · $55 avg order value<br><br>
+        (a) Compute the CPA (cost per acquisition) for each campaign as a unit rate.<br>
+        (b) Compute the Revenue/Spend ratio (ROAS — Return On Ad Spend) for each. Express as a ratio and as a multiple (e.g. 3.5× means $3.50 revenue per $1 spent).<br>
+        (c) Rank campaigns by ROAS. Which is most efficient?<br>
+        (d) The company has a total budget of $24,000 for next month. They decide to allocate it in proportion to each campaign's ROAS. How much does each campaign receive?<br>
+        (e) At each campaign's own CPA rate, how many total customers will the allocated budget acquire? Which allocation is better: equal split or ROAS-proportional?
+      </div><div class="pnote">For (b): ROAS = (customers × avg order value) / spend. For (d): allocate in proportion to ROAS values — use the ratio splitting method. For (e): customers = budget / CPA for each campaign.</div></div>
+      <div class="hint"><div class="h-ico">💡</div><div class="h-txt"><strong>Hint (b):</strong> A: revenue = 320×45 = $14,400. ROAS = 14400/9600 = 1.5. <strong>Hint (d):</strong> Sum all ROAS values. Each campaign's allocation = (its ROAS / total ROAS) × 24,000. <strong>Hint (e):</strong> Compare total customers from ROAS-proportional allocation vs equal split ($6,000 each).</div></div>
+      <div class="ans"><div class="a-ico">✏️</div><div class="a-txt">Answer all five parts. For (e) write a recommendation sentence. Show all ratio and proportion calculations. Then share for full review.</div></div>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<footer>PRE-ALGEBRA · FRACTIONS, DECIMALS & PERCENTAGES · RATIOS & PROPORTIONS · MATHEMATICS FOR DATA ANALYTICS</footer>
+</body>
+</html>

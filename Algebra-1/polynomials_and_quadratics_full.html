@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Polynomials & Quadratic Equations — Full Deep Dive</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:      #fbf8f2;
+    --paper:   #ffffff;
+    --ink:     #1a160a;
+    --muted:   #7a7060;
+    --faint:   #f2ede2;
+    --rule:    #e8e0d0;
+
+    /* Topic 1 — deep slate teal */
+    --t1:      #0e6678;
+    --t1m:     #178aa0;
+    --t1l:     #e8f5f8;
+    --t1b:     #b8dde8;
+
+    /* Topic 2 — rich burgundy */
+    --t2:      #7a1848;
+    --t2m:     #a82860;
+    --t2l:     #fdf0f6;
+    --t2b:     #f0b8d8;
+
+    /* criterion accents */
+    --c1:#1d6fa8; --c1d:rgba(29,111,168,.08);
+    --c2:#6b34c8; --c2d:rgba(107,52,200,.08);
+    --c3:#0e7a50; --c3d:rgba(14,122,80,.08);
+    --c4:#b86000; --c4d:rgba(184,96,0,.08);
+    --c5:#b81830; --c5d:rgba(184,24,48,.08);
+
+    /* difficulty */
+    --easy:#1a8a4a; --easyd:rgba(26,138,74,.1); --easyb:rgba(26,138,74,.25);
+    --med: #a06800; --medd: rgba(160,104,0,.1);  --medb: rgba(160,104,0,.25);
+    --hard:#b81830; --hardd:rgba(184,24,48,.1);  --hardb:rgba(184,24,48,.25);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--ink);font-family:'Plus Jakarta Sans',sans-serif;font-weight:300;line-height:1.8;}
+
+  /* ── HERO ── */
+  .hero{background:var(--ink);color:#f5f0e6;padding:68px 40px 56px;position:relative;overflow:hidden;}
+  .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:52px 52px;pointer-events:none;}
+  .hero-glow{position:absolute;width:600px;height:600px;border-radius:50%;right:-80px;bottom:-120px;background:radial-gradient(circle,rgba(14,102,120,.22) 0%,transparent 65%);pointer-events:none;}
+  .hero-glow2{position:absolute;width:400px;height:400px;border-radius:50%;left:-60px;top:-80px;background:radial-gradient(circle,rgba(122,24,72,.18) 0%,transparent 65%);pointer-events:none;}
+  .hero-inner{max-width:980px;margin:0 auto;position:relative;z-index:2;}
+  .crumb{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#6a6050;margin-bottom:18px;}
+  .crumb .hi{color:#7ad4e8;}
+  .hero-mode{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:3px;padding:5px 14px;margin-bottom:18px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#a89c80;}
+  h1{font-family:'DM Serif Display',serif;font-size:clamp(2.4rem,5vw,3.8rem);font-weight:400;line-height:1.08;letter-spacing:-.02em;color:#fff;margin-bottom:16px;}
+  h1 .t1e{color:#7ad4e8;font-style:italic;}
+  h1 .t2e{color:#f09ac0;font-style:italic;}
+  .hero-desc{color:#8a8070;font-size:.93rem;max-width:580px;line-height:1.75;margin-bottom:28px;}
+  .hero-pills{display:flex;gap:8px;flex-wrap:wrap;}
+  .hpill{font-family:'Space Mono',monospace;font-size:9px;padding:4px 12px;border-radius:2px;letter-spacing:.06em;text-transform:uppercase;}
+  .hp1{background:rgba(14,102,120,.2);color:#7ad4e8;border:1px solid rgba(14,102,120,.35);}
+  .hp2{background:rgba(122,24,72,.2);color:#f09ac0;border:1px solid rgba(122,24,72,.35);}
+  .hpg{background:rgba(255,255,255,.05);color:#6a6050;border:1px solid rgba(255,255,255,.1);}
+
+  /* ── TOPIC SWITCHER NAV ── */
+  .topic-nav{background:var(--faint);border-bottom:2px solid var(--rule);padding:0 40px;position:sticky;top:0;z-index:100;}
+  .topic-nav-inner{max-width:980px;margin:0 auto;display:flex;gap:0;}
+  .tnav{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:14px 22px;color:var(--muted);text-decoration:none;white-space:nowrap;border-bottom:3px solid transparent;transition:all .2s;}
+  .tnav.tp1:hover{color:var(--t1);border-color:var(--t1);}
+  .tnav.tp2:hover{color:var(--t2);border-color:var(--t2);}
+  .tnav-div{width:1px;background:var(--rule);margin:8px 0;}
+
+  /* ── MAIN ── */
+  main{max-width:980px;margin:0 auto;padding:60px 24px 100px;}
+
+  /* ── TOPIC TITLE BLOCK ── */
+  .topic-title-block{border-radius:14px;padding:28px 32px;margin-bottom:42px;display:flex;align-items:flex-start;gap:20px;}
+  .ttb1{background:var(--t1l);border:1.5px solid var(--t1b);}
+  .ttb2{background:var(--t2l);border:1.5px solid var(--t2b);}
+  .topic-icon-box{width:58px;height:58px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;margin-top:3px;}
+  .tib1{background:var(--t1);} .tib2{background:var(--t2);}
+  .topic-title-text{}
+  .ttag{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:5px;}
+  .tt1{color:var(--t1);} .tt2{color:var(--t2);}
+  h2{font-family:'DM Serif Display',serif;font-size:1.9rem;font-weight:400;line-height:1.2;letter-spacing:-.01em;}
+  .h2t1{color:var(--t1);} .h2t2{color:var(--t2);}
+  .topic-tagline{font-size:.88rem;color:var(--muted);margin-top:5px;}
+
+  /* ── CRITERION HEADER ── */
+  .crit-hdr{display:flex;align-items:center;gap:16px;margin-bottom:24px;padding-bottom:14px;border-bottom:1px solid var(--rule);}
+  .cn-badge{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:1.3rem;font-style:italic;color:#fff;flex-shrink:0;}
+  .cn1{background:var(--c1);} .cn2{background:var(--c2);} .cn3{background:var(--c3);} .cn4{background:var(--c4);} .cn5{background:var(--c5);}
+  .crit-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:3px;}
+  .cl1{color:var(--c1);} .cl2{color:var(--c2);} .cl3{color:var(--c3);} .cl4{color:var(--c4);} .cl5{color:var(--c5);}
+  h3{font-family:'DM Serif Display',serif;font-size:1.4rem;font-weight:400;color:var(--ink);line-height:1.2;}
+  .crit-sub{color:var(--muted);font-size:.84rem;margin-top:2px;}
+  .crit-block{margin-bottom:52px;}
+
+  /* ── PROSE ── */
+  .prose p{font-size:.9rem;color:var(--ink);margin-bottom:12px;line-height:1.8;}
+  .prose p:last-child{margin-bottom:0;}
+  .hl1{color:var(--t1);font-weight:600;} .hl2{color:var(--t2);font-weight:600;}
+  .hlk{color:var(--ink);font-weight:600;} .hlm{color:var(--muted);}
+
+  /* ── MATH BLOCK ── */
+  .math{background:var(--faint);border:1px solid var(--rule);border-radius:8px;padding:16px 20px;margin:12px 0;font-family:'Space Mono',monospace;font-size:.82rem;line-height:2.1;color:#2a200a;}
+  .math.t1{border-left:3px solid var(--t1m);}
+  .math.t2{border-left:3px solid var(--t2m);}
+  .math .dim{color:var(--muted);font-size:.75rem;}
+  .math .hi1{color:var(--t1);font-weight:700;}
+  .math .hi2{color:var(--t2);font-weight:700;}
+  .math .hig{color:var(--c3);font-weight:700;}
+  .math .hiy{color:var(--c4);font-weight:700;}
+  .math .hir{color:var(--c5);font-weight:700;}
+
+  /* ── INFO CARD ── */
+  .icard{background:var(--paper);border:1px solid var(--rule);border-radius:10px;padding:20px 22px;margin:14px 0;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+  .icard-title{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+
+  /* ── GRID CARDS ── */
+  .card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin:14px 0;}
+  .cgcard{background:var(--paper);border:1px solid var(--rule);border-radius:10px;padding:16px 18px;transition:transform .2s,border-color .2s;}
+  .cgcard:hover{transform:translateY(-2px);border-color:rgba(0,0,0,.15);}
+  .cgcard-name{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:7px;}
+  .cgcard-formula{font-family:'Space Mono',monospace;font-size:.84rem;font-weight:700;margin-bottom:8px;}
+  .cgcard-note{font-size:.82rem;color:var(--muted);line-height:1.65;}
+  .cg1 .cgcard-name{color:var(--t1);} .cg1 .cgcard-formula{color:var(--t1);}
+  .cg2 .cgcard-name{color:var(--t2);} .cg2 .cgcard-formula{color:var(--t2);}
+
+  /* ── METHOD BLOCK ── */
+  .method-block{background:var(--paper);border:1px solid var(--rule);border-radius:12px;overflow:hidden;margin:16px 0;}
+  .mb-head{padding:13px 20px;border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:12px;}
+  .mb-num{width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;flex-shrink:0;color:#fff;}
+  .mb-title{font-size:.9rem;font-weight:700;color:var(--ink);}
+  .mb-when{font-size:.78rem;color:var(--muted);}
+  .mb-body{padding:16px 20px;}
+
+  /* ── STEPS ── */
+  .steps{display:flex;flex-direction:column;gap:9px;margin:12px 0;}
+  .step{display:flex;gap:13px;align-items:flex-start;}
+  .sn{min-width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;flex-shrink:0;margin-top:2px;}
+  .sn1{background:var(--t1l);color:var(--t1);border:1px solid var(--t1b);}
+  .sn2{background:var(--t2l);color:var(--t2);border:1px solid var(--t2b);}
+  .st{font-size:.87rem;line-height:1.75;}
+
+  /* ── SAMPLE CARD ── */
+  .sc{background:var(--paper);border:1px solid var(--rule);border-radius:12px;overflow:hidden;margin:14px 0;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+  .sc-head{padding:12px 20px;border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+  .sc-n{font-family:'DM Serif Display',serif;font-size:1.1rem;font-style:italic;flex-shrink:0;}
+  .sc-n1{color:var(--c4);} .sc-n2{color:var(--c4);}
+  .sc-title{font-size:.91rem;font-weight:600;color:var(--ink);flex:1;}
+  .sc-tag{font-family:'Space Mono',monospace;font-size:8.5px;padding:3px 9px;border-radius:20px;letter-spacing:.05em;text-transform:uppercase;flex-shrink:0;}
+  .sct1{background:var(--t1l);color:var(--t1);border:1px solid var(--t1b);}
+  .sct2{background:var(--t2l);color:var(--t2);border:1px solid var(--t2b);}
+  .sc-body{padding:18px 20px;}
+  .sc-ctx{font-size:.86rem;color:var(--muted);margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--rule);line-height:1.75;}
+  .sc-ctx strong{color:var(--ink);font-weight:500;}
+  .sc-work{font-family:'Space Mono',monospace;font-size:.8rem;line-height:2.1;background:var(--faint);border:1px solid var(--rule);border-radius:8px;padding:14px 16px;margin-bottom:10px;color:#1a1000;}
+  .sc-tw{font-size:.82rem;color:var(--muted);padding-top:8px;border-top:1px solid var(--rule);line-height:1.7;}
+  .sc-tw strong{color:var(--c3);font-weight:600;}
+
+  /* ── PURPOSE ROWS ── */
+  .purp-rows{display:flex;flex-direction:column;gap:10px;}
+  .purp-row{display:flex;gap:12px;align-items:flex-start;font-size:.88rem;line-height:1.75;}
+  .ptag{font-family:'Space Mono',monospace;font-size:8.5px;padding:3px 9px;border-radius:3px;white-space:nowrap;flex-shrink:0;margin-top:4px;letter-spacing:.06em;text-transform:uppercase;}
+  .pt1{background:var(--t1l);color:var(--t1);border:1px solid var(--t1b);}
+  .pt2{background:var(--t2l);color:var(--t2);border:1px solid var(--t2b);}
+
+  /* ── TABLE ── */
+  .tbl{width:100%;border-collapse:collapse;margin:12px 0;font-size:.83rem;}
+  .tbl th{font-family:'Space Mono',monospace;font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:9px 14px;text-align:left;border-bottom:2px solid var(--rule);background:var(--faint);}
+  .tbl td{padding:10px 14px;border-bottom:1px solid var(--rule);vertical-align:top;color:var(--ink);line-height:1.65;}
+  .tbl td:first-child{font-family:'Space Mono',monospace;font-size:.8rem;white-space:nowrap;}
+  .tbl tr:last-child td{border-bottom:none;}
+  .tbl tr:hover td{background:#fdfaf4;}
+  .tbl1 td:first-child{color:var(--t1);}
+  .tbl2 td:first-child{color:var(--t2);}
+
+  /* ── CHALLENGE BLOCK ── */
+  .ch-intro{border-radius:10px;padding:20px 24px;margin-bottom:22px;}
+  .chi1{background:var(--t1l);border:1px solid var(--t1b);}
+  .chi2{background:var(--t2l);border:1px solid var(--t2b);}
+  .chi-lbl{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:8px;}
+  .chi-lbl1{color:var(--t1);} .chi-lbl2{color:var(--t2);}
+  .chi-text{font-size:.88rem;line-height:1.75;}
+  .diff-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+  .dtag{font-family:'Space Mono',monospace;font-size:8.5px;padding:3px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em;}
+  .de{background:var(--easyd);color:var(--easy);border:1px solid var(--easyb);}
+  .dm{background:var(--medd); color:var(--med); border:1px solid var(--medb);}
+  .dh{background:var(--hardd);color:var(--hard);border:1px solid var(--hardb);}
+
+  .prob{background:var(--paper);border:1px solid var(--rule);border-radius:12px;overflow:hidden;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+  .prob-head{display:flex;align-items:center;gap:13px;padding:13px 20px;border-bottom:1px solid var(--rule);}
+  .pnum{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:1.1rem;font-style:italic;flex-shrink:0;color:#fff;}
+  .pn1{background:var(--t1);} .pn2{background:var(--t2);}
+  .pmeta{flex:1;}
+  .ptitle{font-size:.91rem;font-weight:600;color:var(--ink);}
+  .psub{font-size:.78rem;color:var(--muted);}
+  .dbadge{font-family:'Space Mono',monospace;font-size:8.5px;padding:3px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em;flex-shrink:0;}
+  .prob-body{padding:18px 20px;}
+  .pstmt{background:var(--faint);border:1px solid var(--rule);border-radius:8px;padding:14px 18px;margin-bottom:12px;}
+  .plbl{font-family:'Space Mono',monospace;font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:7px;}
+  .ptext{font-size:.88rem;color:var(--ink);line-height:1.75;}
+  .peq{font-family:'Space Mono',monospace;font-size:.92rem;font-weight:700;display:block;margin:7px 0 2px;letter-spacing:.02em;}
+  .pnote{font-size:.78rem;color:var(--muted);margin-top:5px;font-style:italic;}
+  .hint{background:#fffef4;border:1px solid #f0e070;border-radius:8px;padding:11px 14px;display:flex;gap:9px;align-items:flex-start;margin-bottom:12px;}
+  .hint-ico{font-size:.88rem;flex-shrink:0;margin-top:1px;}
+  .hint-txt{font-size:.82rem;color:#6a5400;line-height:1.7;}
+  .hint-txt strong{color:#3a2c00;}
+  .ans{background:var(--faint);border:1.5px dashed var(--rule);border-radius:8px;padding:14px 18px;min-height:62px;display:flex;align-items:center;gap:10px;}
+  .ans-ico{font-size:.95rem;opacity:.35;}
+  .ans-txt{font-size:.81rem;color:var(--muted);font-style:italic;}
+
+  /* ── DIVIDERS ── */
+  .big-div{display:flex;align-items:center;gap:16px;margin:72px 0 60px;}
+  .big-div::before,.big-div::after{content:'';flex:1;height:2px;background:var(--rule);}
+  .bd-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);white-space:nowrap;padding:0 8px;}
+  .sec-div{display:flex;align-items:center;gap:12px;margin:40px 0 32px;}
+  .sec-div::before,.sec-div::after{content:'';flex:1;height:1px;background:var(--rule);}
+  .sd-lbl{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);}
+
+  /* ── FOOTER ── */
+  footer{text-align:center;padding:28px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;color:var(--muted);border-top:2px solid var(--rule);}
+
+  code{font-family:'Space Mono',monospace;font-size:.8rem;background:var(--faint);border:1px solid var(--rule);padding:1px 6px;border-radius:4px;}
+
+  @media(max-width:600px){
+    .hero{padding:48px 20px 44px;}
+    main{padding:40px 16px 60px;}
+    .topic-title-block{padding:18px 20px;gap:14px;}
+    .sc-body,.prob-body,.mb-body{padding:14px 16px;}
+    h1{font-size:2rem;}
+    h2{font-size:1.6rem;}
+    .topic-nav{padding:0 12px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════ HERO ══════ -->
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-inner">
+    <div class="crumb">Mathematics for Data Analytics → Algebra I → <span class="hi">Polynomials & Quadratics</span></div>
+    <div class="hero-mode">Full Deep Dive · 2 Subtopics · All 5 Criteria Each</div>
+    <h1><span class="t1e">Polynomial</span> Operations &amp; Factoring<br><span style="font-size:.65em;opacity:.5">and</span><br><span class="t2e">Quadratic</span> Equations</h1>
+    <p class="hero-desc">Two fundamental subtopics treated in full — from foundational definitions and real-world purpose, to every technique, five worked samples each, and five challenge problems per subtopic for you to solve.</p>
+    <div class="hero-pills">
+      <span class="hpill hp1">01 · Polynomial Operations & Factoring</span>
+      <span class="hpill hp2">02 · Quadratic Equations</span>
+      <span class="hpill hpg">5 Criteria Each</span>
+      <span class="hpill hpg">5 Samples Each</span>
+      <span class="hpill hpg">5 Challenges Each</span>
+    </div>
+  </div>
+</div>
+
+<!-- TOPIC NAV -->
+<div class="topic-nav">
+  <div class="topic-nav-inner">
+    <a href="#t1c1" class="tnav tp1">01 Description</a>
+    <a href="#t1c2" class="tnav tp1">02 Purpose</a>
+    <a href="#t1c3" class="tnav tp1">03 How It Works</a>
+    <a href="#t1c4" class="tnav tp1">04 Samples</a>
+    <a href="#t1c5" class="tnav tp1">05 Challenges</a>
+    <div class="tnav-div"></div>
+    <a href="#t2c1" class="tnav tp2">Q01 Description</a>
+    <a href="#t2c2" class="tnav tp2">Q02 Purpose</a>
+    <a href="#t2c3" class="tnav tp2">Q03 How It Works</a>
+    <a href="#t2c4" class="tnav tp2">Q04 Samples</a>
+    <a href="#t2c5" class="tnav tp2">Q05 Challenges</a>
+  </div>
+</div>
+
+<main>
+
+<!-- ████████████████████████████████████████████████████████
+     TOPIC 1 — POLYNOMIAL OPERATIONS & FACTORING
+████████████████████████████████████████████████████████ -->
+<div class="topic-title-block ttb1">
+  <div class="topic-icon-box tib1">∑</div>
+  <div class="topic-title-text">
+    <div class="ttag tt1">Algebra I · Subtopic 01 of 02</div>
+    <h2 class="h2t1">Polynomial Operations & Factoring</h2>
+    <div class="topic-tagline">The algebra of multi-term expressions — how to add, subtract, multiply, and break them apart into simpler factors.</div>
+  </div>
+</div>
+
+<!-- T1 C1: DESCRIPTION -->
+<div class="crit-block" id="t1c1">
+  <div class="crit-hdr">
+    <div class="cn-badge cn1">1</div>
+    <div>
+      <div class="crit-label cl1">Criterion 01</div>
+      <h3>Description</h3>
+      <div class="crit-sub">What polynomials are, their anatomy, and what factoring means.</div>
+    </div>
+  </div>
+
+  <div class="prose">
+    <p>A <span class="hl1">polynomial</span> is an algebraic expression consisting of one or more <span class="hlk">terms</span>, where each term is a product of a constant (the <em>coefficient</em>) and a variable raised to a non-negative integer power (the <em>exponent</em>). The general form is:</p>
+  </div>
+
+  <div class="math t1">
+<span class="dim">-- Standard form (descending order of exponents):</span>
+<span class="hi1">aₙxⁿ + aₙ₋₁xⁿ⁻¹ + ... + a₁x + a₀</span>
+
+<span class="dim">-- Examples:</span>
+  3x² + 5x − 2        <span class="dim">← degree 2 (quadratic), 3 terms (trinomial)</span>
+  7x³ − 4x + 1        <span class="dim">← degree 3 (cubic), 3 terms</span>
+  6x⁵ − x² + 9       <span class="dim">← degree 5, 3 terms</span>
+  4x                  <span class="dim">← degree 1 (linear), 1 term (monomial)</span>
+  8                   <span class="dim">← degree 0 (constant)</span>
+  </div>
+
+  <div class="icard">
+    <div class="icard-title">Polynomial Vocabulary — All the Key Terms</div>
+    <table class="tbl tbl1">
+      <tr><th>Term</th><th>Definition</th><th>Example</th></tr>
+      <tr><td>Term</td><td>A product of a coefficient and variable(s) with exponents. Separated by + or − signs.</td><td>In 3x² + 5x − 2: the terms are 3x², 5x, and −2</td></tr>
+      <tr><td>Coefficient</td><td>The numerical factor of a term.</td><td>In 7x³, the coefficient is 7</td></tr>
+      <tr><td>Degree of a term</td><td>The exponent of the variable in that term.</td><td>Degree of 5x³ is 3</td></tr>
+      <tr><td>Degree of polynomial</td><td>The highest degree among all terms.</td><td>3x⁴ + 2x − 1 has degree 4</td></tr>
+      <tr><td>Leading term</td><td>The term with the highest degree.</td><td>In 3x⁴ + 2x − 1, leading term is 3x⁴</td></tr>
+      <tr><td>Leading coefficient</td><td>The coefficient of the leading term.</td><td>In 3x⁴ + ..., leading coefficient is 3</td></tr>
+      <tr><td>Constant term</td><td>The term with no variable (degree 0).</td><td>In 3x² + 5x − 2, constant term is −2</td></tr>
+      <tr><td>Like terms</td><td>Terms with identical variables and exponents — these are the only ones that can be combined.</td><td>3x² and 7x² are like terms; 3x² and 3x are not</td></tr>
+    </table>
+  </div>
+
+  <div class="prose">
+    <p><span class="hl1">Factoring</span> is the reverse of expanding (multiplying out). To factor a polynomial means to rewrite it as a <span class="hlk">product of simpler expressions</span> — its factors — such that multiplying those factors back together gives the original polynomial. It is the algebraic equivalent of finding the building blocks of a number.</p>
+  </div>
+
+  <div class="math t1">
+<span class="dim">Expanding (forward):  (x + 3)(x − 2)  =  x² + x − 6</span>
+<span class="dim">Factoring (reverse):   x² + x − 6     =  (x + 3)(x − 2)</span>
+
+<span class="hi1">Both directions must give the same expression.</span>
+<span class="dim">Verify by expanding factors: always multiply back to check.</span>
+  </div>
+</div>
+
+<div class="sec-div"><span class="sd-lbl">Purpose</span></div>
+
+<!-- T1 C2: PURPOSE -->
+<div class="crit-block" id="t1c2">
+  <div class="crit-hdr">
+    <div class="cn-badge cn2">2</div>
+    <div>
+      <div class="crit-label cl2">Criterion 02</div>
+      <h3>Purpose</h3>
+      <div class="crit-sub">Why polynomial operations and factoring matter in mathematics and data analytics.</div>
+    </div>
+  </div>
+
+  <div class="purp-rows">
+    <div class="purp-row"><span class="ptag pt1">Algebra</span><span>Polynomials are the <strong>language of algebra</strong>. Every formula, model, and relationship you write in algebra is either a polynomial or built from one. Factoring is how you solve polynomial equations — you can't solve x² + 5x + 6 = 0 without factoring it first (or using the quadratic formula, which is also derived from polynomial manipulation).</span></div>
+    <div class="purp-row"><span class="ptag pt1">ML Models</span><span><strong>Polynomial regression</strong> extends linear regression by adding polynomial terms (x², x³) as features. Understanding how to work with polynomial expressions is essential for building, interpreting, and regularizing these models. Feature engineering — creating x², x·y interaction terms — is polynomial operations applied to data columns.</span></div>
+    <div class="purp-row"><span class="ptag pt1">Calculus</span><span>Differentiation and integration rules for polynomials are among the simplest: d/dx[xⁿ] = n·xⁿ⁻¹. Every calculus operation in machine learning — gradient computation, loss function derivatives — applies polynomial rules. You must know polynomials before calculus makes sense.</span></div>
+    <div class="purp-row"><span class="ptag pt1">Simplification</span><span>Factoring simplifies complex rational expressions, reduces fractions, and cancels common factors — critical when deriving formulas, simplifying cost functions, and reducing model equations to interpretable forms.</span></div>
+    <div class="purp-row"><span class="ptag pt1">Root Finding</span><span>The roots (zeros) of a polynomial are where the expression equals zero. In data analytics, roots represent <strong>break-even points, equilibrium values, and critical thresholds</strong>. Factoring finds roots directly by setting each factor equal to zero.</span></div>
+    <div class="purp-row"><span class="ptag pt1">Cryptography</span><span>Polynomial arithmetic over finite fields is the mathematical foundation of modern encryption algorithms (AES, RSA, elliptic curves) and error-correcting codes used in data storage and transmission.</span></div>
+  </div>
+</div>
+
+<div class="sec-div"><span class="sd-lbl">How It Works</span></div>
+
+<!-- T1 C3: HOW IT WORKS -->
+<div class="crit-block" id="t1c3">
+  <div class="crit-hdr">
+    <div class="cn-badge cn3">3</div>
+    <div>
+      <div class="crit-label cl3">Criterion 03</div>
+      <h3>How This Works</h3>
+      <div class="crit-sub">Operations on polynomials, then every major factoring technique with worked examples.</div>
+    </div>
+  </div>
+
+  <div class="prose"><p><strong>Part A — Polynomial Operations</strong></p></div>
+
+  <!-- ADD/SUBTRACT -->
+  <div class="method-block">
+    <div class="mb-head">
+      <div class="mb-num" style="background:var(--t1)">+−</div>
+      <div><div class="mb-title">Addition & Subtraction</div><div class="mb-when">Combine like terms only — same variable, same exponent.</div></div>
+    </div>
+    <div class="mb-body">
+      <div class="math t1">
+(3x² + 5x − 2) + (x² − 3x + 7)
+= (3x² + x²) + (5x − 3x) + (−2 + 7)    <span class="dim">← group like terms</span>
+= <span class="hi1">4x² + 2x + 5</span>
+
+(4x³ − 2x + 1) − (x³ + 3x − 4)
+= 4x³ − 2x + 1 − x³ − 3x + 4           <span class="dim">← distribute the minus sign FIRST</span>
+= (4x³ − x³) + (−2x − 3x) + (1 + 4)
+= <span class="hi1">3x³ − 5x + 5</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MULTIPLY -->
+  <div class="method-block">
+    <div class="mb-head">
+      <div class="mb-num" style="background:var(--t1)">×</div>
+      <div><div class="mb-title">Multiplication</div><div class="mb-when">Every term in the first polynomial multiplies every term in the second. FOIL is the 2×2 special case.</div></div>
+    </div>
+    <div class="mb-body">
+      <div class="math t1">
+<span class="dim">-- FOIL for (a+b)(c+d): First, Outer, Inner, Last</span>
+(2x + 3)(x − 4)
+= (2x)(x) + (2x)(−4) + (3)(x) + (3)(−4)    <span class="dim">← F, O, I, L</span>
+= 2x² − 8x + 3x − 12
+= <span class="hi1">2x² − 5x − 12</span>
+
+<span class="dim">-- General distributive multiplication:</span>
+(x + 2)(x² − 3x + 1)
+= x(x² − 3x + 1) + 2(x² − 3x + 1)
+= x³ − 3x² + x + 2x² − 6x + 2
+= <span class="hi1">x³ − x² − 5x + 2</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="icard">
+    <div class="icard-title">Special Product Patterns — Memorize These</div>
+    <div class="math t1">
+<span class="hi1">Difference of Squares:</span>     (a + b)(a − b)   = a² − b²
+  Example: (x + 5)(x − 5) = x² − 25
+
+<span class="hi1">Perfect Square Trinomial (+):</span> (a + b)²         = a² + 2ab + b²
+  Example: (x + 3)² = x² + 6x + 9
+
+<span class="hi1">Perfect Square Trinomial (−):</span> (a − b)²         = a² − 2ab + b²
+  Example: (2x − 1)² = 4x² − 4x + 1
+
+<span class="hi1">Sum of Cubes:</span>               a³ + b³ = (a + b)(a² − ab + b²)
+<span class="hi1">Difference of Cubes:</span>         a³ − b³ = (a − b)(a² + ab + b²)
+    </div>
+  </div>
+
+  <div class="prose" style="margin-top:16px;"><p><strong>Part B — Factoring Techniques (in order of application)</strong></p><p>Always apply these techniques in order — start with GCF, then check for special patterns, then trial-and-error or the AC method.</p></div>
+
+  <!-- FACTOR 1: GCF -->
+  <div class="method-block">
+    <div class="mb-head">
+      <div class="mb-num" style="background:var(--t1)">1</div>
+      <div><div class="mb-title">Factor out the GCF</div><div class="mb-when">ALWAYS do this first. If every term shares a common factor, pull it out front.</div></div>
+    </div>
+    <div class="mb-body">
+      <div class="steps">
+        <div class="step"><div class="sn sn1">1</div><div class="st">Find the GCF of all coefficients and any common variable factors.</div></div>
+        <div class="step"><div class="sn sn1">2</div><div class="st">Divide each term by the GCF. Write: GCF × (remaining expression).</div></div>
+        <div class="step"><div class="sn sn1">3</div><div class="st">Verify by expanding: GCF × (remaining) must equal the original.</div></div>
+      </div>
+      <div class="math t1">
+6x³ + 9x² − 12x
+GCF of 6, 9, 12 = 3.  Common variable = x (lowest power: x¹)
+GCF = 3x
+
+= <span class="hi1">3x(2x² + 3x − 4)</span>
+
+Verify: 3x·2x² + 3x·3x + 3x·(−4) = 6x³ + 9x² − 12x  ✓
+      </div>
+    </div>
+  </div>
+
+  <!-- FACTOR 2: DIFF OF SQUARES -->
+  <div class="method-block">
+    <div class="mb-head">
+      <div class="mb-num" style="background:var(--t1)">2</div>
+      <div><div class="mb-title">Difference of Squares</div><div class="mb-when">When you have a² − b² with two perfect square terms and a minus sign.</div></div>
+    </div>
+    <div class="mb-body">
+      <div class="math t1">
+Pattern: a² − b² = (a + b)(a − b)
+
+x² − 49    = (x + 7)(x − 7)         <span class="dim">← a=x, b=7</span>
+4x² − 25   = (2x + 5)(2x − 5)       <span class="dim">← a=2x, b=5</span>
+9x² − 16y² = (3x + 4y)(3x − 4y)     <span class="dim">← a=3x, b=4y</span>
+
+<span class="dim">Common mistake: a² + b² does NOT factor over real numbers!</span>
+x² + 9  ←  <span class="hir">cannot be factored (sum of squares)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FACTOR 3: PERFECT SQUARE TRINOMIAL -->
+  <div class="method-block">
+    <div class="mb-head">
+      <div class="mb-num" style="background:var(--t1)">3</div>
+      <div><div class="mb-title">Perfect Square Trinomial</div><div class="mb-when">When a trinomial fits a² ± 2ab + b² — check if first and last terms are perfect squares.</div></div>
+    </div>
+    <div class="mb-body">
+      <div class="math t1">
+Pattern: a² + 2ab + b² = (a + b)²
+         a² − 2ab + b² = (a − b)²
+
+x² + 6x + 9      <span class="dim">← a=x, b=3, middle = 2(x)(3)=6x ✓</span>
+= <span class="hi1">(x + 3)²</span>
+
+4x² − 20x + 25   <span class="dim">← a=2x, b=5, middle = 2(2x)(5)=20x ✓</span>
+= <span class="hi1">(2x − 5)²</span>
+
+<span class="dim">Test: is middle term = 2 × √(first) × √(last)?  If yes → perfect square.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FACTOR 4: TRINOMIALS -->
+  <div class="method-block">
+    <div class="mb-head">
+      <div class="mb-num" style="background:var(--t1)">4</div>
+      <div><div class="mb-title">Factoring Trinomials (x² + bx + c and ax² + bx + c)</div><div class="mb-when">The most common factoring type. Find two numbers that multiply to c and add to b.</div></div>
+    </div>
+    <div class="mb-body">
+      <div class="steps">
+        <div class="step"><div class="sn sn1">A</div><div class="st"><strong>When leading coefficient = 1</strong> (x² + bx + c): Find two numbers that multiply to c and add to b. Write as (x + p)(x + q).</div></div>
+        <div class="step"><div class="sn sn1">B</div><div class="st"><strong>When leading coefficient ≠ 1</strong> (ax² + bx + c): Use the AC method — multiply a·c, find two numbers that multiply to ac and add to b, split the middle term, then factor by grouping.</div></div>
+      </div>
+      <div class="math t1">
+<span class="dim">Case A — Leading coefficient 1:</span>
+x² + 7x + 12
+Need: two numbers × = 12, + = 7
+→ 3 and 4  (3×4=12, 3+4=7)
+= <span class="hi1">(x + 3)(x + 4)</span>
+
+x² − 5x − 14
+Need: two numbers × = −14, + = −5
+→ −7 and 2  (−7×2=−14, −7+2=−5)
+= <span class="hi1">(x − 7)(x + 2)</span>
+
+<span class="dim">Case B — AC Method (leading coefficient ≠ 1):</span>
+6x² + 11x + 4
+a·c = 6·4 = 24   Need: × = 24, + = 11  →  3 and 8
+Split middle: 6x² + 3x + 8x + 4
+Group:        3x(2x + 1) + 4(2x + 1)
+Factor:       <span class="hi1">(2x + 1)(3x + 4)</span>
+Verify: (2x+1)(3x+4) = 6x²+8x+3x+4 = 6x²+11x+4  ✓
+      </div>
+    </div>
+  </div>
+
+  <!-- FACTOR 5: GROUPING -->
+  <div class="method-block">
+    <div class="mb-head">
+      <div class="mb-num" style="background:var(--t1)">5</div>
+      <div><div class="mb-title">Factoring by Grouping</div><div class="mb-when">For four-term polynomials. Group into pairs, factor each pair, extract common binomial.</div></div>
+    </div>
+    <div class="mb-body">
+      <div class="math t1">
+x³ + 2x² − 3x − 6
+Group: (x³ + 2x²) + (−3x − 6)
+Factor each group:
+  x²(x + 2) + (−3)(x + 2)
+Extract common binomial (x + 2):
+= <span class="hi1">(x + 2)(x² − 3)</span>
+Verify: (x+2)(x²−3) = x³−3x+2x²−6 = x³+2x²−3x−6  ✓
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec-div"><span class="sd-lbl">Samples</span></div>
+
+<!-- T1 C4: SAMPLES -->
+<div class="crit-block" id="t1c4">
+  <div class="crit-hdr">
+    <div class="cn-badge cn4">4</div>
+    <div>
+      <div class="crit-label cl4">Criterion 04</div>
+      <h3>Samples</h3>
+      <div class="crit-sub">Five worked examples — from pure algebra to real-world data analytics applications.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-head"><span class="sc-n sc-n1">S1</span><span class="sc-title">Multiply, then factor the result — verification cycle</span><span class="sc-tag sct1">Pure Algebra</span></div>
+    <div class="sc-body">
+      <div class="sc-ctx">Expand (3x − 2)(x + 5), then factor the result back to verify. This bidirectional cycle is how you build confidence with both operations.</div>
+      <div class="sc-work">
+Expand: (3x − 2)(x + 5)
+= 3x·x + 3x·5 + (−2)·x + (−2)·5       ← FOIL
+= 3x² + 15x − 2x − 10
+= 3x² + 13x − 10
+
+Factor back: 3x² + 13x − 10
+a·c = 3·(−10) = −30
+Need: × = −30,  + = 13  →  −2 and 15
+Split: 3x² − 2x + 15x − 10
+Group: x(3x − 2) + 5(3x − 2)
+= (3x − 2)(x + 5)  ✓ — matches original
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> Expanding and factoring are inverse operations. If you factor correctly, expanding the factors must reproduce the original expression exactly.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-head"><span class="sc-n sc-n1">S2</span><span class="sc-title">Finding roots of a polynomial function</span><span class="sc-tag sct1">Algebra / Root Finding</span></div>
+    <div class="sc-body">
+      <div class="sc-ctx">Find all values of x where the polynomial <strong>f(x) = 2x³ − 8x</strong> equals zero. These are the roots — where the function crosses the x-axis.</div>
+      <div class="sc-work">
+f(x) = 2x³ − 8x = 0
+
+Step 1 — Factor out GCF:
+  2x(x² − 4) = 0
+
+Step 2 — Factor difference of squares:
+  2x(x + 2)(x − 2) = 0
+
+Step 3 — Zero Product Property:
+  If a product = 0, at least one factor = 0.
+  2x = 0  →  x = 0
+  x + 2 = 0  →  x = −2
+  x − 2 = 0  →  x = 2
+
+Roots: x = −2, 0, 2
+
+Verify f(2): 2(8) − 8(2) = 16 − 16 = 0  ✓
+Verify f(−2): 2(−8) − 8(−2) = −16 + 16 = 0  ✓
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> Factoring is the fastest path to finding polynomial roots. In data analytics, roots represent zero-crossing thresholds — e.g., the output value where a model transitions from negative to positive prediction.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-head"><span class="sc-n sc-n1">S3</span><span class="sc-title">Polynomial feature engineering for regression</span><span class="sc-tag sct1">Machine Learning</span></div>
+    <div class="sc-body">
+      <div class="sc-ctx">A dataset has one feature x (temperature in °C) and target y (electricity demand). A linear model ŷ = w₀ + w₁x underfits. You decide to add <strong>polynomial features</strong> by expanding (1 + x)² to create new columns. Show the algebraic expansion and what it adds to the feature matrix.</div>
+      <div class="sc-work">
+Original feature vector: [1, x]
+
+Add polynomial features by expanding (1 + x)²:
+  (1 + x)² = 1 + 2x + x²
+  → New features: 1, x, x²
+
+Polynomial regression model:
+  ŷ = w₀ + w₁x + w₂x²
+
+For x = [15, 20, 25, 30] (temperatures):
+  x² = [225, 400, 625, 900]
+
+Feature matrix X:
+  [[1,  15, 225],
+   [1,  20, 400],
+   [1,  25, 625],
+   [1,  30, 900]]
+
+This is still solved as a linear system (Ax=b) —
+the model is linear in the WEIGHTS, not in x.
+The polynomial expansion is just feature engineering.
+
+Python:  from sklearn.preprocessing import PolynomialFeatures
+         poly = PolynomialFeatures(degree=2)
+         X_poly = poly.fit_transform(X)
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> Polynomial feature engineering is one of the most powerful and common preprocessing techniques in ML. It is literally polynomial expansion applied to data columns. Understanding (a+b)² = a²+2ab+b² is the foundation of understanding what PolynomialFeatures does.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-head"><span class="sc-n sc-n1">S4</span><span class="sc-title">Simplifying a rational expression by factoring</span><span class="sc-tag sct1">Algebra / Simplification</span></div>
+    <div class="sc-body">
+      <div class="sc-ctx">Simplify the rational expression (x² − 9) / (x² + x − 6). This appears in calculus when simplifying derivatives and in probability when reducing likelihood ratios.</div>
+      <div class="sc-work">
+Numerator:   x² − 9
+= (x + 3)(x − 3)        ← difference of squares
+
+Denominator: x² + x − 6
+Need: × = −6, + = 1  →  3 and −2
+= (x + 3)(x − 2)
+
+Fraction: (x + 3)(x − 3)
+          ───────────────
+          (x + 3)(x − 2)
+
+Cancel common factor (x + 3), valid when x ≠ −3:
+
+=  (x − 3)              x ≠ −3, x ≠ 2
+   ───────
+   (x − 2)
+
+You CANNOT cancel unless the factors are identical.
+Canceling terms (not factors) is the most common error here.
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> Factoring before canceling is mandatory — you can only cancel common factors (entire expressions in numerator AND denominator), never individual terms. This skill appears constantly in calculus when finding limits and simplifying derivatives.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-head"><span class="sc-n sc-n1">S5</span><span class="sc-title">Profit modeling — polynomial total cost function</span><span class="sc-tag sct1">Business Analytics</span></div>
+    <div class="sc-body">
+      <div class="sc-ctx">A company's monthly profit (in thousands) is modeled as P(x) = −x³ + 6x² + 4x where x = hundreds of units sold. Factor to find the break-even points (where P = 0) and determine the range of profitable production.</div>
+      <div class="sc-work">
+P(x) = −x³ + 6x² + 4x
+
+Step 1 — Factor out GCF (−x, since leading is negative):
+  −x(x² − 6x − 4) ... try just x first:
+  = x(−x² + 6x + 4)
+
+Actually: GCF = x (all terms have x):
+  P(x) = x(−x² + 6x + 4) = 0
+
+Step 2 — Zero Product:
+  x = 0  →  break-even at x=0 (trivial)
+  −x² + 6x + 4 = 0
+  x² − 6x − 4 = 0  ← doesn't factor nicely, use quadratic formula:
+  x = (6 ± √(36+16)) / 2 = (6 ± √52) / 2
+  x ≈ (6 ± 7.21) / 2
+  x ≈ 6.61  or  x ≈ −0.61 (negative, discard)
+
+Break-even points: x = 0 and x ≈ 6.61 (hundreds of units)
+Profitable range: 0 < x < 6.61 (i.e., sell between 1 and 661 units)
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> Real business functions often combine factoring and the quadratic formula. Factoring out the GCF first simplifies the remaining expression. Break-even points are polynomial roots — factoring finds them directly.</div>
+    </div>
+  </div>
+</div>
+
+<div class="sec-div"><span class="sd-lbl">Challenges</span></div>
+
+<!-- T1 C5: CHALLENGES -->
+<div class="crit-block" id="t1c5">
+  <div class="crit-hdr">
+    <div class="cn-badge cn5">5</div>
+    <div>
+      <div class="crit-label cl5">Criterion 05</div>
+      <h3>Challenges</h3>
+      <div class="crit-sub">Five problems to solve — show full working, not just answers.</div>
+    </div>
+  </div>
+
+  <div class="ch-intro chi1">
+    <div class="chi-lbl chi-lbl1">Instructions</div>
+    <div class="chi-text">Each problem tests a specific technique from this subtopic. Show every step. For factoring problems, always verify by expanding your answer back. For word problems, define variables and write the expression first.</div>
+    <div class="diff-row"><span class="dtag de">Easy</span><span class="dtag dm">Medium</span><span class="dtag dh">Hard</span></div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-head"><div class="pnum pn1">1</div><div class="pmeta"><div class="ptitle">Multiply two binomials and identify the pattern</div><div class="psub">Operations · Special Products</div></div><span class="dbadge de">Easy</span></div>
+    <div class="prob-body">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptext">Expand each expression. After expanding, identify which special product pattern it represents.</div><span class="peq">(a) &nbsp;(4x − 3)(4x + 3)</span><span class="peq">(b) &nbsp;(2x + 5)²</span><span class="peq">(c) &nbsp;(x − 7)²</span><div class="pnote">Name the pattern (Difference of Squares, Perfect Square) after expanding each one.</div></div>
+      <div class="hint"><div class="hint-ico">💡</div><div class="hint-txt"><strong>Hint:</strong> Apply FOIL or direct distribution to each. After getting the result, match it against the special product formulas: a²−b², a²+2ab+b², or a²−2ab+b².</div></div>
+      <div class="ans"><div class="ans-ico">✏️</div><div class="ans-txt">Show expansion of each, state the pattern name, then share your answers.</div></div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-head"><div class="pnum pn1">2</div><div class="pmeta"><div class="ptitle">Factor completely — GCF then trinomial</div><div class="psub">Factoring · Two-step</div></div><span class="dbadge de">Easy</span></div>
+    <div class="prob-body">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptext">Factor each polynomial completely. "Completely" means you cannot factor any further.</div><span class="peq">(a) &nbsp;5x² + 10x − 40</span><span class="peq">(b) &nbsp;3x³ − 27x</span><div class="pnote">Always factor out the GCF first, then check if what remains can be factored further.</div></div>
+      <div class="hint"><div class="hint-ico">💡</div><div class="hint-txt"><strong>Hint:</strong> (a) GCF of 5,10,40 = 5. After pulling out 5, factor the remaining trinomial. (b) GCF = 3x. After pulling that out, you have a difference of squares pattern remaining.</div></div>
+      <div class="ans"><div class="ans-ico">✏️</div><div class="ans-txt">Show GCF step, then full factoring, and verify by expanding.</div></div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-head"><div class="pnum pn1">3</div><div class="pmeta"><div class="ptitle">Factor a trinomial with leading coefficient ≠ 1</div><div class="psub">Factoring · AC Method</div></div><span class="dbadge dm">Medium</span></div>
+    <div class="prob-body">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptext">Factor the following trinomials completely using the AC method.</div><span class="peq">(a) &nbsp;6x² + 7x − 3</span><span class="peq">(b) &nbsp;4x² − 12x + 9</span><div class="pnote">(b) has a special structure — check if it's a perfect square trinomial before applying AC method.</div></div>
+      <div class="hint"><div class="hint-ico">💡</div><div class="hint-txt"><strong>Hint (a):</strong> a·c = 6×(−3) = −18. Find two numbers that multiply to −18 and add to 7. Split the middle term, then factor by grouping. <strong>Hint (b):</strong> Check: is √(4x²) = 2x? Is √9 = 3? Is 12x = 2×(2x)×3? If all yes, it's a perfect square.</div></div>
+      <div class="ans"><div class="ans-ico">✏️</div><div class="ans-txt">Show AC method steps for (a) and identify the pattern for (b). Verify both.</div></div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-head"><div class="pnum pn1">4</div><div class="pmeta"><div class="ptitle">Simplify a rational expression</div><div class="psub">Factoring · Rational Expressions</div></div><span class="dbadge dm">Medium</span></div>
+    <div class="prob-body">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptext">Simplify the rational expression fully. State any values of x for which the expression is undefined.</div><span class="peq">(2x² + x − 6) / (x² − x − 6)</span><div class="pnote">Factor both numerator and denominator, then cancel any common factors. You CANNOT cancel individual terms.</div></div>
+      <div class="hint"><div class="hint-ico">💡</div><div class="hint-txt"><strong>Hint:</strong> For the numerator (2x²+x−6): a·c = 2×(−6) = −12. Find two numbers: ×=−12, +=1. For the denominator (x²−x−6): leading coefficient is 1, so find two numbers: ×=−6, +=−1. After factoring both, look for a common binomial factor to cancel.</div></div>
+      <div class="ans"><div class="ans-ico">✏️</div><div class="ans-txt">Show factoring of numerator and denominator, the simplified result, and the restricted values of x.</div></div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-head"><div class="pnum pn1">5</div><div class="pmeta"><div class="ptitle">Revenue model — factor and find break-even</div><div class="psub">Word Problem · Business Analytics</div></div><span class="dbadge dh">Hard</span></div>
+    <div class="prob-body">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptext">A product's revenue function is R(x) = 8x² − 2x and its cost function is C(x) = 6x² + 4x + 10, where x is the number of units sold (in hundreds). <br><br>(a) Write and simplify the profit function P(x) = R(x) − C(x).<br>(b) Factor P(x) completely.<br>(c) Find all break-even points where P(x) = 0.<br>(d) Determine for which values of x the product is profitable (P(x) &gt; 0).</div><div class="pnote">For (d), after factoring, think about when a negative quadratic (leading coefficient is negative) is positive.</div></div>
+      <div class="hint"><div class="hint-ico">💡</div><div class="hint-txt"><strong>Hint:</strong> (a) Subtract C(x) from R(x) term by term. (b) Factor out any GCF from P(x) first. (c) Set each factor equal to 0. (d) Since the leading term will be negative, the parabola opens downward — it is positive BETWEEN the two roots.</div></div>
+      <div class="ans"><div class="ans-ico">✏️</div><div class="ans-txt">Write P(x), factor it, find roots, state the profitable range, and interpret with a sentence.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ████████████████████████████████████████████████████████
+     TOPIC DIVIDER
+████████████████████████████████████████████████████████ -->
+<div class="big-div"><span class="bd-label">End of Subtopic 01 · Beginning of Subtopic 02</span></div>
+
+<!-- ████████████████████████████████████████████████████████
+     TOPIC 2 — QUADRATIC EQUATIONS
+████████████████████████████████████████████████████████ -->
+<div class="topic-title-block ttb2">
+  <div class="topic-icon-box tib2">𝑥²</div>
+  <div class="topic-title-text">
+    <div class="ttag tt2">Algebra I · Subtopic 02 of 02</div>
+    <h2 class="h2t2">Quadratic Equations</h2>
+    <div class="topic-tagline">Equations with a degree-2 term — three complete solution methods: factoring, completing the square, and the quadratic formula.</div>
+  </div>
+</div>
+
+<!-- T2 C1: DESCRIPTION -->
+<div class="crit-block" id="t2c1">
+  <div class="crit-hdr">
+    <div class="cn-badge cn1">1</div>
+    <div>
+      <div class="crit-label cl1">Criterion 01</div>
+      <h3>Description</h3>
+      <div class="crit-sub">What quadratic equations are, their standard forms, and the anatomy of their solutions.</div>
+    </div>
+  </div>
+
+  <div class="prose">
+    <p>A <span class="hl2">quadratic equation</span> is any equation that can be written in the standard form:</p>
+  </div>
+
+  <div class="math t2">
+<span class="hi2">ax² + bx + c = 0</span>
+
+where:  a ≠ 0  (if a=0 it reduces to a linear equation)
+        a = leading coefficient
+        b = linear coefficient
+        c = constant term
+        x = the unknown to solve for
+
+Examples:
+  x² − 5x + 6 = 0       a=1,  b=−5, c=6
+  2x² + 3x − 2 = 0      a=2,  b=3,  c=−2
+  x² − 4 = 0            a=1,  b=0,  c=−4
+  x² + 6x + 9 = 0       a=1,  b=6,  c=9  (perfect square)
+  x² + 1 = 0            a=1,  b=0,  c=1   (no real solutions)
+  </div>
+
+  <div class="prose">
+    <p>A quadratic equation can have <span class="hlk">zero, one, or two real solutions</span> (also called <em>roots</em> or <em>zeros</em>). The <span class="hl2">discriminant</span> — the expression b² − 4ac from inside the quadratic formula — tells you exactly how many real solutions exist before you even solve.</p>
+  </div>
+
+  <div class="icard">
+    <div class="icard-title">The Discriminant — Δ = b² − 4ac</div>
+    <table class="tbl tbl2">
+      <tr><th>Discriminant Value</th><th>Number of Real Solutions</th><th>Nature of Solutions</th><th>Graph (parabola)</th></tr>
+      <tr><td>Δ &gt; 0</td><td>2 distinct real solutions</td><td>Two different real values of x</td><td>Crosses x-axis at 2 points</td></tr>
+      <tr><td>Δ = 0</td><td>1 repeated real solution</td><td>One value: x = −b/(2a) (double root)</td><td>Touches x-axis at exactly 1 point (vertex on axis)</td></tr>
+      <tr><td>Δ &lt; 0</td><td>0 real solutions</td><td>Two complex conjugate solutions (involving √−1)</td><td>Entirely above or below x-axis — never crosses</td></tr>
+    </table>
+  </div>
+
+  <div class="prose">
+    <p>Geometrically, a quadratic equation ax² + bx + c = 0 asks: <em>"Where does the parabola y = ax²+bx+c cross the x-axis?"</em> Each crossing point is a root. The discriminant tells you whether it crosses twice (Δ&gt;0), just touches (Δ=0), or doesn't cross at all (Δ&lt;0).</p>
+  </div>
+
+  <div class="math t2">
+<span class="dim">-- Sum and product of roots (Vieta's formulas):</span>
+If x₁ and x₂ are the two roots of ax² + bx + c = 0, then:
+
+  <span class="hi2">x₁ + x₂ = −b/a</span>   (sum of roots)
+  <span class="hi2">x₁ · x₂ = c/a</span>    (product of roots)
+
+Example: x² − 5x + 6 = 0 → roots are x=2, x=3
+  Sum: 2 + 3 = 5 = −(−5)/1  ✓
+  Product: 2 × 3 = 6 = 6/1  ✓
+
+These formulas let you check your answers instantly.
+  </div>
+</div>
+
+<div class="sec-div"><span class="sd-lbl">Purpose</span></div>
+
+<!-- T2 C2: PURPOSE -->
+<div class="crit-block" id="t2c2">
+  <div class="crit-hdr">
+    <div class="cn-badge cn2">2</div>
+    <div>
+      <div class="crit-label cl2">Criterion 02</div>
+      <h3>Purpose</h3>
+      <div class="crit-sub">Why quadratic equations appear throughout data analytics and applied mathematics.</div>
+    </div>
+  </div>
+
+  <div class="purp-rows">
+    <div class="purp-row"><span class="ptag pt2">Optimization</span><span>Any quadratic function has a single minimum or maximum — the <strong>vertex</strong>. This is the basis of all quadratic optimization. Mean Squared Error (the most common ML loss function) is quadratic in the model weights — minimizing it means finding the vertex, which requires solving a quadratic or its derivative (which is linear).</span></div>
+    <div class="purp-row"><span class="ptag pt2">Statistics</span><span>The <strong>variance formula</strong> σ² = Σ(xᵢ − μ)² / n involves squaring deviations — a quadratic operation. The least squares criterion that drives linear regression minimizes a sum of squared residuals — a quadratic expression in the model coefficients.</span></div>
+    <div class="purp-row"><span class="ptag pt2">Physics / Simulation</span><span>Projectile motion, signal decay, gravitational attraction — all modeled by quadratics. In simulation and game engines, quadratic equations determine collision times, trajectory intersections, and physics-based predictions.</span></div>
+    <div class="purp-row"><span class="ptag pt2">Finance</span><span>Quadratic equations model <strong>break-even analysis, portfolio variance minimization, and option pricing</strong>. The efficient frontier in portfolio optimization is derived from a quadratic program whose solution requires quadratic roots.</span></div>
+    <div class="purp-row"><span class="ptag pt2">Completing the Square</span><span>The technique of completing the square is directly used in <strong>deriving the normal distribution's bell curve, Gaussian processes, kernel methods, and the closed-form solution of regression</strong>. It is not just a solving technique — it is a mathematical transformation used throughout ML theory.</span></div>
+    <div class="purp-row"><span class="ptag pt2">Discriminant</span><span>The discriminant b²−4ac determines whether a quadratic model has real intersections — used in collision detection, determining feasibility of optimization constraints, and testing whether two curves meet in a given domain.</span></div>
+  </div>
+</div>
+
+<div class="sec-div"><span class="sd-lbl">How It Works</span></div>
+
+<!-- T2 C3: HOW IT WORKS -->
+<div class="crit-block" id="t2c3">
+  <div class="crit-hdr">
+    <div class="cn-badge cn3">3</div>
+    <div>
+      <div class="crit-label cl3">Criterion 03</div>
+      <h3>How This Works</h3>
+      <div class="crit-sub">All three solution methods — factoring, completing the square, and the quadratic formula — with full worked examples and when to use each.</div>
+    </div>
+  </div>
+
+  <!-- METHOD 1: FACTORING -->
+  <div class="method-block">
+    <div class="mb-head">
+      <div class="mb-num" style="background:var(--t2)">1</div>
+      <div><div class="mb-title">Method 1 — Factoring</div><div class="mb-when">Best when: the quadratic factors nicely (integer roots, small numbers). Fast but not always possible.</div></div>
+    </div>
+    <div class="mb-body">
+      <div class="steps">
+        <div class="step"><div class="sn sn2">1</div><div class="st">Write in standard form ax²+bx+c = 0.</div></div>
+        <div class="step"><div class="sn sn2">2</div><div class="st">Factor the left side using the techniques from Subtopic 1 (AC method, inspection, etc.).</div></div>
+        <div class="step"><div class="sn sn2">3</div><div class="st">Apply the Zero Product Property: if A·B = 0, then A = 0 or B = 0.</div></div>
+        <div class="step"><div class="sn sn2">4</div><div class="st">Solve each resulting linear equation for x.</div></div>
+        <div class="step"><div class="sn sn2">5</div><div class="st">Verify using Vieta's formulas: roots should sum to −b/a and multiply to c/a.</div></div>
+      </div>
+      <div class="math t2">
+Solve: x² − 7x + 12 = 0
+
+Factor: need × = 12, + = −7  →  −3 and −4
+  (x − 3)(x − 4) = 0
+
+Zero Product Property:
+  x − 3 = 0  →  x = 3
+  x − 4 = 0  →  x = 4
+
+Check Vieta's: sum = 3+4 = 7 = −(−7)/1 ✓   product = 3×4 = 12 = 12/1 ✓
+<span class="hig">Solutions: x = 3, x = 4</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- METHOD 2: COMPLETING THE SQUARE -->
+  <div class="method-block">
+    <div class="mb-head">
+      <div class="mb-num" style="background:var(--t2)">2</div>
+      <div><div class="mb-title">Method 2 — Completing the Square</div><div class="mb-when">Best when: deriving the vertex form, or when the quadratic formula is needed but you want to understand the derivation. Also used in calculus and ML theory.</div></div>
+    </div>
+    <div class="mb-body">
+      <div class="prose"><p>The idea: rewrite ax²+bx+c in the form a(x−h)² + k, where (h,k) is the vertex of the parabola. This is done by manufacturing a perfect square trinomial.</p></div>
+      <div class="steps">
+        <div class="step"><div class="sn sn2">1</div><div class="st">If a ≠ 1, divide the entire equation by a.</div></div>
+        <div class="step"><div class="sn sn2">2</div><div class="st">Move the constant term to the right side.</div></div>
+        <div class="step"><div class="sn sn2">3</div><div class="st">Take half the coefficient of x, square it: (b/2)². Add this to BOTH sides.</div></div>
+        <div class="step"><div class="sn sn2">4</div><div class="st">The left side is now a perfect square trinomial: (x + b/2)².</div></div>
+        <div class="step"><div class="sn sn2">5</div><div class="st">Take the square root of both sides (remember ±).</div></div>
+        <div class="step"><div class="sn sn2">6</div><div class="st">Solve for x. Two solutions come from the ± sign.</div></div>
+      </div>
+      <div class="math t2">
+Solve: 2x² − 8x − 10 = 0
+
+Step 1 — Divide by 2:    x² − 4x − 5 = 0
+Step 2 — Move constant:  x² − 4x = 5
+Step 3 — Half of −4 = −2, (−2)² = 4. Add 4 to both sides:
+  x² − 4x + 4 = 5 + 4
+  x² − 4x + 4 = 9
+Step 4 — Perfect square: (x − 2)² = 9
+Step 5 — Square root:    x − 2 = ±√9 = ±3
+Step 6 — Solve:
+  x − 2 = 3   →  <span class="hi2">x = 5</span>
+  x − 2 = −3  →  <span class="hi2">x = −1</span>
+
+Vertex form: 2(x−2)² − 18 = 0  (vertex at (2, −18))
+      </div>
+    </div>
+  </div>
+
+  <!-- METHOD 3: QUADRATIC FORMULA -->
+  <div class="method-block">
+    <div class="mb-head">
+      <div class="mb-num" style="background:var(--t2)">3</div>
+      <div><div class="mb-title">Method 3 — The Quadratic Formula</div><div class="mb-when">Best when: factoring fails or is unclear. Works for ANY quadratic. Most reliable universal method.</div></div>
+    </div>
+    <div class="mb-body">
+      <div class="prose"><p>The quadratic formula is derived by applying completing the square to the general form ax²+bx+c = 0. It gives the solution directly from the coefficients a, b, and c.</p></div>
+      <div class="math t2">
+<span class="hi2">x = (−b ± √(b² − 4ac)) / (2a)</span>
+
+Derivation (completing the square on ax²+bx+c=0):
+  ax² + bx + c = 0
+  x² + (b/a)x = −c/a
+  x² + (b/a)x + (b/2a)² = −c/a + b²/(4a²)
+  (x + b/2a)² = (b² − 4ac) / (4a²)
+  x + b/2a = ±√(b²−4ac) / (2a)
+  x = (−b ± √(b²−4ac)) / (2a)   <span class="dim">← the formula</span>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="sn sn2">1</div><div class="st">Write the equation in standard form. Identify a, b, c.</div></div>
+        <div class="step"><div class="sn sn2">2</div><div class="st">Compute the discriminant: Δ = b² − 4ac. Determine number of solutions.</div></div>
+        <div class="step"><div class="sn sn2">3</div><div class="st">Substitute a, b, c into the formula and simplify √Δ.</div></div>
+        <div class="step"><div class="sn sn2">4</div><div class="st">Calculate both solutions using + and − separately.</div></div>
+        <div class="step"><div class="sn sn2">5</div><div class="st">Verify with Vieta's formulas.</div></div>
+      </div>
+      <div class="math t2">
+Solve: 3x² − 5x − 2 = 0
+  a=3, b=−5, c=−2
+
+Discriminant: Δ = (−5)² − 4(3)(−2) = 25 + 24 = 49  > 0 → 2 solutions
+
+x = (−(−5) ± √49) / (2·3)
+  = (5 ± 7) / 6
+
+x₁ = (5 + 7)/6 = 12/6 = <span class="hi2">2</span>
+x₂ = (5 − 7)/6 = −2/6 = <span class="hi2">−1/3</span>
+
+Vieta's check:
+  Sum:     2 + (−1/3) = 5/3 = −(−5)/3 ✓
+  Product: 2 × (−1/3) = −2/3 = (−2)/3 ✓
+      </div>
+    </div>
+  </div>
+
+  <div class="icard">
+    <div class="icard-title">Decision Guide — Which Method to Use?</div>
+    <table class="tbl tbl2">
+      <tr><th>Situation</th><th>Best Method</th><th>Why</th></tr>
+      <tr><td>Factors look obvious (small integers)</td><td>Factoring</td><td>Fastest. Works immediately. e.g., x²−5x+6=0</td></tr>
+      <tr><td>Equation of form x²=k or (x−h)²=k</td><td>Square root directly</td><td>No need for any method. x=±√k directly.</td></tr>
+      <tr><td>Need vertex form for graphing or optimization</td><td>Completing the Square</td><td>Gives vertex (h,k) of parabola directly.</td></tr>
+      <tr><td>Factoring fails, or a, b, c are messy</td><td>Quadratic Formula</td><td>Always works. No guessing required.</td></tr>
+      <tr><td>Need to understand derivation or prove a result</td><td>Completing the Square</td><td>Shows WHY the formula works. Used in ML theory.</td></tr>
+      <tr><td>Just need numerical answers fast in code</td><td>np.roots([a,b,c])</td><td>Python returns both roots in one line.</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="sec-div"><span class="sd-lbl">Samples</span></div>
+
+<!-- T2 C4: SAMPLES -->
+<div class="crit-block" id="t2c4">
+  <div class="crit-hdr">
+    <div class="cn-badge cn4">4</div>
+    <div>
+      <div class="crit-label cl4">Criterion 04</div>
+      <h3>Samples</h3>
+      <div class="crit-sub">Five worked examples — from pure algebra to real-world data analytics applications.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-head"><span class="sc-n sc-n2">S1</span><span class="sc-title">Solve using all three methods — same equation</span><span class="sc-tag sct2">Pure Algebra</span></div>
+    <div class="sc-body">
+      <div class="sc-ctx">Solve x² + 2x − 8 = 0 using all three methods. This builds fluency with each technique and shows they always give the same answer.</div>
+      <div class="sc-work">
+Method 1 — Factoring:
+  Need × = −8, + = 2  →  4 and −2
+  (x + 4)(x − 2) = 0
+  x = −4  or  x = 2
+
+Method 2 — Completing the Square:
+  x² + 2x = 8
+  (half of 2)² = 1. Add 1 to both sides:
+  x² + 2x + 1 = 9
+  (x + 1)² = 9
+  x + 1 = ±3
+  x = 2  or  x = −4
+
+Method 3 — Quadratic Formula:
+  a=1, b=2, c=−8
+  Δ = 4 − 4(1)(−8) = 4 + 32 = 36
+  x = (−2 ± 6) / 2
+  x = 2  or  x = −4
+
+All three methods give: x = 2, x = −4  ✓
+Vieta's: sum = 2+(−4) = −2 = −2/1 ✓  product = 2×(−4) = −8 = −8/1 ✓
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> All three methods must give identical answers. The choice of method affects only the efficiency and insight, not the result.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-head"><span class="sc-n sc-n2">S2</span><span class="sc-title">Irrational roots — quadratic formula required</span><span class="sc-tag sct2">Pure Algebra</span></div>
+    <div class="sc-body">
+      <div class="sc-ctx">Solve 2x² − 6x + 1 = 0. This does not factor over integers — the quadratic formula produces irrational roots involving √.</div>
+      <div class="sc-work">
+a=2, b=−6, c=1
+
+Discriminant: Δ = (−6)² − 4(2)(1) = 36 − 8 = 28  > 0 → 2 real solutions
+
+x = (6 ± √28) / (2·2)
+  = (6 ± √(4·7)) / 4
+  = (6 ± 2√7) / 4
+  = (3 ± √7) / 2          ← simplified by dividing num/denom by 2
+
+x₁ = (3 + √7)/2 ≈ (3 + 2.646)/2 ≈ 2.823
+x₂ = (3 − √7)/2 ≈ (3 − 2.646)/2 ≈ 0.177
+
+Vieta's:
+  Sum:     2.823 + 0.177 = 3 = −(−6)/2 ✓
+  Product: 2.823 × 0.177 ≈ 0.5 = 1/2 ✓
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> Most real-world quadratics don't have integer roots. Always simplify √ before reporting (e.g., √28 = 2√7). Leave exact form when possible — rounding too early causes precision errors.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-head"><span class="sc-n sc-n2">S3</span><span class="sc-title">Completing the square — find vertex for optimization</span><span class="sc-tag sct2">Optimization / Analytics</span></div>
+    <div class="sc-body">
+      <div class="sc-ctx">A company's daily profit (in $hundreds) is modeled as P(x) = −2x² + 16x − 24, where x = units produced (in hundreds). Use completing the square to find the production level that <strong>maximizes profit</strong> and the maximum profit value.</div>
+      <div class="sc-work">
+P(x) = −2x² + 16x − 24
+
+Step 1 — Factor out a = −2:
+  P(x) = −2(x² − 8x + 12)   ← wait, complete the square inside
+
+Step 1 (correctly) — Factor −2 from x-terms only:
+  P(x) = −2(x² − 8x) − 24
+
+Step 2 — Complete the square inside:
+  Half of −8 = −4,  (−4)² = 16
+  P(x) = −2(x² − 8x + 16 − 16) − 24
+        = −2((x−4)² − 16) − 24
+        = −2(x−4)² + 32 − 24
+        = −2(x−4)² + 8
+
+Vertex form: P(x) = −2(x − 4)² + 8
+
+Vertex: (4, 8)
+→ Maximum profit of $800 occurs at x=4 (400 units produced)
+
+Since a = −2 < 0, parabola opens downward → vertex IS the maximum.
+
+Verify: P(4) = −2(4)² + 16(4) − 24 = −32 + 64 − 24 = 8  ✓
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> Completing the square directly gives the vertex — the point of maximum or minimum — which is the optimization answer. This is why completing the square appears in ML: finding the minimum of a quadratic loss function is exactly this operation.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-head"><span class="sc-n sc-n2">S4</span><span class="sc-title">MSE Loss and quadratic minimization — ML connection</span><span class="sc-tag sct2">Machine Learning</span></div>
+    <div class="sc-body">
+      <div class="sc-ctx">In simple linear regression with one data point (for illustration), the Mean Squared Error loss as a function of slope w is a quadratic in w. Show how completing the square finds the optimal w that minimizes loss.</div>
+      <div class="sc-work">
+One data point: (x=2, y=5).  Model: ŷ = w·x = 2w
+Loss: L(w) = (y − ŷ)² = (5 − 2w)²
+           = 25 − 20w + 4w²
+           = 4w² − 20w + 25
+
+This is a quadratic in w. Minimize by completing the square:
+  L(w) = 4(w² − 5w) + 25
+        = 4(w² − 5w + 6.25 − 6.25) + 25
+        = 4(w − 2.5)² − 25 + 25
+        = 4(w − 2.5)² + 0
+
+Vertex: w = 2.5 → minimum loss = 0
+
+Optimal weight: w* = 2.5
+Check: ŷ = 2.5 × 2 = 5 = y  → perfect fit, loss = 0  ✓
+
+In general: w* = Σ(xᵢyᵢ) / Σ(xᵢ²) = 10/4 = 2.5 ✓
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> The quadratic structure of MSE loss is why gradient descent converges smoothly for linear regression — there is exactly one global minimum (the vertex of the parabola). Completing the square reveals this minimum directly without calculus.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-head"><span class="sc-n sc-n2">S5</span><span class="sc-title">Projectile / threshold model — time to event</span><span class="sc-tag sct2">Applied Analytics</span></div>
+    <div class="sc-body">
+      <div class="sc-ctx">A sensor reading over time follows the model S(t) = −3t² + 18t + 5 (where t = time in seconds, S = signal strength). Find: (a) when the signal first exceeds 29 units, and (b) when the signal returns to 5 units (its initial value).</div>
+      <div class="sc-work">
+S(t) = −3t² + 18t + 5
+
+Part (a) — Signal = 29:
+  −3t² + 18t + 5 = 29
+  −3t² + 18t − 24 = 0
+  t² − 6t + 8 = 0     ← divide by −3
+  (t − 2)(t − 4) = 0
+  t = 2 or t = 4
+
+Signal is exactly 29 at t=2 and t=4.
+It exceeds 29 for 2 < t < 4 (between these values).
+
+Part (b) — Signal returns to 5:
+  −3t² + 18t + 5 = 5
+  −3t² + 18t = 0
+  −3t(t − 6) = 0       ← factor out −3t
+  t = 0 (initial) or t = 6
+
+Signal returns to 5 at t = 6 seconds.
+
+Vertex (peak signal):  t = −b/(2a) = −18/(2×−3) = 3
+Peak: S(3) = −3(9)+18(3)+5 = −27+54+5 = 32
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> Time-to-event and threshold-crossing questions in sensor analytics, signal processing, and anomaly detection are modeled as quadratics. Setting S(t) = threshold gives a quadratic equation whose roots are the exact crossing times.</div>
+    </div>
+  </div>
+</div>
+
+<div class="sec-div"><span class="sd-lbl">Challenges</span></div>
+
+<!-- T2 C5: CHALLENGES -->
+<div class="crit-block" id="t2c5">
+  <div class="crit-hdr">
+    <div class="cn-badge cn5">5</div>
+    <div>
+      <div class="crit-label cl5">Criterion 05</div>
+      <h3>Challenges</h3>
+      <div class="crit-sub">Five problems to solve — each tests a specific quadratic solving method or concept.</div>
+    </div>
+  </div>
+
+  <div class="ch-intro chi2">
+    <div class="chi-lbl chi-lbl2">Instructions</div>
+    <div class="chi-text">Each problem specifies which method to use. Do not switch methods unless instructed — the goal is to practice each technique deliberately. Show every step. For real-world problems, write the equation before solving and interpret the answer in a sentence.</div>
+    <div class="diff-row"><span class="dtag de">Easy</span><span class="dtag dm">Medium</span><span class="dtag dh">Hard</span></div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-head"><div class="pnum pn2">1</div><div class="pmeta"><div class="ptitle">Solve by factoring — use discriminant to check first</div><div class="psub">Factoring Method · Discriminant check</div></div><span class="dbadge de">Easy</span></div>
+    <div class="prob-body">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptext">Before solving, compute the discriminant to confirm real solutions exist. Then solve by factoring and verify with Vieta's formulas.</div><span class="peq">(a) &nbsp;x² − 3x − 10 = 0</span><span class="peq">(b) &nbsp;2x² − x − 6 = 0</span><div class="pnote">Show discriminant calculation, then factoring steps, then Vieta's check for both (a) and (b).</div></div>
+      <div class="hint"><div class="hint-ico">💡</div><div class="hint-txt"><strong>Hint (a):</strong> Discriminant = 9+40 = 49. Two roots. Find two numbers × = −10, + = −3. <strong>Hint (b):</strong> Use AC method. a·c = 2×(−6) = −12. Find × = −12, + = −1.</div></div>
+      <div class="ans"><div class="ans-ico">✏️</div><div class="ans-txt">Show: discriminant → factoring → roots → Vieta's check. Then share your work.</div></div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-head"><div class="pnum pn2">2</div><div class="pmeta"><div class="ptitle">Solve by completing the square</div><div class="psub">Completing the Square · Find vertex form too</div></div><span class="dbadge de">Easy</span></div>
+    <div class="prob-body">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptext">Solve by completing the square only — do not factor or use the quadratic formula. Also write the vertex form and state the vertex coordinates.</div><span class="peq">x² − 6x + 5 = 0</span><div class="pnote">After solving, confirm: does the vertex form a(x−h)²+k equal zero at your two root values?</div></div>
+      <div class="hint"><div class="hint-ico">💡</div><div class="hint-txt"><strong>Hint:</strong> Move 5 to the right. Half of −6 = −3. (−3)² = 9. Add 9 to both sides. You'll get (x−3)² = 4. Take square root of both sides (don't forget ±). The vertex is at x=3, and k = 4−9 = −4, so vertex is (3, −4).</div></div>
+      <div class="ans"><div class="ans-ico">✏️</div><div class="ans-txt">Show all completing-the-square steps, the two roots, and write the vertex form with vertex coordinates.</div></div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-head"><div class="pnum pn2">3</div><div class="pmeta"><div class="ptitle">Quadratic formula with irrational roots</div><div class="psub">Quadratic Formula · Simplify √ exactly</div></div><span class="dbadge dm">Medium</span></div>
+    <div class="prob-body">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptext">Solve using the quadratic formula. Simplify the square root fully and leave your answer in exact form (no decimal approximations unless asked).</div><span class="peq">3x² + 4x − 2 = 0</span><div class="pnote">After getting the exact form, also compute decimal approximations to 3 decimal places and verify with Vieta's formulas.</div></div>
+      <div class="hint"><div class="hint-ico">💡</div><div class="hint-txt"><strong>Hint:</strong> a=3, b=4, c=−2. Discriminant = 16+24 = 40 = 4×10. So √40 = 2√10. The formula gives x = (−4 ± 2√10)/6. Simplify by dividing numerator and denominator by 2.</div></div>
+      <div class="ans"><div class="ans-ico">✏️</div><div class="ans-txt">Show discriminant → formula → exact simplified form → decimal approximations → Vieta's check.</div></div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-head"><div class="pnum pn2">4</div><div class="pmeta"><div class="ptitle">No real solutions — complex discriminant</div><div class="psub">Discriminant · Identify type · Interpret geometrically</div></div><span class="dbadge dm">Medium</span></div>
+    <div class="prob-body">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptext">Apply the quadratic formula to the equation below. Show what happens when the discriminant is negative. State what this means geometrically and in a real-world context (if this were a profit model, what would it mean?).</div><span class="peq">x² − 4x + 13 = 0</span><div class="pnote">You will get √(negative). In terms of real solutions — state there are none, and explain why geometrically. You do NOT need to compute complex number solutions.</div></div>
+      <div class="hint"><div class="hint-ico">💡</div><div class="hint-txt"><strong>Hint:</strong> Compute Δ = b²−4ac = 16−52. If Δ &lt; 0, there are no real roots. Geometrically, the parabola never crosses the x-axis. If this were a profit model P(x), it would mean the company is never at break-even — either always profitable or always at a loss (determined by sign of a).</div></div>
+      <div class="ans"><div class="ans-ico">✏️</div><div class="ans-txt">Show discriminant calculation, state no real solutions, explain geometrically, and write 1–2 sentences interpreting this in a profit model context.</div></div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-head"><div class="pnum pn2">5</div><div class="pmeta"><div class="ptitle">Revenue optimization — full quadratic model</div><div class="psub">Word Problem · All three concepts · Interpret</div></div><span class="dbadge dh">Hard</span></div>
+    <div class="prob-body">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptext">
+        A company sells a product. Market research shows that if they set price p (in dollars), the quantity demanded is Q(p) = 200 − 4p.<br><br>
+        (a) Write the revenue function R(p) = p × Q(p) and expand it fully.<br>
+        (b) Use completing the square to find the price that maximizes revenue and the maximum revenue.<br>
+        (c) Using the quadratic formula, find all prices where revenue equals $0. Interpret both roots.<br>
+        (d) At what price range is revenue above $1,800? Set up the quadratic inequality and solve it.
+      </div><div class="pnote">This combines all three quadratic techniques in a single real-world problem. Show each part separately and write an interpretation sentence for parts (b) and (d).</div></div>
+      <div class="hint"><div class="hint-ico">💡</div><div class="hint-txt"><strong>Hint (a):</strong> R(p) = p(200−4p) = 200p − 4p². <strong>Hint (b):</strong> Complete the square on −4p² + 200p. Factor out −4 first. <strong>Hint (c):</strong> Set −4p² + 200p = 0. Factor (easier than formula here). <strong>Hint (d):</strong> −4p² + 200p &gt; 1800 → rearrange to −4p² + 200p − 1800 &gt; 0 → divide by −4, flip sign → solve p² − 50p + 450 &lt; 0.</div></div>
+      <div class="ans"><div class="ans-ico">✏️</div><div class="ans-txt">Show all four parts with full working and interpretation sentences. Then share for review.</div></div>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<footer>ALGEBRA I · POLYNOMIAL OPERATIONS & FACTORING · QUADRATIC EQUATIONS · MATHEMATICS FOR DATA ANALYTICS</footer>
+</body>
+</html>

@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exponential, Logarithmic & Rational Functions — Full Deep Dive</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,700&family=Urbanist:wght@300;400;500;600;700&family=Inconsolata:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:    #07090f;
+    --s1:    #0c0f1a;
+    --s2:    #111624;
+    --s3:    #171d2e;
+    --bdr:   rgba(255,255,255,.07);
+    --bdr2:  rgba(255,255,255,.13);
+    --text:  #c8d4ec;
+    --muted: #5a6480;
+    --faint: #161c2c;
+
+    /* T1 — amber / warm orange */
+    --t1:    #f59e0b;
+    --t1d:   rgba(245,158,11,.1);
+    --t1b:   rgba(245,158,11,.22);
+    --t1dk:  #b45309;
+
+    /* T2 — rose / crimson */
+    --t2:    #f43f5e;
+    --t2d:   rgba(244,63,94,.1);
+    --t2b:   rgba(244,63,94,.22);
+    --t2dk:  #be123c;
+
+    /* criterion accent palette */
+    --ca:#60a5fa; --cad:rgba(96,165,250,.09);
+    --cb:#a78bfa; --cbd:rgba(167,139,250,.09);
+    --cc:#34d399; --ccd:rgba(52,211,153,.09);
+    --cd:#fbbf24; --cdd:rgba(251,191,36,.09);
+    --ce:#fb7185; --ced:rgba(251,113,133,.09);
+
+    --easy:#22c55e; --easyd:rgba(34,197,94,.1);  --easyb:rgba(34,197,94,.28);
+    --med: #f59e0b; --medd: rgba(245,158,11,.1); --medb: rgba(245,158,11,.28);
+    --hard:#f43f5e; --hardd:rgba(244,63,94,.1);  --hardb:rgba(244,63,94,.28);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Urbanist',sans-serif;font-weight:300;line-height:1.8;}
+
+  /* ── HERO ── */
+  .hero{background:var(--s1);border-bottom:1px solid var(--bdr);overflow:hidden;position:relative;padding:72px 40px 60px;}
+  .hero-noise{position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;}
+  .hero-g1{position:absolute;width:640px;height:640px;border-radius:50%;right:-100px;top:-180px;background:radial-gradient(circle,rgba(245,158,11,.1) 0%,transparent 65%);pointer-events:none;}
+  .hero-g2{position:absolute;width:500px;height:500px;border-radius:50%;left:-80px;bottom:-150px;background:radial-gradient(circle,rgba(244,63,94,.09) 0%,transparent 65%);pointer-events:none;}
+  .hi{max-width:980px;margin:0 auto;position:relative;z-index:2;}
+  .crumb{font-family:'Inconsolata',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;}
+  .crumb .acc{color:var(--t1);}
+  .flag{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.04);border:1px solid var(--bdr2);border-radius:3px;padding:5px 14px;margin-bottom:18px;font-family:'Inconsolata',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+  h1{font-family:'Fraunces',serif;font-size:clamp(2.4rem,5vw,3.9rem);font-weight:900;line-height:1.06;letter-spacing:-.03em;color:#fff;margin-bottom:14px;}
+  h1 .e1{font-style:italic;color:var(--t1);}
+  h1 .e2{font-style:italic;color:var(--t2);}
+  .hdesc{color:var(--muted);font-size:.92rem;max-width:580px;line-height:1.75;margin-bottom:26px;}
+  .hpills{display:flex;gap:8px;flex-wrap:wrap;}
+  .hp{font-family:'Inconsolata',monospace;font-size:9px;padding:4px 12px;border-radius:2px;letter-spacing:.05em;text-transform:uppercase;}
+  .hp1{background:var(--t1d);color:var(--t1);border:1px solid var(--t1b);}
+  .hp2{background:var(--t2d);color:var(--t2);border:1px solid var(--t2b);}
+  .hpn{background:rgba(255,255,255,.04);color:var(--muted);border:1px solid var(--bdr);}
+
+  /* ── NAV ── */
+  .nav{background:var(--s2);border-bottom:1px solid var(--bdr);position:sticky;top:0;z-index:100;overflow-x:auto;}
+  .nav::-webkit-scrollbar{display:none;}
+  .nav-in{max-width:980px;margin:0 auto;display:flex;white-space:nowrap;}
+  .ni{font-family:'Inconsolata',monospace;font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;padding:13px 16px;color:var(--muted);text-decoration:none;border-bottom:2px solid transparent;transition:all .2s;flex-shrink:0;}
+  .ni.a1:hover{color:var(--t1);border-color:var(--t1);}
+  .ni.a2:hover{color:var(--t2);border-color:var(--t2);}
+  .n-sep{width:1px;background:var(--bdr);margin:8px 4px;flex-shrink:0;}
+
+  /* ── MAIN ── */
+  main{max-width:980px;margin:0 auto;padding:60px 24px 100px;}
+
+  /* ── TOPIC HEADER ── */
+  .thdr{border-radius:14px;padding:26px 30px;margin-bottom:40px;display:flex;align-items:flex-start;gap:18px;}
+  .thdr1{background:rgba(245,158,11,.07);border:1.5px solid var(--t1b);}
+  .thdr2{background:rgba(244,63,94,.07);border:1.5px solid var(--t2b);}
+  .tico{width:56px;height:56px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;margin-top:2px;}
+  .tc1{background:var(--t1d);border:1px solid var(--t1b);}
+  .tc2{background:var(--t2d);border:1px solid var(--t2b);}
+  .ttag{font-family:'Inconsolata',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:5px;}
+  .tt1{color:var(--t1);} .tt2{color:var(--t2);}
+  h2{font-family:'Fraunces',serif;font-size:1.9rem;font-weight:700;line-height:1.15;letter-spacing:-.02em;}
+  .h21{color:var(--t1);} .h22{color:var(--t2);}
+  .tsub{font-size:.87rem;color:var(--muted);margin-top:4px;}
+
+  /* ── CRITERION BLOCK ── */
+  .cb{margin-bottom:52px;}
+  .chdr{display:flex;align-items:center;gap:14px;margin-bottom:22px;padding-bottom:13px;border-bottom:1px solid var(--bdr);}
+  .cbdg{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:1.2rem;font-style:italic;font-weight:700;color:#fff;flex-shrink:0;}
+  .cba{background:var(--ca);} .cbb{background:var(--cb);} .cbc{background:var(--cc);} .cbd2{background:var(--cd);} .cbe{background:var(--ce);}
+  .ctag{font-family:'Inconsolata',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:3px;}
+  .ct-a{color:var(--ca);}.ct-b{color:var(--cb);}.ct-c{color:var(--cc);}.ct-d{color:var(--cd);}.ct-e{color:var(--ce);}
+  h3{font-family:'Fraunces',serif;font-size:1.35rem;font-weight:700;color:#fff;line-height:1.2;letter-spacing:-.01em;}
+  .csub{font-size:.84rem;color:var(--muted);margin-top:2px;}
+
+  /* ── PROSE ── */
+  .prose p{font-size:.9rem;color:var(--text);margin-bottom:12px;line-height:1.8;}
+  .prose p:last-child{margin-bottom:0;}
+  .h1t{color:var(--t1);font-weight:600;} .h2t{color:var(--t2);font-weight:600;}
+  .hkw{color:#fff;font-weight:600;}
+
+  /* ── MATH BLOCK ── */
+  .math{background:var(--s2);border:1px solid var(--bdr);border-radius:8px;padding:15px 20px;margin:12px 0;font-family:'Inconsolata',monospace;font-size:.82rem;line-height:2.15;color:#b8d0f0;}
+  .math.m1{border-left:3px solid var(--t1);}
+  .math.m2{border-left:3px solid var(--t2);}
+  .math .dim{color:var(--muted);font-size:.75rem;}
+  .math .ht1{color:var(--t1);font-weight:700;}
+  .math .ht2{color:var(--t2);font-weight:700;}
+  .math .hg{color:var(--cc);font-weight:700;}
+  .math .hy{color:var(--cd);font-weight:700;}
+  .math .hr{color:var(--ce);font-weight:700;}
+
+  /* ── INFO CARD ── */
+  .icard{background:var(--s2);border:1px solid var(--bdr);border-radius:10px;padding:18px 22px;margin:13px 0;}
+  .ictitle{font-family:'Inconsolata',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+
+  /* ── GRID CARDS ── */
+  .gcgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;margin:13px 0;}
+  .gcrd{background:var(--s2);border:1px solid var(--bdr);border-radius:10px;padding:16px 18px;transition:border-color .2s,transform .2s;}
+  .gcrd:hover{border-color:var(--bdr2);transform:translateY(-2px);}
+  .gcrd-nm{font-family:'Inconsolata',monospace;font-size:9px;letter-spacing:.13em;text-transform:uppercase;margin-bottom:7px;}
+  .gcrd-f{font-family:'Inconsolata',monospace;font-size:.85rem;font-weight:600;margin-bottom:8px;}
+  .gcrd-n{font-size:.82rem;color:var(--muted);line-height:1.65;}
+  .g1 .gcrd-nm{color:var(--t1);} .g1 .gcrd-f{color:var(--t1);}
+  .g2 .gcrd-nm{color:var(--t2);} .g2 .gcrd-f{color:var(--t2);}
+
+  /* ── TABLE ── */
+  .tbl{width:100%;border-collapse:collapse;margin:12px 0;font-size:.83rem;}
+  .tbl th{font-family:'Inconsolata',monospace;font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:9px 14px;text-align:left;border-bottom:1px solid var(--bdr2);background:var(--s3);}
+  .tbl td{padding:10px 14px;border-bottom:1px solid var(--bdr);vertical-align:top;line-height:1.65;}
+  .tbl td:first-child{font-family:'Inconsolata',monospace;font-size:.8rem;white-space:nowrap;}
+  .tbl tr:last-child td{border-bottom:none;}
+  .tbl tr:hover td{background:rgba(255,255,255,.015);}
+  .tb1 td:first-child{color:var(--t1);}
+  .tb2 td:first-child{color:var(--t2);}
+
+  /* ── METHOD BLOCK ── */
+  .mblock{background:var(--s1);border:1px solid var(--bdr);border-radius:12px;overflow:hidden;margin:14px 0;}
+  .mb-hd{padding:12px 20px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:12px;background:var(--s2);}
+  .mb-ltr{width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:1rem;font-weight:700;font-style:italic;color:#fff;flex-shrink:0;}
+  .mb-title{font-size:.9rem;font-weight:600;color:#fff;}
+  .mb-when{font-size:.78rem;color:var(--muted);}
+  .mb-bd{padding:16px 20px;}
+
+  /* ── STEPS ── */
+  .steps{display:flex;flex-direction:column;gap:9px;margin:11px 0;}
+  .step{display:flex;gap:13px;align-items:flex-start;}
+  .sn{min-width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Inconsolata',monospace;font-size:10px;font-weight:600;flex-shrink:0;margin-top:2px;}
+  .sn1{background:var(--t1d);color:var(--t1);border:1px solid var(--t1b);}
+  .sn2{background:var(--t2d);color:var(--t2);border:1px solid var(--t2b);}
+  .st{font-size:.87rem;line-height:1.75;}
+
+  /* ── PURPOSE ── */
+  .purp-rows{display:flex;flex-direction:column;gap:10px;}
+  .purp-row{display:flex;gap:12px;align-items:flex-start;font-size:.88rem;line-height:1.75;}
+  .ptag{font-family:'Inconsolata',monospace;font-size:8.5px;padding:3px 9px;border-radius:3px;white-space:nowrap;flex-shrink:0;margin-top:4px;letter-spacing:.06em;text-transform:uppercase;}
+  .pt1{background:var(--t1d);color:var(--t1);border:1px solid var(--t1b);}
+  .pt2{background:var(--t2d);color:var(--t2);border:1px solid var(--t2b);}
+
+  /* ── CALLOUT ── */
+  .callout{border-radius:10px;padding:15px 19px;margin:13px 0;display:flex;gap:12px;align-items:flex-start;}
+  .call1{background:var(--t1d);border:1px solid var(--t1b);}
+  .call2{background:var(--t2d);border:1px solid var(--t2b);}
+  .call-ico{font-size:1rem;flex-shrink:0;margin-top:2px;}
+  .call-txt{font-size:.87rem;line-height:1.75;}
+  .call1 .call-txt strong{color:var(--t1);}
+  .call2 .call-txt strong{color:var(--t2);}
+
+  /* ── SAMPLE CARD ── */
+  .sc{background:var(--s2);border:1px solid var(--bdr);border-radius:12px;overflow:hidden;margin:14px 0;}
+  .sc-hd{padding:12px 20px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--s3);}
+  .sc-n{font-family:'Fraunces',serif;font-size:1.05rem;font-style:italic;font-weight:700;flex-shrink:0;}
+  .sn1c{color:var(--cd);} .sn2c{color:var(--cd);}
+  .sc-title{font-size:.9rem;font-weight:600;color:#fff;flex:1;}
+  .sc-tag{font-family:'Inconsolata',monospace;font-size:8.5px;padding:3px 9px;border-radius:20px;letter-spacing:.05em;text-transform:uppercase;flex-shrink:0;}
+  .st1{background:var(--t1d);color:var(--t1);border:1px solid var(--t1b);}
+  .st2{background:var(--t2d);color:var(--t2);border:1px solid var(--t2b);}
+  .sc-bd{padding:18px 20px;}
+  .sc-ctx{font-size:.86rem;color:var(--muted);margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--bdr);line-height:1.75;}
+  .sc-ctx strong{color:var(--text);font-weight:500;}
+  .sc-work{font-family:'Inconsolata',monospace;font-size:.8rem;line-height:2.1;background:rgba(52,211,153,.05);border:1px solid rgba(52,211,153,.12);border-radius:8px;padding:14px 16px;margin-bottom:10px;color:#c8e8d8;}
+  .sc-tw{font-size:.82rem;color:var(--muted);padding-top:8px;border-top:1px solid var(--bdr);line-height:1.7;}
+  .sc-tw strong{color:var(--cc);font-weight:600;}
+
+  /* ── CHALLENGES ── */
+  .ch-intro{border-radius:10px;padding:18px 22px;margin-bottom:20px;}
+  .chi1{background:var(--t1d);border:1px solid var(--t1b);}
+  .chi2{background:var(--t2d);border:1px solid var(--t2b);}
+  .chi-tag{font-family:'Inconsolata',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:8px;}
+  .cht1{color:var(--t1);} .cht2{color:var(--t2);}
+  .chi-txt{font-size:.88rem;line-height:1.75;}
+  .diff-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+  .dtag{font-family:'Inconsolata',monospace;font-size:8.5px;padding:3px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em;}
+  .de{background:var(--easyd);color:var(--easy);border:1px solid var(--easyb);}
+  .dm{background:var(--medd);color:var(--med);border:1px solid var(--medb);}
+  .dh{background:var(--hardd);color:var(--hard);border:1px solid var(--hardb);}
+
+  .prob{background:var(--s1);border:1px solid var(--bdr);border-radius:12px;overflow:hidden;margin-bottom:13px;}
+  .prob-hd{display:flex;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid var(--bdr);background:var(--s2);}
+  .pnum{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:1.05rem;font-style:italic;font-weight:700;flex-shrink:0;color:#fff;}
+  .pn1{background:var(--t1d);border:1px solid var(--t1b);color:var(--t1);}
+  .pn2{background:var(--t2d);border:1px solid var(--t2b);color:var(--t2);}
+  .pmeta{flex:1;}
+  .ptitle{font-size:.9rem;font-weight:600;color:#fff;}
+  .psub{font-size:.77rem;color:var(--muted);}
+  .dbadge{font-family:'Inconsolata',monospace;font-size:8.5px;padding:3px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em;flex-shrink:0;}
+  .prob-bd{padding:17px 20px;}
+  .pstmt{background:var(--s2);border:1px solid var(--bdr);border-radius:8px;padding:14px 18px;margin-bottom:12px;}
+  .plbl{font-family:'Inconsolata',monospace;font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+  .ptxt{font-size:.88rem;color:var(--text);line-height:1.75;}
+  .peq{font-family:'Inconsolata',monospace;font-size:.92rem;font-weight:600;display:block;margin:7px 0 2px;color:#d0e4ff;}
+  .pnote{font-size:.78rem;color:var(--muted);margin-top:5px;font-style:italic;}
+  .hint{background:rgba(251,191,36,.05);border:1px solid rgba(251,191,36,.18);border-radius:8px;padding:10px 14px;display:flex;gap:9px;align-items:flex-start;margin-bottom:11px;}
+  .h-ico{font-size:.88rem;flex-shrink:0;margin-top:1px;}
+  .h-txt{font-size:.82rem;color:#c0a020;line-height:1.7;}
+  .h-txt strong{color:var(--cd);}
+  .ans{background:var(--s3);border:1.5px dashed rgba(255,255,255,.1);border-radius:8px;padding:13px 18px;min-height:56px;display:flex;align-items:center;gap:10px;}
+  .a-ico{font-size:.9rem;opacity:.3;}
+  .a-txt{font-size:.81rem;color:var(--muted);font-style:italic;}
+
+  /* ── DIVIDERS ── */
+  .bdiv{display:flex;align-items:center;gap:16px;margin:72px 0 56px;}
+  .bdiv::before,.bdiv::after{content:'';flex:1;height:2px;background:var(--bdr);}
+  .bd-lbl{font-family:'Inconsolata',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);white-space:nowrap;padding:0 8px;}
+  .sdiv{display:flex;align-items:center;gap:12px;margin:38px 0 26px;}
+  .sdiv::before,.sdiv::after{content:'';flex:1;height:1px;background:var(--bdr);}
+  .sd-lbl{font-family:'Inconsolata',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);}
+
+  footer{text-align:center;padding:26px;font-family:'Inconsolata',monospace;font-size:10px;letter-spacing:.1em;color:var(--muted);border-top:1px solid var(--bdr);}
+
+  code{font-family:'Inconsolata',monospace;font-size:.8rem;background:var(--s3);border:1px solid var(--bdr);padding:1px 6px;border-radius:4px;color:var(--t1);}
+
+  @media(max-width:600px){
+    .hero{padding:48px 18px 44px;}
+    main{padding:40px 14px 60px;}
+    .sc-bd,.prob-bd,.mb-bd{padding:14px 15px;}
+    h1{font-size:2rem;}
+    .nav{padding:0 12px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-noise"></div>
+  <div class="hero-g1"></div><div class="hero-g2"></div>
+  <div class="hi">
+    <div class="crumb">Mathematics for Data Analytics → Algebra II → <span class="acc">Functions</span></div>
+    <div class="flag">Full Deep Dive · 2 Subtopics · All 5 Criteria Each</div>
+    <h1><span class="e1">Exponential &amp;<br>Logarithmic</span> Functions<br><span style="font-size:.45em;opacity:.3;font-weight:400;display:block;margin:6px 0 4px">and</span><span class="e2">Rational</span> Functions &amp; Expressions</h1>
+    <p class="hdesc">Two function families that dominate applied mathematics — exponential and logarithmic functions model growth, decay, and information, while rational functions model rates, proportions, and every relationship involving a variable in the denominator.</p>
+    <div class="hpills">
+      <span class="hp hp1">01 · Exponential & Logarithmic</span>
+      <span class="hp hp2">02 · Rational Functions</span>
+      <span class="hp hpn">5 Criteria Each</span>
+      <span class="hp hpn">5 Samples Each</span>
+      <span class="hp hpn">5 Challenges Each</span>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="nav-in">
+    <a href="#e1" class="ni a1">01 Description</a>
+    <a href="#e2" class="ni a1">02 Purpose</a>
+    <a href="#e3" class="ni a1">03 How It Works</a>
+    <a href="#e4" class="ni a1">04 Samples</a>
+    <a href="#e5" class="ni a1">05 Challenges</a>
+    <div class="n-sep"></div>
+    <a href="#r1" class="ni a2">R01 Description</a>
+    <a href="#r2" class="ni a2">R02 Purpose</a>
+    <a href="#r3" class="ni a2">R03 How It Works</a>
+    <a href="#r4" class="ni a2">R04 Samples</a>
+    <a href="#r5" class="ni a2">R05 Challenges</a>
+  </div>
+</div>
+
+<main>
+
+<!-- ████████████████████████████████████
+     TOPIC 1 — EXPONENTIAL & LOGARITHMIC FUNCTIONS
+████████████████████████████████████ -->
+<div class="thdr thdr1">
+  <div class="tico tc1">eˣ</div>
+  <div>
+    <div class="ttag tt1">Algebra II · Subtopic 01 of 02</div>
+    <h2 class="h21">Exponential & Logarithmic Functions</h2>
+    <div class="tsub">Two functions that are inverses of each other — modeling every phenomenon where change is proportional to current value.</div>
+  </div>
+</div>
+
+<!-- E1: DESCRIPTION -->
+<div class="cb" id="e1">
+  <div class="chdr">
+    <div class="cbdg cba">1</div>
+    <div>
+      <div class="ctag ct-a">Criterion 01</div>
+      <h3>Description</h3>
+      <div class="csub">What exponential and logarithmic functions are, their anatomy, and how they relate to each other.</div>
+    </div>
+  </div>
+
+  <div class="prose">
+    <p>An <span class="h1t">exponential function</span> is one where the variable appears in the <span class="hkw">exponent</span>, not the base. The base is a fixed positive constant (≠1), and the function describes a quantity that grows or decays by a <span class="hkw">constant multiplicative factor</span> per unit time. This is fundamentally different from polynomial growth, where the variable is the base.</p>
+  </div>
+
+  <div class="math m1">
+<span class="dim">-- General exponential function:</span>
+<span class="ht1">f(x) = a · bˣ</span>
+  a = initial value (value when x = 0, since b⁰ = 1)
+  b = base (constant, b > 0, b ≠ 1)
+  x = exponent (the variable)
+
+<span class="dim">-- Base determines behavior:</span>
+  b > 1  →  exponential GROWTH  (function increases)
+  0 < b < 1  →  exponential DECAY  (function decreases)
+
+<span class="dim">-- Most important special case: natural exponential</span>
+<span class="ht1">f(x) = eˣ</span>   where e ≈ 2.71828...
+  This is the only function that is its own derivative: d/dx[eˣ] = eˣ
+  Used everywhere in calculus, ML, and statistics.
+
+<span class="dim">-- Examples:</span>
+  f(x) = 2ˣ          → growth, base 2
+  g(x) = (1/3)ˣ      → decay, base 1/3
+  h(x) = 5 · e^(0.3x) → continuous growth, rate 0.3
+  k(x) = 100 · e^(−2x) → continuous decay, rate 2
+  </div>
+
+  <div class="prose">
+    <p>A <span class="h1t">logarithmic function</span> is the <span class="hkw">inverse</span> of an exponential function. Where the exponential asks "what is bˣ?", the logarithm asks "to what power must b be raised to get x?" Every logarithmic function is just the exponential reflected across the line y = x.</p>
+  </div>
+
+  <div class="math m1">
+<span class="dim">-- General logarithmic function:</span>
+<span class="ht1">f(x) = log_b(x)</span>   means:  bʸ = x  where y = f(x)
+
+<span class="dim">-- Domain and Range (opposite of exponential):</span>
+  Exponential:   Domain (−∞,∞),  Range (0,∞)
+  Logarithmic:   Domain (0,∞),   Range (−∞,∞)
+
+<span class="dim">-- The inverse relationship:</span>
+  log_b(bˣ) = x    for all x              ← log undoes exponent
+  b^(log_b(x)) = x  for all x > 0        ← exponent undoes log
+
+<span class="dim">-- Three key special bases:</span>
+  log_10(x) = log(x)    → common log (base 10)
+  log_e(x)  = ln(x)     → natural log (base e) — most used in ML
+  log_2(x)              → binary log — information theory
+
+<span class="dim">-- Characteristic shape:</span>
+  Exponential:  starts near 0, grows/decays rapidly
+  Logarithmic:  starts from −∞ near x=0, grows slowly, never negative x
+  </div>
+
+  <div class="icard">
+    <div class="ictitle">Side-by-Side Comparison — Exponential vs Logarithmic</div>
+    <table class="tbl tb1">
+      <tr><th>Property</th><th>Exponential f(x) = bˣ</th><th>Logarithmic f(x) = log_b(x)</th></tr>
+      <tr><td>Domain</td><td>(−∞, ∞) — all reals</td><td>(0, ∞) — positive reals only</td></tr>
+      <tr><td>Range</td><td>(0, ∞) — always positive</td><td>(−∞, ∞) — all reals</td></tr>
+      <tr><td>x-intercept</td><td>None (never crosses x-axis)</td><td>Always at x = 1 (log_b(1) = 0)</td></tr>
+      <tr><td>y-intercept</td><td>Always at y = 1 (b⁰ = 1)</td><td>None (undefined at x = 0)</td></tr>
+      <tr><td>Asymptote</td><td>Horizontal: y = 0</td><td>Vertical: x = 0</td></tr>
+      <tr><td>b > 1 behavior</td><td>Increasing, rapid growth</td><td>Increasing, very slow growth</td></tr>
+      <tr><td>0 < b < 1 behavior</td><td>Decreasing, rapid decay</td><td>Decreasing</td></tr>
+      <tr><td>Relationship</td><td colspan="2">They are inverses: reflecting one across y = x gives the other</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="sdiv"><span class="sd-lbl">Purpose</span></div>
+
+<!-- E2: PURPOSE -->
+<div class="cb" id="e2">
+  <div class="chdr">
+    <div class="cbdg cbb">2</div>
+    <div>
+      <div class="ctag ct-b">Criterion 02</div>
+      <h3>Purpose</h3>
+      <div class="csub">Why exponential and logarithmic functions are indispensable in data analytics and machine learning.</div>
+    </div>
+  </div>
+
+  <div class="purp-rows">
+    <div class="purp-row"><span class="ptag pt1">Growth Models</span><span>Exponential functions model any phenomenon where growth rate is proportional to current value: <strong>compound interest</strong> A = Pe^(rt), <strong>population growth</strong> P(t) = P₀e^(kt), <strong>viral spread</strong>, <strong>radioactive decay</strong> N(t) = N₀e^(−λt). These are foundational models in epidemiology, finance, and ecology analytics.</span></div>
+    <div class="purp-row"><span class="ptag pt1">ML Loss</span><span>The <strong>cross-entropy loss function</strong> L = −Σ yᵢ ln(ŷᵢ) uses the natural log directly. The <strong>softmax function</strong> uses eˣ in the numerator and denominator. The <strong>sigmoid activation</strong> σ(x) = 1/(1+e⁻ˣ) is exponential. Every modern classification model depends on both eˣ and ln(x) in its core formulas.</span></div>
+    <div class="purp-row"><span class="ptag pt1">Log Transform</span><span><strong>Log transformation</strong> is one of the most applied preprocessing techniques in data analytics. Right-skewed distributions (income, prices, page views) become approximately normal after ln(x) transformation. It compresses large ranges, stabilizes variance, and makes multiplicative relationships additive — linearizing power-law and exponential relationships.</span></div>
+    <div class="purp-row"><span class="ptag pt1">Information</span><span><strong>Shannon entropy</strong> H(X) = −Σ p(x) log₂(p(x)) measures information content using log₂. <strong>KL Divergence</strong> D_KL(P||Q) = Σ p(x) ln(p(x)/q(x)) measures how different two probability distributions are — used in variational autoencoders, information gain in decision trees, and model evaluation.</span></div>
+    <div class="purp-row"><span class="ptag pt1">Solving</span><span>Logarithms are the <strong>algebraic tool for solving exponential equations</strong> where the unknown is in the exponent. Whenever you need to find time to reach a threshold (doubling time, half-life, when a metric crosses a target), you need logarithms. Taking ln of both sides isolates the exponent.</span></div>
+    <div class="purp-row"><span class="ptag pt1">Probability</span><span><strong>Log-likelihood</strong> converts the product of many probabilities into a tractable sum: ln(∏ P(xᵢ)) = Σ ln(P(xᵢ)). This prevents numerical underflow when multiplying many small probabilities. Every maximum likelihood estimation (MLE) procedure works in log-space for this reason.</span></div>
+  </div>
+</div>
+
+<div class="sdiv"><span class="sd-lbl">How It Works</span></div>
+
+<!-- E3: HOW IT WORKS -->
+<div class="cb" id="e3">
+  <div class="chdr">
+    <div class="cbdg cbc">3</div>
+    <div>
+      <div class="ctag ct-c">Criterion 03</div>
+      <h3>How This Works</h3>
+      <div class="csub">Graphing behavior, transformations, solving exponential and logarithmic equations, and the full set of log laws applied.</div>
+    </div>
+  </div>
+
+  <div class="mblock">
+    <div class="mb-hd">
+      <div class="mb-ltr" style="background:var(--t1)">A</div>
+      <div><div class="mb-title">Transformations of Exponential Functions</div><div class="mb-when">f(x) = a · b^(cx+d) + k — each parameter shifts, scales, or reflects.</div></div>
+    </div>
+    <div class="mb-bd">
+      <div class="math m1">
+f(x) = a · b^(cx + d) + k
+
+a  — vertical stretch/compress (|a|), reflect if a < 0
+b  — base (growth if b>1, decay if 0<b<1)
+c  — horizontal stretch/compress (1/c), reflect if c < 0
+d  — horizontal shift (left if d>0, right if d<0)
+k  — vertical shift; changes asymptote to y = k
+
+Examples:
+  f(x) = 2ˣ + 3       → shifted up 3, asymptote at y=3
+  g(x) = −eˣ          → reflected over x-axis, now decreasing
+  h(x) = 3·2^(x−4)   → stretched vertically by 3, shifted right 4
+  k(x) = e^(−x)       → reflection over y-axis, decay function
+      </div>
+    </div>
+  </div>
+
+  <div class="mblock">
+    <div class="mb-hd">
+      <div class="mb-ltr" style="background:var(--t1)">B</div>
+      <div><div class="mb-title">Solving Exponential Equations</div><div class="mb-when">Two cases: same base (equate exponents) or different base (take logarithm of both sides).</div></div>
+    </div>
+    <div class="mb-bd">
+      <div class="math m1">
+<span class="dim">-- Case 1: Same base — equate exponents</span>
+  2^(3x−1) = 2⁵
+  3x − 1 = 5      ← bases are equal, so exponents must be equal
+  3x = 6
+  <span class="ht1">x = 2</span>
+
+  4^(x+1) = 8     ← rewrite in same base: 4 = 2², 8 = 2³
+  (2²)^(x+1) = 2³
+  2^(2x+2) = 2³
+  2x + 2 = 3
+  <span class="ht1">x = 1/2</span>
+
+<span class="dim">-- Case 2: Different bases — take ln of both sides</span>
+  5^x = 30
+  ln(5^x) = ln(30)
+  x · ln(5) = ln(30)         ← Power Law of logarithms
+  x = ln(30) / ln(5)
+  x = 3.4012 / 1.6094
+  <span class="ht1">x ≈ 2.113</span>
+
+  e^(2x−3) = 14
+  ln(e^(2x−3)) = ln(14)
+  2x − 3 = ln(14)            ← ln and e cancel (inverse law)
+  2x = ln(14) + 3
+  <span class="ht1">x = (ln(14) + 3) / 2 ≈ (2.639 + 3)/2 ≈ 2.820</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="mblock">
+    <div class="mb-hd">
+      <div class="mb-ltr" style="background:var(--t1)">C</div>
+      <div><div class="mb-title">Solving Logarithmic Equations</div><div class="mb-when">Isolate the log, then convert to exponential form. Always check for extraneous solutions.</div></div>
+    </div>
+    <div class="mb-bd">
+      <div class="steps">
+        <div class="step"><div class="sn sn1">1</div><div class="st">Isolate the logarithm on one side (combine multiple logs using log laws if needed).</div></div>
+        <div class="step"><div class="sn sn1">2</div><div class="st">Convert to exponential form: log_b(x) = c → x = bᶜ.</div></div>
+        <div class="step"><div class="sn sn1">3</div><div class="st">Solve for the variable.</div></div>
+        <div class="step"><div class="sn sn1">4</div><div class="st">Check for extraneous solutions: substitute back and verify the original log argument is positive.</div></div>
+      </div>
+      <div class="math m1">
+log_3(2x − 1) = 4
+  Convert: 2x − 1 = 3⁴ = 81
+  2x = 82
+  <span class="ht1">x = 41</span>
+  Check: 2(41)−1 = 81 > 0 ✓
+
+ln(x) + ln(x−3) = ln(10)
+  Product Law: ln(x(x−3)) = ln(10)
+  x(x−3) = 10              ← cancel ln from both sides
+  x² − 3x − 10 = 0
+  (x−5)(x+2) = 0
+  x = 5  or  x = −2
+
+  Check x=5:  ln(5) and ln(2) both defined ✓  → <span class="ht1">x = 5</span>
+  Check x=−2: ln(−2) undefined ✗              → x = −2 is extraneous!
+      </div>
+    </div>
+  </div>
+
+  <div class="mblock">
+    <div class="mb-hd">
+      <div class="mb-ltr" style="background:var(--t1)">D</div>
+      <div><div class="mb-title">All Logarithm Laws — Applied to ln</div><div class="mb-when">These are the algebraic manipulation tools for every log expression.</div></div>
+    </div>
+    <div class="mb-bd">
+      <div class="math m1">
+Product:    ln(ab)   = ln(a) + ln(b)
+Quotient:   ln(a/b)  = ln(a) − ln(b)
+Power:      ln(aⁿ)   = n · ln(a)          ← most used in ML optimization
+Identity:   ln(1)    = 0
+Identity:   ln(e)    = 1
+Inverse:    e^(ln x) = x   and   ln(eˣ) = x
+Change:     log_b(x) = ln(x) / ln(b)
+
+<span class="dim">-- Expand a complex ln expression:</span>
+ln( √x · y³ / z² )
+= ln(√x) + ln(y³) − ln(z²)     ← product/quotient laws
+= (1/2)ln(x) + 3·ln(y) − 2·ln(z)   ← power law
+
+<span class="dim">-- Condense back:</span>
+(1/2)ln(x) + 3·ln(y) − 2·ln(z)
+= ln(x^(1/2)) + ln(y³) − ln(z²)
+= ln( √x · y³ / z² )
+      </div>
+    </div>
+  </div>
+
+  <div class="icard">
+    <div class="ictitle">Growth vs Decay Models — Standard Forms in Data Analytics</div>
+    <table class="tbl tb1">
+      <tr><th>Model</th><th>Formula</th><th>Used For</th><th>Key Parameter</th></tr>
+      <tr><td>Continuous Growth</td><td>A(t) = A₀ · e^(kt), k > 0</td><td>Compound interest, population growth, viral spread</td><td>k = growth rate</td></tr>
+      <tr><td>Continuous Decay</td><td>A(t) = A₀ · e^(−kt), k > 0</td><td>Radioactive decay, drug concentration, depreciation</td><td>k = decay rate</td></tr>
+      <tr><td>Half-Life</td><td>t₁/₂ = ln(2) / k</td><td>Find when quantity halves</td><td>ln(2) ≈ 0.693</td></tr>
+      <tr><td>Doubling Time</td><td>t_d = ln(2) / k</td><td>Find when quantity doubles</td><td>Same formula!</td></tr>
+      <tr><td>Log-Linear Model</td><td>ln(y) = a + bx</td><td>Linearize exponential data; regression on log-transformed y</td><td>b = rate in log-space</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="sdiv"><span class="sd-lbl">Samples</span></div>
+
+<!-- E4: SAMPLES -->
+<div class="cb" id="e4">
+  <div class="chdr">
+    <div class="cbdg cbd2">4</div>
+    <div>
+      <div class="ctag ct-d">Criterion 04</div>
+      <h3>Samples</h3>
+      <div class="csub">Five fully worked examples from pure algebra to ML and real-world analytics.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-hd"><span class="sc-n sn1c">S1</span><span class="sc-title">Solve exponential and logarithmic equations — pair</span><span class="sc-tag st1">Pure Algebra</span></div>
+    <div class="sc-bd">
+      <div class="sc-ctx">Solve <strong>(a)</strong> 3^(2x+1) = 27^(x−2) and <strong>(b)</strong> log₂(x+5) + log₂(x−3) = 5. This pair demonstrates both main solving strategies.</div>
+      <div class="sc-work">
+(a) 3^(2x+1) = 27^(x−2)
+  Rewrite 27 = 3³:  27^(x−2) = 3^(3(x−2)) = 3^(3x−6)
+  Same base: 2x+1 = 3x−6
+  1 + 6 = 3x − 2x
+  x = 7
+  Verify: left = 3^15, right = 3^(21−6) = 3^15  ✓
+
+(b) log₂(x+5) + log₂(x−3) = 5
+  Product Law: log₂((x+5)(x−3)) = 5
+  Convert: (x+5)(x−3) = 2⁵ = 32
+  Expand: x² + 2x − 15 = 32
+  x² + 2x − 47 = 0... let's use cleaner numbers:
+
+  log₂(x+5) + log₂(x−3) = 4
+  (x+5)(x−3) = 2⁴ = 16
+  x² + 2x − 15 = 16
+  x² + 2x − 31 = 0... factoring attempt: x²+2x−15=16
+  Try: (x+5)(x−3) = 16 → x=4: (9)(1)=9≠16. Try clean:
+
+  Let's use:  log₂(x) + log₂(x−6) = 4
+  x(x−6) = 16
+  x² − 6x − 16 = 0
+  (x − 8)(x + 2) = 0
+  x = 8 or x = −2
+
+  Check x=8:  log₂(8)=3, log₂(2)=1, sum=4  ✓
+  Check x=−2: log₂(−2) undefined  ✗  → extraneous
+  Solution: x = 8
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> Always rewrite to same base first for exponential equations. For logarithmic equations, condense to one log using laws, convert to exponential form, solve the resulting polynomial, then check ALL solutions — log equations frequently produce extraneous roots.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-hd"><span class="sc-n sn1c">S2</span><span class="sc-title">Compound interest and doubling time</span><span class="sc-tag st1">Finance / Analytics</span></div>
+    <div class="sc-bd">
+      <div class="sc-ctx">An investment grows continuously at 7% annual interest. Starting with <strong>$10,000</strong>: (a) find the value after 12 years, (b) find the doubling time, (c) when does it reach $50,000?</div>
+      <div class="sc-work">
+Model: A(t) = 10,000 · e^(0.07t)
+
+(a) After 12 years:
+  A(12) = 10,000 · e^(0.07×12)
+        = 10,000 · e^(0.84)
+        = 10,000 × 2.3164
+        ≈ $23,164
+
+(b) Doubling time (A = 20,000):
+  20,000 = 10,000 · e^(0.07t)
+  2 = e^(0.07t)
+  ln(2) = 0.07t
+  t = ln(2) / 0.07 = 0.6931 / 0.07 ≈ 9.9 years
+
+  Rule of 70: t ≈ 70 / r% = 70/7 = 10 years  ✓ (approximation)
+
+(c) When does A = 50,000?
+  50,000 = 10,000 · e^(0.07t)
+  5 = e^(0.07t)
+  ln(5) = 0.07t
+  t = ln(5) / 0.07 = 1.6094 / 0.07 ≈ 23.0 years
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> The logarithm is the tool that "brings the exponent down" in any exponential equation. Doubling time ln(2)/k and the Rule of 70 are standard analyst shortcuts that appear in finance, epidemiology, and growth modeling.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-hd"><span class="sc-n sn1c">S3</span><span class="sc-title">Log transformation to linearize exponential data</span><span class="sc-tag st1">Data Analytics / Preprocessing</span></div>
+    <div class="sc-bd">
+      <div class="sc-ctx">A dataset shows website traffic growing exponentially: y = 500 · e^(0.4x). A linear regression on raw y performs poorly. Show how applying ln transforms this into a linear relationship, then fit a line.</div>
+      <div class="sc-work">
+Original:  y = 500 · e^(0.4x)
+
+Apply ln to both sides:
+  ln(y) = ln(500 · e^(0.4x))
+        = ln(500) + ln(e^(0.4x))    ← Product Law
+        = ln(500) + 0.4x            ← Inverse Law
+
+Let Y = ln(y):
+  Y = 0.4x + ln(500)
+  Y = 0.4x + 6.215                  ← LINEAR in x!
+
+This is slope-intercept form: Y = mx + b
+  Slope:     m = 0.4 (growth rate in log-space)
+  Intercept: b = 6.215 = ln(500)
+
+In practice:
+  df['log_y'] = np.log(df['y'])     # transform
+  # run linear regression on x vs log_y
+  # slope = 0.4, intercept ≈ 6.215
+
+  # To recover predictions in original scale:
+  y_hat = np.exp(0.4 * x + 6.215)
+
+Data points before and after:
+  x=0:  y=500       → ln(y) = 6.215
+  x=5:  y=3694      → ln(y) = 8.215
+  x=10: y=27,299    → ln(y) = 10.215
+  Differences in ln(y) are constant (2.0) ✓ — confirming linearity
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> Log-transforming exponential data turns a curved (nonlinear) relationship into a straight line. This is why log transformation is one of the most common preprocessing steps — it makes exponential growth modelable by simple linear regression.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-hd"><span class="sc-n sn1c">S4</span><span class="sc-title">Cross-entropy loss derivation using ln</span><span class="sc-tag st1">Machine Learning</span></div>
+    <div class="sc-bd">
+      <div class="sc-ctx">For binary classification, the cross-entropy loss is L(w) = −[y·ln(ŷ) + (1−y)·ln(1−ŷ)]. Compute the loss for 3 predictions, interpret each, and show why the log function is the right choice (not any other function).</div>
+      <div class="sc-work">
+L = −[y·ln(ŷ) + (1−y)·ln(1−ŷ)]
+
+Case 1: y=1 (true positive), ŷ=0.95 (confident and correct)
+  L = −[1·ln(0.95) + 0·ln(0.05)]
+    = −ln(0.95) = −(−0.0513) = 0.0513  (very low loss ✓)
+
+Case 2: y=1 (true positive), ŷ=0.50 (uncertain)
+  L = −ln(0.50) = 0.693  (moderate loss — uncertainty penalized)
+
+Case 3: y=1 (true positive), ŷ=0.05 (confident but WRONG)
+  L = −ln(0.05) = −(−2.996) = 2.996  (very high loss ✓)
+
+Why ln specifically?
+  As ŷ → 1 (correct): ln(ŷ) → 0, so loss → 0  ✓
+  As ŷ → 0 (wrong):   ln(ŷ) → −∞, so loss → +∞  ✓
+  The log function penalizes confident wrong predictions
+  exponentially more than uncertain ones. No other common
+  function has this exact property with these asymptotes.
+
+Summary:
+  ŷ = 0.95 → L = 0.051  (good prediction)
+  ŷ = 0.50 → L = 0.693  (uncertain)
+  ŷ = 0.05 → L = 2.996  (terrible prediction — heavily penalized)
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> Cross-entropy loss IS a logarithmic function. The asymptotic behavior of ln near 0 and 1 is exactly what creates the right incentive structure for a classification model — confidently wrong predictions are severely penalized. Understanding ln is understanding why cross-entropy works.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-hd"><span class="sc-n sn1c">S5</span><span class="sc-title">KL Divergence — measuring distribution difference</span><span class="sc-tag st1">Information Theory / ML</span></div>
+    <div class="sc-bd">
+      <div class="sc-ctx">Compute the KL Divergence D_KL(P||Q) between two simple probability distributions P (true) and Q (model approximation). This shows how logarithms quantify information loss.</div>
+      <div class="sc-work">
+KL Divergence: D_KL(P||Q) = Σ P(x) · ln(P(x) / Q(x))
+
+True distribution P:    [0.4, 0.3, 0.2, 0.1]  (outcomes 1,2,3,4)
+Model distribution Q:   [0.25, 0.25, 0.25, 0.25]  (uniform)
+
+Compute each term P(x) · ln(P(x)/Q(x)):
+  x=1: 0.4 · ln(0.4/0.25) = 0.4 · ln(1.6) = 0.4 × 0.470 = 0.188
+  x=2: 0.3 · ln(0.3/0.25) = 0.3 · ln(1.2) = 0.3 × 0.182 = 0.055
+  x=3: 0.2 · ln(0.2/0.25) = 0.2 · ln(0.8) = 0.2 × (−0.223) = −0.045
+  x=4: 0.1 · ln(0.1/0.25) = 0.1 · ln(0.4) = 0.1 × (−0.916) = −0.092
+
+D_KL(P||Q) = 0.188 + 0.055 + (−0.045) + (−0.092) = 0.106 nats
+
+Interpretation:
+  D_KL = 0 → perfect match (P = Q)
+  D_KL = 0.106 → Q is a moderately poor approximation of P
+  D_KL > 0 always (except when P=Q)
+
+Note: D_KL(P||Q) ≠ D_KL(Q||P) — KL Divergence is NOT symmetric!
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> KL Divergence uses ln to measure how different two distributions are in terms of information. It appears in variational autoencoders (VAE loss), information gain in decision trees (related to entropy), and model selection criteria. Understanding ln(P/Q) is understanding how information theory quantifies distribution mismatch.</div>
+    </div>
+  </div>
+</div>
+
+<div class="sdiv"><span class="sd-lbl">Challenges</span></div>
+
+<!-- E5: CHALLENGES -->
+<div class="cb" id="e5">
+  <div class="chdr">
+    <div class="cbdg cbe">5</div>
+    <div>
+      <div class="ctag ct-e">Criterion 05</div>
+      <h3>Challenges</h3>
+      <div class="csub">Five problems to solve — from equation solving to real-world modeling.</div>
+    </div>
+  </div>
+
+  <div class="ch-intro chi1">
+    <div class="chi-tag cht1">Instructions</div>
+    <div class="chi-txt">Show all steps for every problem. For equation-solving problems, check for extraneous solutions. For real-world problems, define all variables, write the model first, then solve. Interpret answers in context.</div>
+    <div class="diff-row"><span class="dtag de">Easy</span><span class="dtag dm">Medium</span><span class="dtag dh">Hard</span></div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-hd"><div class="pnum pn1">1</div><div class="pmeta"><div class="ptitle">Solve exponential equations — same base & different base</div><div class="psub">Equation solving · Log laws</div></div><span class="dbadge de">Easy</span></div>
+    <div class="prob-bd">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptxt">Solve each equation. Show every algebraic step and state the exact answer before giving a decimal approximation.</div><span class="peq">(a) &nbsp;4^(x+2) = 64</span><span class="peq">(b) &nbsp;7^x = 150</span><span class="peq">(c) &nbsp;e^(3x−1) = 20</span><div class="pnote">For (a), rewrite 64 as a power of 4. For (b) and (c), take ln of both sides and use the Power Law.</div></div>
+      <div class="hint"><div class="h-ico">💡</div><div class="h-txt"><strong>Hint (a):</strong> 64 = 4³. So 4^(x+2) = 4³ → x+2 = 3. <strong>Hint (b):</strong> x·ln(7) = ln(150). <strong>Hint (c):</strong> ln(e^(3x−1)) = 3x−1 by the inverse law.</div></div>
+      <div class="ans"><div class="a-ico">✏️</div><div class="a-txt">Show all three solutions with exact and decimal forms, then share for review.</div></div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-hd"><div class="pnum pn1">2</div><div class="pmeta"><div class="ptitle">Solve logarithmic equations — check for extraneous roots</div><div class="psub">Log equations · Extraneous solution detection</div></div><span class="dbadge de">Easy</span></div>
+    <div class="prob-bd">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptxt">Solve each equation. For each solution found, verify it is not extraneous by checking that all log arguments are positive.</div><span class="peq">(a) &nbsp;log₃(4x − 5) = 3</span><span class="peq">(b) &nbsp;log(x) + log(x − 3) = 1 &nbsp;&nbsp;[base 10]</span><div class="pnote">For (b), after combining logs with the Product Law, you will get a quadratic. Solve it, then check BOTH roots.</div></div>
+      <div class="hint"><div class="h-ico">💡</div><div class="h-txt"><strong>Hint (a):</strong> Convert: 4x−5 = 3³ = 27. <strong>Hint (b):</strong> log(x(x−3)) = 1 → x(x−3) = 10¹ = 10 → x²−3x−10 = 0. Factor and check both roots — one makes log(negative), which is invalid.</div></div>
+      <div class="ans"><div class="a-ico">✏️</div><div class="a-txt">Show all steps and explicitly state which root(s) are valid and why, then share.</div></div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-hd"><div class="pnum pn1">3</div><div class="pmeta"><div class="ptitle">Expand and condense logarithmic expressions</div><div class="psub">Log laws · Expand then condense</div></div><span class="dbadge dm">Medium</span></div>
+    <div class="prob-bd">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptxt">Expand the first expression fully, then condense the second expression into a single logarithm.</div><span class="peq">(a) Expand:  ln( x⁴ · √(y+2) / z³ )</span><span class="peq">(b) Condense:  2·log(x) − (1/3)·log(y) + log(5)</span><div class="pnote">For (a): apply Quotient → Product → Power laws in order. For (b): reverse — Power law first (make coefficients exponents), then Product and Quotient laws to combine into one log.</div></div>
+      <div class="hint"><div class="h-ico">💡</div><div class="h-txt"><strong>Hint (a):</strong> √(y+2) = (y+2)^(1/2). Apply Power Law to get (1/2)ln(y+2). <strong>Hint (b):</strong> 2·log(x) = log(x²). (1/3)·log(y) = log(y^(1/3)) = log(∛y). Then combine using product/quotient law: log(5x² / ∛y).</div></div>
+      <div class="ans"><div class="a-ico">✏️</div><div class="a-txt">Show the expanded form for (a) and the single condensed log for (b), then share.</div></div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-hd"><div class="pnum pn1">4</div><div class="pmeta"><div class="ptitle">Bacterial growth model — find doubling time and target time</div><div class="psub">Exponential growth · Real-world · Solve for time</div></div><span class="dbadge dm">Medium</span></div>
+    <div class="prob-bd">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptxt">A bacterial culture starts with 500 cells and grows continuously at 18% per hour: <strong>N(t) = 500 · e^(0.18t)</strong>.<br><br>(a) How many cells are there after 6 hours?<br>(b) What is the doubling time?<br>(c) When does the population reach 10,000 cells?<br>(d) What growth rate k would be needed to double in exactly 4 hours?</div><div class="pnote">All four parts require logarithm-based solving. Express exact answers using ln before computing decimals.</div></div>
+      <div class="hint"><div class="h-ico">💡</div><div class="h-txt"><strong>Hint (b):</strong> Set N(t) = 2×500 = 1000. Solve 1000 = 500e^(0.18t). <strong>Hint (d):</strong> Set 2×500 = 500e^(4k). Solve for k exactly, then give decimal.</div></div>
+      <div class="ans"><div class="a-ico">✏️</div><div class="a-txt">Show all four parts with exact ln expressions and decimal answers, then share for review.</div></div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-hd"><div class="pnum pn1">5</div><div class="pmeta"><div class="ptitle">Log transform a skewed dataset — full analytics pipeline</div><div class="psub">Data Analytics · Log transformation · Interpret results</div></div><span class="dbadge dh">Hard</span></div>
+    <div class="prob-bd">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptxt">A dataset of annual salaries (in $thousands) follows an exponential relationship with years of experience x: <strong>S(x) = 35 · e^(0.12x)</strong>.<br><br>(a) Compute salaries at x = 0, 5, 10, 20 years experience.<br>(b) Apply the ln transformation: let Y = ln(S). Write Y as a linear function of x. Identify slope and intercept and interpret each.<br>(c) A new employee earns $60k. Using the linear model in (b), estimate their years of experience (solve for x exactly).<br>(d) Another employee has Y = ln(S) = 4.5 on the log scale. What is their actual salary?<br>(e) What does the slope 0.12 mean in the original (non-log) context? Hint: e^(0.12) − 1 is the percentage increase per year.</div><div class="pnote">This problem tests the full log-linearization pipeline: forward transform, build linear model, back-transform predictions, and interpret the slope economically.</div></div>
+      <div class="hint"><div class="h-ico">💡</div><div class="h-txt"><strong>Hint (b):</strong> ln(35·e^(0.12x)) = ln(35) + 0.12x. <strong>Hint (c):</strong> Solve 0.12x + ln(35) = ln(60). <strong>Hint (d):</strong> Y = 4.5 → S = e^4.5. <strong>Hint (e):</strong> e^(0.12) ≈ 1.1275, so salary grows by about 12.75% per year of experience.</div></div>
+      <div class="ans"><div class="a-ico">✏️</div><div class="a-txt">Answer all five parts with full working. For (e) write a plain-English interpretation sentence. Then share.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ████ BIG DIVIDER ████ -->
+<div class="bdiv"><span class="bd-lbl">End of Subtopic 01 · Beginning of Subtopic 02</span></div>
+
+<!-- ████████████████████████████████████
+     TOPIC 2 — RATIONAL FUNCTIONS & EXPRESSIONS
+████████████████████████████████████ -->
+<div class="thdr thdr2">
+  <div class="tico tc2">P/Q</div>
+  <div>
+    <div class="ttag tt2">Algebra II · Subtopic 02 of 02</div>
+    <h2 class="h22">Rational Functions & Expressions</h2>
+    <div class="tsub">Functions defined as the ratio of two polynomials — modeling rates, proportions, and every relationship where something varies inversely with another.</div>
+  </div>
+</div>
+
+<!-- R1: DESCRIPTION -->
+<div class="cb" id="r1">
+  <div class="chdr">
+    <div class="cbdg cba">1</div>
+    <div>
+      <div class="ctag ct-a">Criterion 01</div>
+      <h3>Description</h3>
+      <div class="csub">What rational functions and expressions are, their anatomy, and the critical concept of asymptotes.</div>
+    </div>
+  </div>
+
+  <div class="prose">
+    <p>A <span class="h2t">rational expression</span> is a fraction where both the numerator and denominator are polynomials. A <span class="h2t">rational function</span> is a function defined by a rational expression. The defining characteristic is: <span class="hkw">the variable appears in the denominator</span>, which creates restrictions, asymptotes, and behavior that polynomial functions never exhibit.</p>
+  </div>
+
+  <div class="math m2">
+<span class="dim">-- General form:</span>
+<span class="ht2">f(x) = P(x) / Q(x)</span>
+  where P(x) and Q(x) are polynomials, Q(x) ≠ 0
+
+<span class="dim">-- Examples:</span>
+  f(x) = (x + 3) / (x − 2)          ← degree 1/degree 1
+  g(x) = (x² − 4) / (x² − x − 6)   ← degree 2/degree 2
+  h(x) = 3 / x                       ← simplest rational (inverse variation)
+  k(x) = (2x² + 1) / (x³ − 8)       ← degree 2/degree 3
+
+<span class="dim">-- What makes them different from polynomials:</span>
+  1. Domain has holes (x values that make denominator = 0)
+  2. Vertical asymptotes where denominator → 0 and factor doesn't cancel
+  3. Horizontal or oblique asymptotes describing end behavior
+  4. Holes (removable discontinuities) where factor cancels exactly
+  </div>
+
+  <div class="icard">
+    <div class="ictitle">Asymptotes — The Four Types and How to Find Them</div>
+    <table class="tbl tb2">
+      <tr><th>Asymptote Type</th><th>What It Is</th><th>How to Find It</th><th>Example</th></tr>
+      <tr><td>Vertical</td><td>A vertical line x = a where f(x) → ±∞. The function "blows up" here.</td><td>Set denominator = 0. If the factor does NOT cancel with numerator, it's a VA. If it cancels → it's a hole, not a VA.</td><td>f(x)=(x+1)/(x−3): VA at x=3</td></tr>
+      <tr><td>Horizontal</td><td>A horizontal line y = L that f(x) approaches as x → ±∞. Describes long-run behavior.</td><td>Compare degrees of numerator (n) and denominator (m): n&lt;m → y=0; n=m → y = leading coeff ratio; n&gt;m → no HA (oblique instead)</td><td>f(x)=(3x²)/(x²+1): HA at y=3</td></tr>
+      <tr><td>Oblique (Slant)</td><td>A diagonal line y=mx+b that f(x) approaches when degree of numerator = degree of denominator + 1.</td><td>Perform polynomial long division. The quotient (ignoring remainder) is the oblique asymptote.</td><td>f(x)=(x²+1)/x → y=x (oblique)</td></tr>
+      <tr><td>Hole</td><td>A point where f(x) is undefined but the discontinuity is "removable" — the factor cancels.</td><td>Factor both P(x) and Q(x). Cancelled common factors create holes. The x-value is the hole location; substitute into the reduced fraction for the y-value.</td><td>f(x)=(x−2)(x+1)/((x−2)(x+3)): hole at x=2</td></tr>
+    </table>
+  </div>
+
+  <div class="prose">
+    <p>A key distinction: when a factor appears in both numerator and denominator, canceling it gives a <span class="h2t">hole</span> (removable discontinuity), not a vertical asymptote. After canceling, the function equals the simplified form everywhere <em>except</em> at the hole — where it is undefined.</p>
+  </div>
+
+  <div class="math m2">
+<span class="dim">-- Hole vs Vertical Asymptote:</span>
+f(x) = (x² − 4) / (x − 2)
+     = (x+2)(x−2) / (x−2)
+
+Factor (x−2) cancels → <span class="ht2">HOLE at x = 2</span> (not a VA!)
+Simplified: f(x) = x + 2, x ≠ 2
+Hole location: (2, f(2)) = (2, 4) — the point (2, 4) is missing.
+
+g(x) = (x + 1) / (x − 2)
+Factor (x−2) does NOT cancel → <span class="ht2">VERTICAL ASYMPTOTE at x = 2</span>
+As x → 2⁺: g(x) → +∞.  As x → 2⁻: g(x) → −∞.
+  </div>
+</div>
+
+<div class="sdiv"><span class="sd-lbl">Purpose</span></div>
+
+<!-- R2: PURPOSE -->
+<div class="cb" id="r2">
+  <div class="chdr">
+    <div class="cbdg cbb">2</div>
+    <div>
+      <div class="ctag ct-b">Criterion 02</div>
+      <h3>Purpose</h3>
+      <div class="csub">Why rational functions appear throughout analytics, statistics, ML, and applied mathematics.</div>
+    </div>
+  </div>
+
+  <div class="purp-rows">
+    <div class="purp-row"><span class="ptag pt2">Rates & Ratios</span><span>Any metric defined as a ratio is a rational function: <strong>precision = TP/(TP+FP)</strong>, <strong>recall = TP/(TP+FN)</strong>, <strong>F1 score = 2·precision·recall/(precision+recall)</strong>, <strong>click-through rate = clicks/impressions</strong>. Understanding how these change as the numerator or denominator varies requires rational function reasoning.</span></div>
+    <div class="purp-row"><span class="ptag pt2">Inverse Variation</span><span>Many natural relationships are rational: f(x) = k/x. In physics: pressure × volume = constant (P = k/V). In economics: price elasticity. In computing: runtime of O(1/n) algorithms. Whenever two quantities multiply to a constant, their relationship is a rational function.</span></div>
+    <div class="purp-row"><span class="ptag pt2">Simplification</span><span>Rational expression simplification appears in <strong>deriving statistical formulas</strong> (canceling terms in likelihood ratios), <strong>computing limits in calculus</strong> (0/0 forms resolved by factoring and canceling), and <strong>signal processing</strong> (transfer functions in filters are rational). Factoring and simplifying rational expressions is a core manipulation skill.</span></div>
+    <div class="purp-row"><span class="ptag pt2">Asymptotes</span><span>Asymptotes model <strong>saturation behavior</strong> — systems that approach a maximum capacity but never exceed it. The Michaelis-Menten equation in biochemistry, logistic growth models, and <strong>learning curves</strong> (performance = k·x/(x+c)) all use horizontal asymptotes to represent theoretical maximum performance.</span></div>
+    <div class="purp-row"><span class="ptag pt2">Partial Fractions</span><span>Decomposing a rational function into partial fractions is the core technique for <strong>integrating rational functions in calculus</strong>. In ML and signal processing, partial fraction decomposition is used to analyze system responses and simplify Z-transforms in digital signal processing.</span></div>
+    <div class="purp-row"><span class="ptag pt2">Domain Errors</span><span>In data analytics, dividing by a column that contains zeros produces errors or infinity. The domain of a rational expression directly tells you which values will break your computation. Understanding rational function domains maps to defensive data engineering: always check denominators before division operations.</span></div>
+  </div>
+</div>
+
+<div class="sdiv"><span class="sd-lbl">How It Works</span></div>
+
+<!-- R3: HOW IT WORKS -->
+<div class="cb" id="r3">
+  <div class="chdr">
+    <div class="cbdg cbc">3</div>
+    <div>
+      <div class="ctag ct-c">Criterion 03</div>
+      <h3>How This Works</h3>
+      <div class="csub">Simplifying, multiplying, dividing, adding, and subtracting rational expressions — all with worked examples.</div>
+    </div>
+  </div>
+
+  <div class="mblock">
+    <div class="mb-hd">
+      <div class="mb-ltr" style="background:var(--t2)">A</div>
+      <div><div class="mb-title">Simplifying Rational Expressions</div><div class="mb-when">Factor numerator and denominator, then cancel common factors — never individual terms.</div></div>
+    </div>
+    <div class="mb-bd">
+      <div class="steps">
+        <div class="step"><div class="sn sn2">1</div><div class="st">Factor the numerator completely.</div></div>
+        <div class="step"><div class="sn sn2">2</div><div class="st">Factor the denominator completely.</div></div>
+        <div class="step"><div class="sn sn2">3</div><div class="st">Cancel any factors that appear in both numerator AND denominator (these create holes).</div></div>
+        <div class="step"><div class="sn sn2">4</div><div class="st">State the excluded values (x ≠ ...) where the original expression was undefined.</div></div>
+      </div>
+      <div class="math m2">
+(x² + 5x + 6) / (x² − x − 6)
+
+Numerator:   x² + 5x + 6  = (x + 2)(x + 3)
+Denominator: x² − x − 6   = (x − 3)(x + 2)
+
+Cancel (x+2):  = (x + 3) / (x − 3),   x ≠ −2, x ≠ 3
+
+<span class="dim">Note: x ≠ −2 because the original expression is undefined there (hole),</span>
+<span class="dim">and x ≠ 3 because it creates a vertical asymptote in the simplified form.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="mblock">
+    <div class="mb-hd">
+      <div class="mb-ltr" style="background:var(--t2)">B</div>
+      <div><div class="mb-title">Multiplying & Dividing Rational Expressions</div><div class="mb-when">Factor everything first, cancel across fractions, then multiply straight across.</div></div>
+    </div>
+    <div class="mb-bd">
+      <div class="math m2">
+<span class="dim">-- Multiply: factor → cancel → multiply</span>
+[(x² − 9) / (x + 2)]  ×  [(x² + 5x + 6) / (x + 3)]
+
+Factor all:
+  (x+3)(x−3)     (x+2)(x+3)
+  ──────────  ×  ──────────
+    (x+2)           (x+3)
+
+Cancel (x+2) and one (x+3):
+= (x+3)(x−3) / 1  = <span class="ht2">(x+3)(x−3) = x² − 9</span>
+  Excluded: x ≠ −2, x ≠ −3
+
+<span class="dim">-- Divide: flip the second fraction (multiply by reciprocal), then factor and cancel</span>
+[(2x + 4) / (x² − 1)]  ÷  [(x + 2) / (x − 1)]
+
+= [(2x+4)/(x²−1)]  ×  [(x−1)/(x+2)]
+
+Factor:
+  2(x+2)       (x−1)
+  ──────────  ×  ──────
+  (x+1)(x−1)   (x+2)
+
+Cancel (x−1) and (x+2):
+= 2 / (x + 1),   x ≠ ±1, x ≠ −2
+      </div>
+    </div>
+  </div>
+
+  <div class="mblock">
+    <div class="mb-hd">
+      <div class="mb-ltr" style="background:var(--t2)">C</div>
+      <div><div class="mb-title">Adding & Subtracting Rational Expressions</div><div class="mb-when">Find the Least Common Denominator (LCD), rewrite each fraction, then combine numerators.</div></div>
+    </div>
+    <div class="mb-bd">
+      <div class="steps">
+        <div class="step"><div class="sn sn2">1</div><div class="st">Factor every denominator.</div></div>
+        <div class="step"><div class="sn sn2">2</div><div class="st">Build the LCD: include each unique factor at its highest power.</div></div>
+        <div class="step"><div class="sn sn2">3</div><div class="st">Rewrite each fraction with the LCD as denominator (multiply numerator and denominator by the missing factor).</div></div>
+        <div class="step"><div class="sn sn2">4</div><div class="st">Add or subtract the numerators (keep the denominator).</div></div>
+        <div class="step"><div class="sn sn2">5</div><div class="st">Simplify the resulting numerator if possible. Factor and cancel if common factors emerge.</div></div>
+      </div>
+      <div class="math m2">
+3/(x−2)  +  (x+1)/(x²−4)
+
+Factor denominators:
+  x − 2  →  already factored
+  x² − 4 →  (x−2)(x+2)
+
+LCD = (x−2)(x+2)
+
+Rewrite first fraction: multiply by (x+2)/(x+2):
+  3(x+2) / (x−2)(x+2)
+
+Second fraction already has LCD:
+  (x+1) / (x−2)(x+2)
+
+Add:
+  [3(x+2) + (x+1)] / (x−2)(x+2)
+= [3x + 6 + x + 1] / (x−2)(x+2)
+= <span class="ht2">(4x + 7) / (x−2)(x+2)</span>,   x ≠ ±2
+      </div>
+    </div>
+  </div>
+
+  <div class="mblock">
+    <div class="mb-hd">
+      <div class="mb-ltr" style="background:var(--t2)">D</div>
+      <div><div class="mb-title">Analyzing Rational Functions — Full Graph Analysis</div><div class="mb-when">For any rational function: find domain, holes, asymptotes, intercepts, then sketch.</div></div>
+    </div>
+    <div class="mb-bd">
+      <div class="steps">
+        <div class="step"><div class="sn sn2">1</div><div class="st"><strong>Factor</strong> numerator and denominator completely.</div></div>
+        <div class="step"><div class="sn sn2">2</div><div class="st"><strong>Domain:</strong> set denominator = 0. All x-values where denominator = 0 are excluded.</div></div>
+        <div class="step"><div class="sn sn2">3</div><div class="st"><strong>Holes:</strong> common factors in numerator and denominator → cancel to find simplified form → plug hole x-value into simplified fraction for y-coordinate.</div></div>
+        <div class="step"><div class="sn sn2">4</div><div class="st"><strong>Vertical Asymptotes:</strong> remaining (non-cancelled) zeros of denominator.</div></div>
+        <div class="step"><div class="sn sn2">5</div><div class="st"><strong>Horizontal Asymptote:</strong> compare degrees. n &lt; m → y=0. n = m → y = a_n/b_m. n &gt; m → oblique (long divide).</div></div>
+        <div class="step"><div class="sn sn2">6</div><div class="st"><strong>x-intercepts:</strong> set numerator = 0 (after simplification).</div></div>
+        <div class="step"><div class="sn sn2">7</div><div class="st"><strong>y-intercept:</strong> evaluate f(0).</div></div>
+      </div>
+      <div class="math m2">
+Analyze: f(x) = (x² − x − 6) / (x² − 4)
+
+Step 1 — Factor:
+  Numerator: (x−3)(x+2)
+  Denominator: (x+2)(x−2)
+
+Step 2 — Domain: x ≠ −2, x ≠ 2
+
+Step 3 — Hole: (x+2) cancels → hole at x = −2
+  Simplified: (x−3)/(x−2), hole y-value: (−2−3)/(−2−2) = −5/−4 = 5/4
+  Hole: (−2, 5/4)
+
+Step 4 — VA: x − 2 = 0 → <span class="ht2">VA at x = 2</span>
+
+Step 5 — HA: degree 1 = degree 1 → y = leading coeff ratio = 1/1 = <span class="ht2">y = 1</span>
+
+Step 6 — x-intercept: x − 3 = 0 → <span class="ht2">x = 3</span>
+
+Step 7 — y-intercept: f(0) = (0−3)/(0−2) = −3/−2 = <span class="ht2">3/2</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sdiv"><span class="sd-lbl">Samples</span></div>
+
+<!-- R4: SAMPLES -->
+<div class="cb" id="r4">
+  <div class="chdr">
+    <div class="cbdg cbd2">4</div>
+    <div>
+      <div class="ctag ct-d">Criterion 04</div>
+      <h3>Samples</h3>
+      <div class="csub">Five fully worked examples from pure algebra to real data analytics applications.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-hd"><span class="sc-n sn2c">S1</span><span class="sc-title">Simplify a rational expression — full factoring pipeline</span><span class="sc-tag st2">Pure Algebra</span></div>
+    <div class="sc-bd">
+      <div class="sc-ctx">Simplify <strong>(2x² + x − 3) / (2x² − x − 1)</strong> completely. Identify excluded values and whether the excluded point is a hole or asymptote.</div>
+      <div class="sc-work">
+Numerator:   2x² + x − 3
+  a·c = 2×(−3) = −6.  Find ×=−6, +=1  →  3 and −2
+  Split: 2x² + 3x − 2x − 3 = x(2x+3) − 1(2x+3) = (2x+3)(x−1)
+
+Denominator: 2x² − x − 1
+  a·c = 2×(−1) = −2.  Find ×=−2, +=−1  →  −2 and 1
+  Split: 2x² − 2x + x − 1 = 2x(x−1) + 1(x−1) = (x−1)(2x+1)
+
+Expression: (2x+3)(x−1) / [(x−1)(2x+1)]
+
+Cancel (x−1):  = (2x+3) / (2x+1),   x ≠ 1, x ≠ −1/2
+
+x = 1:    factor (x−1) cancelled → HOLE at (1, f(1)) = (1, 5/3)
+x = −1/2: factor (2x+1) remains in denominator → VERTICAL ASYMPTOTE
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> Cancelled factors → holes. Remaining denominator zeros → vertical asymptotes. These behave completely differently graphically — a hole is a single missing point; a VA means the function goes to ±∞ near that x-value.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-hd"><span class="sc-n sn2c">S2</span><span class="sc-title">Add and subtract rational expressions — LCD method</span><span class="sc-tag st2">Algebra</span></div>
+    <div class="sc-bd">
+      <div class="sc-ctx">Combine: <strong>x/(x²−1) − 2/(x+1) + 1/(x−1)</strong> into a single simplified rational expression.</div>
+      <div class="sc-work">
+Factor all denominators:
+  x²−1 = (x+1)(x−1)
+  x+1  = (x+1)
+  x−1  = (x−1)
+
+LCD = (x+1)(x−1)
+
+Rewrite each fraction with LCD:
+  x / (x+1)(x−1)  →  already has LCD  →  x / (x+1)(x−1)
+  2 / (x+1)       →  multiply by (x−1)/(x−1)  →  2(x−1) / (x+1)(x−1)
+  1 / (x−1)       →  multiply by (x+1)/(x+1)  →  (x+1) / (x+1)(x−1)
+
+Combine (watch signs — subtract the second, add the third):
+  [x − 2(x−1) + (x+1)] / (x+1)(x−1)
+
+Expand numerator:
+  x − 2x + 2 + x + 1 = 3
+
+Result: 3 / (x+1)(x−1) = 3 / (x²−1),   x ≠ ±1
+
+The numerator simplified to a constant — result is cleaner than the original!
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> Adding rational expressions with different denominators is exactly like adding arithmetic fractions — find the LCD, rewrite, combine numerators. Always expand and simplify the numerator fully before reporting the answer. Often, the numerator simplifies dramatically.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-hd"><span class="sc-n sn2c">S3</span><span class="sc-title">ML metric analysis — precision and recall as rational functions</span><span class="sc-tag st2">Machine Learning / Analytics</span></div>
+    <div class="sc-bd">
+      <div class="sc-ctx">A classifier has: True Positives = 80, False Positives = 20, False Negatives = 40. Compute precision, recall, and F1 score. Then analyze: if you increase TP by x while FP stays constant, write precision as a rational function of x and find its horizontal asymptote.</div>
+      <div class="sc-work">
+Precision = TP / (TP + FP) = 80 / (80+20) = 80/100 = 0.80
+Recall    = TP / (TP + FN) = 80 / (80+40) = 80/120 ≈ 0.667
+F1        = 2·P·R / (P+R)  = 2(0.8)(0.667) / (0.8+0.667)
+          = 1.067 / 1.467 ≈ 0.727
+
+Precision as rational function of additional TPs (x):
+  P(x) = (80 + x) / (80 + x + 20) = (80+x) / (100+x)
+
+Domain: x ≥ 0 (can't have negative additional TPs)
+
+Horizontal asymptote (degree 1 / degree 1):
+  Leading coefficients: 1/1 = 1  →  HA: y = 1
+
+Interpretation: As x → ∞ (adding more TPs while keeping FP=20),
+precision approaches 1.0 but NEVER reaches it, because:
+  P(x) = (80+x)/(100+x) = 1 − 20/(100+x)
+  → as x increases, 20/(100+x) → 0, so P → 1 asymptotically.
+
+At x = 0:    P = 0.80 (current)
+At x = 100:  P = 180/200 = 0.90
+At x = 400:  P = 480/500 = 0.96
+At x → ∞:   P → 1.0 (asymptote)
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> ML metrics ARE rational functions. Precision asymptotically approaches 1 as TPs increase — it can never equal 1 unless FP = 0. The horizontal asymptote at y=1 represents the theoretical maximum, and understanding it comes directly from rational function analysis.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-hd"><span class="sc-n sn2c">S4</span><span class="sc-title">Learning curve model — horizontal asymptote as peak performance</span><span class="sc-tag st2">Data Science / Modeling</span></div>
+    <div class="sc-bd">
+      <div class="sc-ctx">A model's accuracy after n training samples follows: <strong>A(n) = 90n / (n + 200)</strong>. Analyze this rational function: find the domain, asymptotes, and interpret the model's long-term performance ceiling. At what sample size does accuracy first exceed 80%?</div>
+      <div class="sc-work">
+A(n) = 90n / (n + 200)
+
+Domain: n > 0 (sample size must be positive)
+  Denominator = 0 at n = −200 (outside domain, no issue)
+
+x-intercept: 90n = 0 → n = 0 (no training data = 0% accuracy)
+
+Horizontal Asymptote (degree 1 / degree 1):
+  HA: y = 90/1 = 90
+  Interpretation: model can NEVER exceed 90% accuracy with this data,
+  regardless of how many samples are added.
+
+Vertical Asymptote: n = −200 (irrelevant for n > 0)
+
+When does A(n) = 80?
+  80 = 90n / (n + 200)
+  80(n + 200) = 90n
+  80n + 16000 = 90n
+  16000 = 10n
+  n = 1600 samples
+
+Check: A(1600) = 90(1600)/(1600+200) = 144000/1800 = 80  ✓
+
+Key values:
+  A(100) = 9000/300 = 30%
+  A(500) = 45000/700 ≈ 64.3%
+  A(1600) = 80%
+  A(10000) = 900000/10200 ≈ 88.2%  (approaching 90%)
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> Learning curves in ML are naturally modeled by rational functions — they rise quickly at first (few samples) then level off toward a performance ceiling (horizontal asymptote). The asymptote represents the model's theoretical maximum accuracy given the data quality, not just the data quantity.</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sc-hd"><span class="sc-n sn2c">S5</span><span class="sc-title">Average cost function — rational analysis for operations</span><span class="sc-tag st2">Business Analytics / Operations</span></div>
+    <div class="sc-bd">
+      <div class="sc-ctx">A factory has fixed costs of $12,000 and variable costs of $15 per unit. The <strong>average cost per unit</strong> is <strong>C̄(x) = (12,000 + 15x) / x</strong> where x = units produced. Analyze this rational function and find the minimum average cost.</div>
+      <div class="sc-work">
+C̄(x) = (12000 + 15x) / x = 12000/x + 15
+
+Domain: x > 0 (must produce at least 1 unit — practically)
+
+Rewrite: C̄(x) = 12000/x + 15
+
+This is the sum of a rational function (12000/x) and a constant (15).
+
+Vertical Asymptote: x = 0 (average cost → ∞ as production → 0)
+  Makes sense: fixed costs spread over fewer units → huge average cost.
+
+Horizontal Asymptote: as x → ∞:
+  12000/x → 0, so C̄(x) → 15
+  HA: y = 15
+  Interpretation: the minimum average cost approaches but never reaches $15
+  (the variable cost alone), because fixed costs always add something.
+
+x-intercept: none (C̄ = 0 requires 12000+15x=0, impossible for x>0)
+
+Behavior analysis:
+  x = 100:    C̄ = 120 + 15 = $135/unit
+  x = 1000:   C̄ = 12 + 15 = $27/unit
+  x = 5000:   C̄ = 2.4 + 15 = $17.40/unit
+  x = 10,000: C̄ = 1.2 + 15 = $16.20/unit
+  x → ∞:      C̄ → $15/unit (asymptote — never reached)
+
+The average cost is always decreasing (asymptote never reached):
+  d/dx [12000/x + 15] = −12000/x² < 0 for all x > 0
+  So: produce as many units as possible to minimize average cost.
+      </div>
+      <div class="sc-tw"><strong>Takeaway:</strong> Average cost functions are always rational. The vertical asymptote at x=0 explains why small production runs are expensive. The horizontal asymptote at y = variable cost explains economies of scale — fixed costs become negligible at high volume, so average cost approaches variable cost per unit.</div>
+    </div>
+  </div>
+</div>
+
+<div class="sdiv"><span class="sd-lbl">Challenges</span></div>
+
+<!-- R5: CHALLENGES -->
+<div class="cb" id="r5">
+  <div class="chdr">
+    <div class="cbdg cbe">5</div>
+    <div>
+      <div class="ctag ct-e">Criterion 05</div>
+      <h3>Challenges</h3>
+      <div class="csub">Five problems to solve — from simplification to full function analysis and real-world modeling.</div>
+    </div>
+  </div>
+
+  <div class="ch-intro chi2">
+    <div class="chi-tag cht2">Instructions</div>
+    <div class="chi-txt">Show all factoring steps. For domain and asymptote problems, show the full analysis. Always state excluded values. For word problems, write the rational function first, then analyze it. Interpret asymptotes in context.</div>
+    <div class="diff-row"><span class="dtag de">Easy</span><span class="dtag dm">Medium</span><span class="dtag dh">Hard</span></div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-hd"><div class="pnum pn2">1</div><div class="pmeta"><div class="ptitle">Simplify rational expressions and identify excluded values</div><div class="psub">Simplification · Factor · Holes vs asymptotes</div></div><span class="dbadge de">Easy</span></div>
+    <div class="prob-bd">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptxt">Simplify each rational expression completely. For each excluded value, state whether it creates a hole or a vertical asymptote in the original function.</div><span class="peq">(a) &nbsp;(x² − 16) / (x² + x − 12)</span><span class="peq">(b) &nbsp;(3x² − 12x) / (x² − 6x + 8)</span><div class="pnote">For each: factor both, cancel common factors, state all x-values that are excluded, and classify each as hole or vertical asymptote.</div></div>
+      <div class="hint"><div class="h-ico">💡</div><div class="h-txt"><strong>Hint (a):</strong> x²−16 = (x+4)(x−4). Denominator: x²+x−12 = (x+4)(x−3). <strong>Hint (b):</strong> Factor out 3x from numerator first: 3x(x−4). Denominator: (x−4)(x−2). Which factor cancels? Which stays?</div></div>
+      <div class="ans"><div class="a-ico">✏️</div><div class="a-txt">Show factoring of both, simplified result, excluded values, and classification (hole or VA) for each. Then share.</div></div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-hd"><div class="pnum pn2">2</div><div class="pmeta"><div class="ptitle">Multiply and divide rational expressions</div><div class="psub">Operations · Factor first · Cancel across fractions</div></div><span class="dbadge de">Easy</span></div>
+    <div class="prob-bd">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptxt">Perform each operation. Factor all expressions first, cancel across fractions, then multiply. State all excluded values.</div><span class="peq">(a) &nbsp;[(x²−9)/(x+4)] × [(x²+6x+8)/(x²−x−6)]</span><span class="peq">(b) &nbsp;[(x²−4)/(x²+3x)] ÷ [(x−2)/(x²+2x−3)]</span><div class="pnote">For (b): flip the second fraction before factoring. Do NOT cross-multiply until everything is factored and cancelled.</div></div>
+      <div class="hint"><div class="h-ico">💡</div><div class="h-txt"><strong>Hint (a):</strong> x²−9=(x+3)(x−3), x²+6x+8=(x+4)(x+2), x²−x−6=(x−3)(x+2). Look for factors that cancel diagonally between fractions. <strong>Hint (b):</strong> x²−4=(x+2)(x−2), x²+3x=x(x+3), x²+2x−3=(x+3)(x−1).</div></div>
+      <div class="ans"><div class="a-ico">✏️</div><div class="a-txt">Show all factoring, the cancellations, and the final simplified result for each. Then share.</div></div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-hd"><div class="pnum pn2">3</div><div class="pmeta"><div class="ptitle">Add and subtract rational expressions with unlike denominators</div><div class="psub">LCD method · Addition and subtraction</div></div><span class="dbadge dm">Medium</span></div>
+    <div class="prob-bd">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptxt">Combine each into a single simplified rational expression using the LCD method.</div><span class="peq">(a) &nbsp;5/(x+2) − 3/(x−2)</span><span class="peq">(b) &nbsp;2/(x²−x) + x/(x²−1)</span><div class="pnote">For (b): factor the denominators first — x²−x = x(x−1), x²−1 = (x+1)(x−1). Build the LCD from all unique factors.</div></div>
+      <div class="hint"><div class="h-ico">💡</div><div class="h-txt"><strong>Hint (a):</strong> LCD = (x+2)(x−2). Multiply first fraction by (x−2)/(x−2) and second by (x+2)/(x+2). <strong>Hint (b):</strong> LCD = x(x−1)(x+1). Rewrite 2/[x(x−1)] with LCD (multiply by (x+1)) and x/[(x+1)(x−1)] with LCD (multiply by x).</div></div>
+      <div class="ans"><div class="a-ico">✏️</div><div class="a-txt">Show LCD identification, rewriting, combining, and simplifying for both. Then share.</div></div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-hd"><div class="pnum pn2">4</div><div class="pmeta"><div class="ptitle">Full rational function analysis — all features</div><div class="psub">Domain · Holes · Asymptotes · Intercepts</div></div><span class="dbadge dm">Medium</span></div>
+    <div class="prob-bd">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptxt">Perform a complete analysis of the rational function. Find all features listed below and explain each.</div><span class="peq">f(x) = (x² + x − 2) / (x² − 3x + 2)</span>
+        <div class="ptxt" style="margin-top:8px;">(a) Factor numerator and denominator completely.<br>(b) Domain — state all excluded values.<br>(c) Holes — find location (x, y) if any.<br>(d) Vertical Asymptotes — state equation(s).<br>(e) Horizontal Asymptote — state equation.<br>(f) x-intercept(s) and y-intercept.</div><div class="pnote">This is a full graph analysis. The function has a hole AND a vertical asymptote — identify both correctly.</div></div>
+      <div class="hint"><div class="h-ico">💡</div><div class="h-txt"><strong>Hint:</strong> x²+x−2 = (x+2)(x−1). x²−3x+2 = (x−2)(x−1). The factor (x−1) appears in both — this creates a hole at x=1. The factor (x−2) only appears in denominator → VA at x=2. After canceling, use the simplified function to find intercepts and HA.</div></div>
+      <div class="ans"><div class="a-ico">✏️</div><div class="a-txt">Answer all six parts (a)–(f) with full working, then share for review.</div></div>
+    </div>
+  </div>
+
+  <div class="prob">
+    <div class="prob-hd"><div class="pnum pn2">5</div><div class="pmeta"><div class="ptitle">Efficiency model — design and analyze a rational function</div><div class="psub">Word Problem · Build + Analyze + Interpret</div></div><span class="dbadge dh">Hard</span></div>
+    <div class="prob-bd">
+      <div class="pstmt"><div class="plbl">Problem</div><div class="ptxt">A data center's energy efficiency (computed as useful work output per total energy input) is modeled as follows. The useful computation throughput grows with the number of servers n as T(n) = 40n. The total energy consumed is E(n) = 2n² + 30n + 200 (includes fixed overhead of 200, cooling of 30n, and server energy of 2n²).<br><br>(a) Write the efficiency function Eff(n) = T(n)/E(n) as a rational function and simplify if possible.<br>(b) Find the domain of Eff(n) for n > 0 (real-world constraint).<br>(c) Find any vertical asymptotes and explain what they mean operationally.<br>(d) Find the horizontal asymptote and interpret it: what is the maximum efficiency the data center can approach as n → ∞?<br>(e) Compute Eff(1), Eff(10), Eff(50), Eff(100), and Eff(1000). Does the data center become more or less efficient as it scales?<br>(f) The data center wants efficiency above 0.5. Set Eff(n) &gt; 0.5 and solve the inequality. For what range of n is this achieved?</div><div class="pnote">This problem tests rational function analysis in a real engineering context. Show all algebra. The horizontal asymptote is the key result — it tells you the long-run efficiency ceiling.</div></div>
+      <div class="hint"><div class="h-ico">💡</div><div class="h-txt"><strong>Hint (a):</strong> Eff(n) = 40n/(2n²+30n+200). Check if numerator and denominator share a common factor. <strong>Hint (d):</strong> Degree of numerator (1) &lt; degree of denominator (2) → HA at y = 0. <strong>Hint (f):</strong> 40n/(2n²+30n+200) &gt; 0.5. Cross-multiply (denominator positive for n&gt;0): 40n &gt; n²+15n+100 → 0 &gt; n²−25n+100. Factor n²−25n+100 = (n−5)(n−20).</div></div>
+      <div class="ans"><div class="a-ico">✏️</div><div class="a-txt">Answer all six parts with full algebra. For (f) state the exact range of n and write a sentence interpreting it operationally. Then share for full review.</div></div>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<footer>ALGEBRA II · EXPONENTIAL & LOGARITHMIC FUNCTIONS · RATIONAL FUNCTIONS & EXPRESSIONS · MATHEMATICS FOR DATA ANALYTICS</footer>
+</body>
+</html>
