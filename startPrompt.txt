@@ -1,0 +1,17 @@
+Subtopic: [topic]
+
+Generate:
+Sections 1-4
+
+Requirements:
+- maintain rigorous mathematical exposition
+- preserve notation consistency
+- append into the existing PDF workflow
+- use formal theorem-style formatting
+- include detailed derivations where appropriate
+- connect concepts to data analysis and machine learning when relevant
+- include progressively rigorous examples
+- avoid filler and conversational tone
+
+Additional Focus:
+N/A
